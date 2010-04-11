@@ -4,6 +4,10 @@ CC	?= g++
 # Options du compilateur
 CXXFLAGS	?= -ANSI
 
+# Reconnaître les Extension de nom de fichier *.cpp et *.o comme suffixe
+SUFFIXES ?= .cpp .o 
+.SUFFIXES: $(SUFFIXES) .
+
 # Nom de l'executable
 PROG	= CFC
 

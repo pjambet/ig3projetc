@@ -1,11 +1,19 @@
+#Compilateur utilisé
+CC	?= g++
 
-all: CFC clean exec
+#Options du compilateur
+CXXFLAGS	?= -ANSI
 
-CFC: main.o
-	g++ -o ../CFC main.o
+#Nom de l'executable
+PROG	?= CFC
+
+all: $(PROG) clean exec
+
+$(PROG): main.o
+	$(CC) $(CXXFLAGS) -o ../CFC main.o
 
 main.o: ./cpp/main.cpp
-	g++ -o main.o -c ./cpp/main.cpp
+	$(CC) $(CXXFLAGS) -c ./cpp/main.cpp
 
 clean:
 	rm -rf *.o

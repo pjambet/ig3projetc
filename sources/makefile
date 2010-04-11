@@ -1,19 +1,22 @@
-#Compilateur utilisé
+# Compilateur utilisé
 CC	?= g++
 
-#Options du compilateur
+# Options du compilateur
 CXXFLAGS	?= -ANSI
 
-#Nom de l'executable
-PROG	?= CFC
+# Nom de l'executable
+PROG	= CFC
+
+# Liste des fichiers objets nécessaures
+OBJS	= main.o
 
 all: $(PROG) clean exec
 
-$(PROG): main.o
-	$(CC) $(CXXFLAGS) -o ../CFC main.o
+$(PROG): $(OBJS)
+	$(CC) $(CXXFLAGS) -o ../$(PROG) $(OBJS)
 
-main.o: ./cpp/main.cpp
-	$(CC) $(CXXFLAGS) -c ./cpp/main.cpp
+.c.o:
+	$(CC) $(CXXFLAGS) -c ./cpp/$*.cpp
 
 clean:
 	rm -rf *.o

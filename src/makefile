@@ -1,11 +1,26 @@
+# Compilateur utilisé
+CC	?= g++
 
-all: CFC clean exec
+# Options du compilateur
+CXXFLAGS	?= -ANSI
 
-CFC: main.o
-	g++ -o ../CFC main.o
+# Reconnaître les Extension de nom de fichier *.cpp et *.o comme suffixe
+SUFFIXES ?= .cpp .o 
+.SUFFIXES: $(SUFFIXES) .
 
-main.o: ./cpp/main.cpp
-	g++ -o main.o -c ./cpp/main.cpp
+# Nom de l'executable
+PROG	= CFC
+
+# Liste des fichiers objets nécessaures
+OBJS	= main.o
+
+all: $(PROG) clean exec
+
+$(PROG): $(OBJS)
+	$(CC) $(CXXFLAGS) -o ../$(PROG) $(OBJS)
+
+.c.o:
+	$(CC) $(CXXFLAGS) -c ./cpp/$*.cpp
 
 clean:
 	rm -rf *.o

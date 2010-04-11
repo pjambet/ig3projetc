@@ -1,8 +1,8 @@
 # Compilateur utilisé
-CC	?= g++
+CXX	?= g++
 
 # Options du compilateur
-CXXFLAGS	?= -ANSI
+CXXFLAGS	?= -Wall -ANSI
 
 # Reconnaître les Extension de nom de fichier *.cpp et *.o comme suffixe
 SUFFIXES ?= .cpp .o 
@@ -17,13 +17,13 @@ OBJS	= main.o
 all: $(PROG) clean exec
 
 $(PROG): $(OBJS)
-	$(CC) $(CXXFLAGS) -o ../$(PROG) $(OBJS)
+	$(CXX) $(CXXFLAGS) -o ../$(PROG) $(OBJS)
 
-.c.o:
-	$(CC) $(CXXFLAGS) -c ./cpp/$*.cpp
+main.o: ./cpp/main.cpp
+	$(CXX) $(CXXFLAGS) -c ./cpp/main.cpp
 
 clean:
-	rm -rf *.o
+	rm -rf $(OBJS)
 
 exec:
-	../CFC
+	../$(PROG)

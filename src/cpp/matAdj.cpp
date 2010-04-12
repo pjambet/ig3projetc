@@ -14,16 +14,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include <string.h>
 #include "../h/matAdj.h"
 
-static int t = 0;
-
-int** allocMat (int** M) { // Alloue une matrice adjacente
-    int i;
-    M = (int**) malloc(tailleMat*sizeof(int));
-    for (i = 0; i < tailleMat; i++) {
-        M[i] = (int*) malloc(tailleMat*sizeof(int));
-    }
-    return M;
-}
+int temps;
 
 void printMat (int** M) { // Affiche la matrice adjacente
     int i, j;
@@ -39,8 +30,11 @@ void printMat (int** M) { // Affiche la matrice adjacente
 }
 
 int** copieMat (int** M) { // Renvoie la copie de la matrice M
-    int i, j;
-    int** Mp = allocMat(Mp);
+    int i, j, k;
+    int** Mp = (int**) malloc(tailleMat*sizeof(int));
+    for (k = 0; k < tailleMat; k++) {
+        Mp[k] = (int*) malloc(tailleMat*sizeof(int));
+    }
     for (i = 0; i < tailleMat; i++) {
         for (j = 0; j < tailleMat; j++) {
             Mp[i][j] = M[i][j];
@@ -50,8 +44,11 @@ int** copieMat (int** M) { // Renvoie la copie de la matrice M
 }
 
 int** matDuale (int** M) { // Renvoie la matrice duale de M
-    int i, j;
-    int** Mp = allocMat(Mp);
+    int i, j, k;
+    int** Mp = (int**) malloc(tailleMat*sizeof(int));
+    for (k = 0; k < tailleMat; k++) {
+        Mp[k] = (int*) malloc(tailleMat*sizeof(int));
+    }
     for (i = 0; i < tailleMat; i++) {
         for (j = 0; j < tailleMat; j++) {
             Mp[i][j] = M[j][i];
@@ -63,37 +60,35 @@ int** matDuale (int** M) { // Renvoie la matrice duale de M
 void PProf (int** M, int i, sommet* s) { // Parcours en profondeur
     int j;
     s[i].etat = 0; // Etat atteint
-    t++;
-    s[i].deb = t;
+    temps++;
+    s[i].deb = temps;
     for (j = 0; j < tailleMat; j++) {
         if ((M[i][j] > 0) && (s[j].etat == -1)) { // Successeur non atteint
             PProf(M, j, s);
         }
     }
     s[i].etat = 1; // Etat explore
-    t++;
-    s[i].fin = t;
+    temps++;
+    s[i].fin = temps;
 }
 
-sommet* PP (int** M) { // Parcours en profondeur
+void PP (int** M, sommet* s) { // Parcours en profondeur
     int i;
-    sommet* s = (sommet*) malloc(tailleMat*sizeof(int));
+    temps = 0;
     for (i = 0; i < tailleMat; i++) {
-        s[i].num = i+1;
+        s[i].num = i;
         s[i].etat = -1; // Etat non atteint
         s[i].deb = 0;
         s[i].fin = 0;
     }
     for (i = 0; i < tailleMat; i++) {
-        if (s[i].etat == -1)
+        if (s[s[i].num].etat == -1)
             PProf(M, i, s);
     }
-    return s;
 }
 
-void ordreDual (sommet* s) { // Renvoie l'ordre de parcours de G^D (trié par ordre décroissant des temps d'accès finaux)
+void triDecroissant (sommet* s) { // Renvoie l'ordre de parcours de la matrice duale (trié par ordre décroissant des temps d'accès finaux)
     int i, tmp = 0, continuer = 1;
-    int* o = (int*) malloc(tailleMat*sizeof(int));
     while (continuer) {
         continuer--;
         for (i = 0; i < tailleMat-1; i++) {
@@ -101,9 +96,11 @@ void ordreDual (sommet* s) { // Renvoie l'ordre de parcours de G^D (trié par ord
                 tmp = s[i+1].fin;
                 s[i+1].fin = s[i].fin;
                 s[i].fin = tmp;
+
                 tmp = s[i+1].deb;
                 s[i+1].deb = s[i].deb;
                 s[i].deb = tmp;
+
                 tmp = s[i+1].num;
                 s[i+1].num = s[i].num;
                 s[i].num = tmp;
@@ -111,57 +108,30 @@ void ordreDual (sommet* s) { // Renvoie l'ordre de parcours de G^D (trié par ord
             }
         }
     }
-    for (i = 0; i < tailleMat; i++) {
-        o[i] = s[i].num;
-        printf("%d ", o[i]);
+}
+
+void CFC (sommet* s) { // Renvoie les composantes fortement connexes du graphe
+    int i;
+    printf("{");
+    for (i = 0; i < tailleMat-1; i++) {
+        //printf("i= %d\n", i);
+        if ((s[i].fin) < (s[i+1].deb)) {
+            printf("%d}", s[i].num+1);
+            if (i < tailleMat-2)
+                printf(", {");
+        } else {
+            if (i < tailleMat-2)
+                printf("%d, ", s[i].num+1);
+            else
+                printf("%d}\n", s[i].num+1);
+        }
     }
-    printf("\n");
-    //return o;
 }
 
 void printSommet (sommet* s) { // Affiche le tableau d'informations des sommets
     int i;
     for (i = 0; i < tailleMat; i++) {
-        printf("Sommet %d = %d/%d\n", s[i].num, s[i].deb, s[i].fin);
+        printf("Sommet %d = %d/%d\n", s[i].num+1, s[i].deb, s[i].fin);
     }
     printf("\n");
 }
-
-/*int** addiMat (int** M1, int** M2) {
-    int i, j;
-    int** M = allocMat(M);
-    for (i = 0; i < tailleMat; i++) {
-        for (j = 0; j < tailleMat; j++) {
-            if ((M1[i][j] == 1) || (M2[i][j] == 1))
-                M[i][j] = 1;
-            else
-                M[i][j] = 0; // M[i][j] = (M1[i][j] == 1) || (M2[i][j] == 1);
-        }
-    }
-    return M;
-}
-
-int** prodMat (int** M1, int** M2) {
-    int i, j, k;
-    int** M = allocMat(M);
-    for (i = 0; i < tailleMat; i++) {
-        for (j = 0; j < tailleMat; j++) {
-            for (k = 0; k < tailleMat; k++) {
-                M[i][j] += M1[i][k]*M2[k][j];
-            }
-        }
-    }
-    return M;
-}
-
-int** fermetureTrans (int** M) {
-    int** G = copieMat(M);
-    int** Gk = copieMat(M);
-    int i;
-    for (i = 1; i < tailleMat; i++) {
-        Gk = prodMat(Gk, M);
-        G = addiMat(Gk, G);
-    }
-    return G;
-}
-*/

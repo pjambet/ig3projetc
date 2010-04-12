@@ -11,14 +11,16 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include "../h/matAdj.h"
 #include "../h/lsc.h"
 
 int main(int argc, char* argv[]) {
-    int i = 0, j = 0;
-    int** Mat = allocMat(Mat);
-    sommet* s = (sommet*) malloc(tailleMat*sizeof(int));
+    int i = 0, j = 0, k;
+    int** Mat = (int**) malloc(tailleMat*sizeof(int));
+    for (k = 0; k < tailleMat; k++) {
+        Mat[k] = (int*) malloc(tailleMat*sizeof(int));
+    }
+    sommet* S = (sommet*) malloc(tailleMat*sizeof(int));
     char c;
     FILE* fichier;
     fichier = fopen(argv[1], "r");
@@ -34,11 +36,16 @@ int main(int argc, char* argv[]) {
             }
         }
         fclose(fichier);
-        s = PP(Mat);
-        printSommet(s);
-        //ordreDual(s);
+
+        PP(Mat, S);
+        triDecroissant(S);
+        PP(matDuale(Mat), S);
+        printf("Les composantes fortement connexes du graphe sont :\n");
+        CFC(S);
+
     } else {
         printf("Lecture du fichier impossible\n");
     }
+    system("PAUSE");
     return 0;
 }

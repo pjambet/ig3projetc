@@ -36,11 +36,9 @@ int main(int argc, char* argv[]) {
             }
         }
         fclose(fichier);
-
-        PP(Mat, S);
+        PP(Mat, S, 'g');
         triDecroissant(S);
-        PP(matDuale(Mat), S);
-        printf("Les composantes fortement connexes du graphe sont :\n");
+        PP(Mat, S, 'd');
         CFC(S);
 
     } else {

@@ -23,13 +23,11 @@ struct sommet {
 };
 
 void printMat (int** M); // Affiche la matrice adjacente
-int** copieMat (int** M); // Renvoie la copie de la matrice M
-int** matDuale (int** M); // Renvoie la matrice duale de M
-void PProf (int** M, int i, sommet* s); // Parcours en profondeur
-void PP (int** M, sommet* s); // Parcours en profondeur
+void PProfG (int** M, int i, sommet* s); // Parcours en profondeur du graphe
+void PProfGD (int** M, int i, sommet* s); // Parcours en profondeur du graphe dual
+void PP (int** M, sommet* s, char mode); // Parcours en profondeur
 void triDecroissant (sommet* s); // Renvoie l'ordre de parcours de la matrice duale (trié par ordre décroissant des temps d'accès finaux)
 void CFC (sommet* s); // Renvoie les composantes fortement connexes du graphe
 void printSommet (sommet* s); // Affiche le tableau d'informations des sommets
-
 
 #endif // MATADJ_H_INCLUDED

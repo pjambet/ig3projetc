@@ -29,42 +29,14 @@ void printMat (int** M) { // Affiche la matrice adjacente
     printf("\n");
 }
 
-int** copieMat (int** M) { // Renvoie la copie de la matrice M
-    int i, j, k;
-    int** Mp = (int**) malloc(tailleMat*sizeof(int));
-    for (k = 0; k < tailleMat; k++) {
-        Mp[k] = (int*) malloc(tailleMat*sizeof(int));
-    }
-    for (i = 0; i < tailleMat; i++) {
-        for (j = 0; j < tailleMat; j++) {
-            Mp[i][j] = M[i][j];
-        }
-    }
-    return Mp;
-}
-
-int** matDuale (int** M) { // Renvoie la matrice duale de M
-    int i, j, k;
-    int** Mp = (int**) malloc(tailleMat*sizeof(int));
-    for (k = 0; k < tailleMat; k++) {
-        Mp[k] = (int*) malloc(tailleMat*sizeof(int));
-    }
-    for (i = 0; i < tailleMat; i++) {
-        for (j = 0; j < tailleMat; j++) {
-            Mp[i][j] = M[j][i];
-        }
-    }
-    return Mp;
-}
-
-void PProf (int** M, int i, sommet* s) { // Parcours en profondeur
+void PProfG (int** M, int i, sommet* s) { // Parcours en profondeur du graphe
     int j;
     s[i].etat = 0; // Etat atteint
     temps++;
     s[i].deb = temps;
     for (j = 0; j < tailleMat; j++) {
         if ((M[i][j] > 0) && (s[j].etat == -1)) { // Successeur non atteint
-            PProf(M, j, s);
+            PProfG(M, j, s);
         }
     }
     s[i].etat = 1; // Etat explore
@@ -72,7 +44,22 @@ void PProf (int** M, int i, sommet* s) { // Parcours en profondeur
     s[i].fin = temps;
 }
 
-void PP (int** M, sommet* s) { // Parcours en profondeur
+void PProfGD (int** M, int i, sommet* s) { // Parcours en profondeur du graphe dual
+    int j;
+    s[i].etat = 0; // Etat atteint
+    temps++;
+    s[i].deb = temps;
+    for (j = 0; j < tailleMat; j++) {
+        if ((M[j][i] > 0) && (s[j].etat == -1)) { // Successeur non atteint
+            PProfGD(M, j, s);
+        }
+    }
+    s[i].etat = 1; // Etat explore
+    temps++;
+    s[i].fin = temps;
+}
+
+void PP (int** M, sommet* s, char mode) { // Parcours en profondeur
     int i;
     temps = 0;
     for (i = 0; i < tailleMat; i++) {
@@ -82,8 +69,13 @@ void PP (int** M, sommet* s) { // Parcours en profondeur
         s[i].fin = 0;
     }
     for (i = 0; i < tailleMat; i++) {
-        if (s[s[i].num].etat == -1)
-            PProf(M, i, s);
+        if (s[s[i].num].etat == -1) {
+            if (mode == 'g') {
+                PProfG(M, i, s);
+            } else {
+                PProfGD(M, i, s);
+            }
+        }
     }
 }
 
@@ -112,15 +104,15 @@ void triDecroissant (sommet* s) { // Renvoie l'ordre de parcours de la matrice d
 
 void CFC (sommet* s) { // Renvoie les composantes fortement connexes du graphe
     int i;
-    printf("{");
-    for (i = 0; i < tailleMat-1; i++) {
+    printf("Les composantes fortement connexes du graphe sont :\n{");
+    for (i = 0; i < tailleMat; i++) {
         //printf("i= %d\n", i);
         if ((s[i].fin) < (s[i+1].deb)) {
             printf("%d}", s[i].num+1);
-            if (i < tailleMat-2)
-                printf(", {");
+            //if (i < tailleMat)
+            printf(", {");
         } else {
-            if (i < tailleMat-2)
+            if (i < tailleMat-1)
                 printf("%d, ", s[i].num+1);
             else
                 printf("%d}\n", s[i].num+1);

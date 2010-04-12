@@ -23,7 +23,7 @@ void printMat (int** M) { // Affiche la matrice adjacente
     int i, j;
     for (i = 0; i < tailleMat; i++) {
         for (j = 0; j < tailleMat; j++) {
-            printf("%d ", M[j][i]);
+            printf("%d ", M[i][j]);
         }
         printf("\n");
     }
@@ -57,9 +57,11 @@ void PProf (int* M, int i, sommet* s, int t) { // Parcours en profondeur
     t++;
     s[i].deb = t;
     for (i = 0; i < tailleMat; i++) {
+        printf("M[%d] = %d s[%d].etat = %d\n", i, M[i], i, s[i].etat);
         if ((M[i] > 0) && (s[i].etat == -1)) // Successeur non atteint
             PProf(M, i, s, t);
     }
+    printf("\n");
     s[i].etat = 1; // Etat explore
     t++;
     s[i].fin = t;
@@ -82,15 +84,7 @@ void printSommet (sommet* s) { // Affiche le tableau d'informations des sommets
     for (i = 0; i < tailleMat; i++) {
         printf("Sommet %d : Etat=%d, d(%d)=%d, f(%d)=%d\n", i, s[i].etat, i, s[i].deb, i, s[i].fin);
     }
-}
-
-void CFCx (int** M, int x) { // Composante Forcement Connexe d'un sommet
-
-}
-
-void CFC (int** M) { // Ensemble des Composantes Fortement Connexe d'un graphe
-    PP(M);
-    PP(matDuale(M));
+    printf("\n");
 }
 
 /*int** addiMat (int** M1, int** M2) {
@@ -135,7 +129,8 @@ int** fermetureTrans (int** M) {
 int main(int argc, char* argv[]) {
     int i = 0, j = 0;
     int** Mat = allocMat(Mat);
-    sommet* s = (sommet*) malloc(tailleMat*sizeof(int));
+    sommet* s1 = (sommet*) malloc(tailleMat*sizeof(int));
+    sommet* s2 = (sommet*) malloc(tailleMat*sizeof(int));
     char c;
     FILE* fichier;
 
@@ -147,14 +142,14 @@ int main(int argc, char* argv[]) {
                 j++;
                 i = 0;
             } else {
-                Mat[i][j] = atoi(&c);
+                Mat[j][i] = atoi(&c);
                 i++;
             }
         }
         fclose(fichier);
         printMat(Mat);
-        s = PP(Mat);
-        printSommet(s);
+        s1 = PP(Mat);
+        printSommet(s1);
     }
     return 0;
 }

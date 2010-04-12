@@ -16,6 +16,57 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 
 int temps;
 
+void matAdjCFC (char* a) { // Renvoie les composantes fortement connexes du graphe
+    int i = 0, j = 0, k, d, f;
+    int** Mat = (int**) malloc(tailleMat*sizeof(int));
+    for (k = 0; k < tailleMat; k++) {
+        Mat[k] = (int*) malloc(tailleMat*sizeof(int));
+    }
+    sommet* S = (sommet*) malloc(tailleMat*sizeof(int));
+    char c;
+    FILE* fichier;
+    fichier = fopen(a, "r"); //fichier = fopen("./test/graph.txt", "r");
+    if (fichier != NULL) {
+        while (!feof(fichier)) {
+            c = fgetc(fichier);
+            if (i == tailleMat) {
+                j++;
+                i = 0;
+            } else {
+                Mat[j][i] = atoi(&c);
+                i++;
+            }
+        }
+        fclose(fichier);
+        printMat(Mat);
+        iniSommet(S);
+        PP(Mat, S, 1);
+        triDecroissant(S);
+        PP(Mat, S, 0);
+        iniSommet(S);
+        printf("Les composantes fortement connexes du graphe sont :\n{%d", (S[i].num)+1);
+        d = S[i].deb;
+        f = S[i].fin;
+        while (i < tailleMat) {
+            if ((d < (S[i+1].deb)) && (f > (S[i+1].fin))) {
+                printf(", %d", (S[i+1].num)+1);
+                i++;
+            } else {
+                i++;
+                d = S[i].deb;
+                f = S[i].fin;
+                if (i < tailleMat)
+                    printf("}, {%d", (S[i].num)+1);
+                else
+                    printf("}.");
+            }
+        }
+        printf("\n");
+    } else {
+        printf("Lecture du fichier impossible\n");
+    }
+}
+
 void printMat (int** M) { // Affiche la matrice adjacente
     int i, j;
     printf(" ");
@@ -116,26 +167,4 @@ void triDecroissant (sommet* s) { // Renvoie l'ordre de parcours de la matrice d
             }
         }
     }
-}
-
-void CFC (sommet* s) { // Renvoie les composantes fortement connexes du graphe
-    int i = 0, d, f;
-    printf("Les composantes fortement connexes du graphe sont :\n{%d", (s[i].num)+1);
-    d = s[i].deb;
-    f = s[i].fin;
-    while (i < tailleMat) {
-        if ((d < (s[i+1].deb)) && (f > (s[i+1].fin))) {
-            printf(", %d", (s[i+1].num)+1);
-            i++;
-        } else {
-            i++;
-            d = s[i].deb;
-            f = s[i].fin;
-            if (i < tailleMat)
-                printf("}, {%d", (s[i].num)+1);
-            else
-                printf("}.");
-        }
-    }
-    printf("\n");
 }

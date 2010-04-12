@@ -15,37 +15,6 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include "../h/lsc.h"
 
 int main(int argc, char* argv[]) {
-    int i = 0, j = 0, k;
-    int** Mat = (int**) malloc(tailleMat*sizeof(int));
-    for (k = 0; k < tailleMat; k++) {
-        Mat[k] = (int*) malloc(tailleMat*sizeof(int));
-    }
-    sommet* S = (sommet*) malloc(tailleMat*sizeof(int));
-    char c;
-    FILE* fichier;
-    fichier = fopen(argv[1], "r"); //fichier = fopen("./test/graph.txt", "r");
-    if (fichier != NULL) {
-        while (!feof(fichier)) {
-            c = fgetc(fichier);
-            if (i == tailleMat) {
-                j++;
-                i = 0;
-            } else {
-                Mat[j][i] = atoi(&c);
-                i++;
-            }
-        }
-        fclose(fichier);
-        printMat(Mat);
-        iniSommet(S);
-        PP(Mat, S, 1);
-        triDecroissant(S);
-        PP(Mat, S, 0);
-        iniSommet(S);
-        CFC(S);
-
-    } else {
-        printf("Lecture du fichier impossible\n");
-    }
+    matAdjCFC(argv[1]);
     return 0;
 }

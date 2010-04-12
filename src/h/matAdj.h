@@ -22,12 +22,12 @@ struct sommet {
     int fin;
 };
 
+void matAdjCFC (char* a); // Renvoie les composantes fortement connexes du graphe
 void printMat (int** M); // Affiche la matrice adjacente
 void iniSommet (sommet* s); // Initialise les valeurs de la structure sommet
 void PP (int** M, sommet* s, int mode); // Parcours en profondeur
 void PProfG (int** M, int i, sommet* s); // Parcours en profondeur du graphe
 void PProfGD (int** M, int i, sommet* s); // Parcours en profondeur du graphe dual
 void triDecroissant (sommet* s); // Renvoie l'ordre de parcours de la matrice duale (trié par ordre décroissant des temps d'accès finaux)
-void CFC (sommet* s); // Renvoie les composantes fortement connexes du graphe
 
 #endif // MATADJ_H_INCLUDED

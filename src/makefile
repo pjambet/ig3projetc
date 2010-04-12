@@ -2,7 +2,7 @@
 CXX	?= g++
 
 # Options du compilateur
-CXXFLAGS	?= -Wall -ANSI
+CXXFLAGS	?= -Wall -ansi
 
 # Reconnaître les Extension de nom de fichier *.cpp et *.o comme suffixe
 SUFFIXES ?= .cpp .o 

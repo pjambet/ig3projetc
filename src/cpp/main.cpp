@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-# define tailleMat 5
+#include <string.h>
+#define tailleMat 5
 typedef struct sommet sommet;
 
 struct sommet {
@@ -22,7 +23,7 @@ void printMat (int** M) { // Affiche la matrice adjacente
     int i, j;
     for (i = 0; i < tailleMat; i++) {
         for (j = 0; j < tailleMat; j++) {
-            printf(" %d ", M[j][i]);
+            printf("%d ", M[j][i]);
         }
         printf("\n");
     }
@@ -52,7 +53,6 @@ int** matDuale (int** M) { // Renvoie la matrice duale de M
 }
 
 void PProf (int* M, int i, sommet* s, int t) { // Parcours en profondeur
-    int deb;
     s[i].etat = 0; // Etat atteint
     t++;
     s[i].deb = t;
@@ -128,8 +128,9 @@ int** fermetureTrans (int** M) {
 int main(int argc, char* argv[]) {
     int i = 0, j = 0;
     int** Mat = allocMat(Mat);
+    char c;
     FILE* fichier;
-    char c = '\0';
+
     fichier = fopen(argv[1], "r");
     if (fichier != NULL) {
         while (!feof(fichier)) {

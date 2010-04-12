@@ -39,6 +39,32 @@ void printMat (int** M) { // Affiche la matrice adjacente
     printf("\n");
 }
 
+void iniSommet (sommet* s) { // // Initialise les valeurs de la structure sommet
+    int i;
+    for (i = 0; i < tailleMat; i++) {
+        s[i].num = i;
+    }
+}
+
+void PP (int** M, sommet* s, int mode) { // Parcours en profondeur
+    int i;
+    temps = 0;
+    for (i = 0; i < tailleMat; i++) {
+        s[i].etat = -1; // Etat non atteint
+        s[i].deb = 0;
+        s[i].fin = 0;
+    }
+    for (i = 0; i < tailleMat; i++) {
+        if (s[s[i].num].etat == -1) {
+            if (mode) {
+                PProfG(M, s[i].num, s);
+            } else {
+                PProfGD(M, s[i].num, s);
+            }
+        }
+    }
+}
+
 void PProfG (int** M, int i, sommet* s) { // Parcours en profondeur du graphe
     int j;
     s[i].etat = 0; // Etat atteint
@@ -69,26 +95,6 @@ void PProfGD (int** M, int i, sommet* s) { // Parcours en profondeur du graphe d
     s[i].fin = temps;
 }
 
-void PP (int** M, sommet* s, char mode) { // Parcours en profondeur
-    int i;
-    temps = 0;
-    for (i = 0; i < tailleMat; i++) {
-        s[i].num = i;
-        s[i].etat = -1; // Etat non atteint
-        s[i].deb = 0;
-        s[i].fin = 0;
-    }
-    for (i = 0; i < tailleMat; i++) {
-        if (s[s[i].num].etat == -1) {
-            if (mode == 'g') {
-                PProfG(M, i, s);
-            } else {
-                PProfGD(M, i, s);
-            }
-        }
-    }
-}
-
 void triDecroissant (sommet* s) { // Renvoie l'ordre de parcours de la matrice duale (trié par ordre décroissant des temps d'accès finaux)
     int i, tmp = 0, continuer = 1;
     while (continuer) {
@@ -113,27 +119,23 @@ void triDecroissant (sommet* s) { // Renvoie l'ordre de parcours de la matrice d
 }
 
 void CFC (sommet* s) { // Renvoie les composantes fortement connexes du graphe
-    int i;
-    printf("Les composantes fortement connexes du graphe sont :\n{");
-    for (i = 0; i < tailleMat; i++) {
-        //printf("i= %d\n", i);
-        if ((s[i].fin) < (s[i+1].deb)) {
-            printf("%d}", s[i].num+1);
-            if (i < tailleMat-1)
-                printf(", {");
+    int i = 0, d, f;
+    printf("Les composantes fortement connexes du graphe sont :\n{%d", (s[i].num)+1);
+    d = s[i].deb;
+    f = s[i].fin;
+    while (i < tailleMat) {
+        if ((d < (s[i+1].deb)) && (f > (s[i+1].fin))) {
+            printf(", %d", (s[i+1].num)+1);
+            i++;
         } else {
-            if (i < tailleMat-1)
-                printf("%d, ", s[i].num+1);
+            i++;
+            d = s[i].deb;
+            f = s[i].fin;
+            if (i < tailleMat)
+                printf("}, {%d", (s[i].num)+1);
             else
-                printf("%d}\n", s[i].num+1);
+                printf("}.");
         }
-    }
-}
-
-void printSommet (sommet* s) { // Affiche le tableau d'informations des sommets
-    int i;
-    for (i = 0; i < tailleMat; i++) {
-        printf("Sommet %d = %d/%d\n", (s[i].num)+1, s[i].deb, s[i].fin);
     }
     printf("\n");
 }

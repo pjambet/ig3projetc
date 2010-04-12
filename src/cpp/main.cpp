@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
     sommet* S = (sommet*) malloc(tailleMat*sizeof(int));
     char c;
     FILE* fichier;
-    fichier = fopen(argv[1], "r");
+    fichier = fopen(argv[1], "r"); //fichier = fopen("./test/graph.txt", "r");
     if (fichier != NULL) {
         while (!feof(fichier)) {
             c = fgetc(fichier);
@@ -37,11 +37,11 @@ int main(int argc, char* argv[]) {
         }
         fclose(fichier);
         printMat(Mat);
-        PP(Mat, S, 'g');
-        printSommet(S);
+        iniSommet(S);
+        PP(Mat, S, 1);
         triDecroissant(S);
-        printSommet(S);
-        PP(Mat, S, 'd');
+        PP(Mat, S, 0);
+        iniSommet(S);
         CFC(S);
 
     } else {

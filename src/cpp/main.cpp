@@ -56,11 +56,10 @@ int** matDuale (int** M) { // Renvoie la matrice duale de M
 
 void PProf (int** M, int i, sommet* s, int t) { // Parcours en profondeur
     int j;
-    printf("Sommet %d\n", i+1);
     s[i].etat = 0; // Etat atteint
     t++;
     s[i].deb = t;
-    printf("s[%d].deb = %d\n", i+1, t);
+    printf("Sommet %d (%d / ?)\n", i+1, s[i].deb, s[i].fin);
     for (j = 0; j < tailleMat; j++) {
         //printf("M[%d] = %d s[%d].etat = %d\n", j+1, M[i][j], j+1, s[j].etat);
         if ((M[i][j] > 0) && (s[j].etat == -1)) { // Successeur non atteint
@@ -71,7 +70,7 @@ void PProf (int** M, int i, sommet* s, int t) { // Parcours en profondeur
     s[i].etat = 1; // Etat explore
     t++;
     s[i].fin = t;
-    printf("s[%d].fin = %d\n", i+1, t);
+    printf("Sommet %d (%d / %d)\n", i+1, s[i].deb, s[i].fin);
 }
 
 sommet* PP (int** M) { // Parcours en profondeur
@@ -79,9 +78,12 @@ sommet* PP (int** M) { // Parcours en profondeur
     sommet* s = (sommet*) malloc(tailleMat*sizeof(int));
     for (i = 0; i < tailleMat; i++) {
         s[i].etat = -1; // Etat non atteint
+        s[i].deb = 0;
+        s[i].fin = 0;
     }
     for (i = 0; i < tailleMat; i++) {
-        PProf(M, i, s, t);
+        if (s[i].etat == -1)
+            PProf(M, i, s, t);
     }
     return s;
 }

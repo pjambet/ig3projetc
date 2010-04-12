@@ -36,6 +36,7 @@ int main(int argc, char* argv[]) {
             }
         }
         fclose(fichier);
+        printMat(Mat);
         PP(Mat, S, 'g');
         triDecroissant(S);
         PP(Mat, S, 'd');
@@ -44,6 +45,5 @@ int main(int argc, char* argv[]) {
     } else {
         printf("Lecture du fichier impossible\n");
     }
-    system("PAUSE");
     return 0;
 }

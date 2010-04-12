@@ -18,11 +18,15 @@ int temps;
 
 void printMat (int** M) { // Affiche la matrice adjacente
     int i, j;
-    printf("  1 2 3 4 5 6 7 8\n");
+    printf(" ");
     for (i = 0; i < tailleMat; i++) {
-        printf("%d ", i+1);
+        printf("  %d", i+1);
+    }
+    printf("\n");
+    for (i = 0; i < tailleMat; i++) {
+        printf("%d  ", i+1);
         for (j = 0; j < tailleMat; j++) {
-            printf("%d ", M[i][j]);
+            printf("%d  ", M[i][j]);
         }
         printf("\n");
     }
@@ -109,8 +113,8 @@ void CFC (sommet* s) { // Renvoie les composantes fortement connexes du graphe
         //printf("i= %d\n", i);
         if ((s[i].fin) < (s[i+1].deb)) {
             printf("%d}", s[i].num+1);
-            //if (i < tailleMat)
-            printf(", {");
+            if (i < tailleMat-1)
+                printf(", {");
         } else {
             if (i < tailleMat-1)
                 printf("%d, ", s[i].num+1);
@@ -123,7 +127,7 @@ void CFC (sommet* s) { // Renvoie les composantes fortement connexes du graphe
 void printSommet (sommet* s) { // Affiche le tableau d'informations des sommets
     int i;
     for (i = 0; i < tailleMat; i++) {
-        printf("Sommet %d = %d/%d\n", s[i].num+1, s[i].deb, s[i].fin);
+        printf("Sommet %d = %d/%d\n", (s[i].num)+1, s[i].deb, s[i].fin);
     }
     printf("\n");
 }

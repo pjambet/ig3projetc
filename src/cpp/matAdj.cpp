@@ -20,11 +20,17 @@ void printMat (int** M) { // Affiche la matrice adjacente
     int i, j;
     printf(" ");
     for (i = 0; i < tailleMat; i++) {
-        printf("  %d", i+1);
+        if (i <= 9)
+            printf("  %d", i+1);
+        else
+            printf(" %d", i+1);
     }
     printf("\n");
     for (i = 0; i < tailleMat; i++) {
-        printf("%d  ", i+1);
+        if (i < 9)
+            printf("%d  ", i+1);
+        else
+            printf("%d ", i+1);
         for (j = 0; j < tailleMat; j++) {
             printf("%d  ", M[i][j]);
         }

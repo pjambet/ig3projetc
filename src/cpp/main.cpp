@@ -38,7 +38,9 @@ int main(int argc, char* argv[]) {
         fclose(fichier);
         printMat(Mat);
         PP(Mat, S, 'g');
+        printSommet(S);
         triDecroissant(S);
+        printSommet(S);
         PP(Mat, S, 'd');
         CFC(S);
 

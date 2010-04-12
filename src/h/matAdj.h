@@ -11,7 +11,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 
 #ifndef MATADJ_H_INCLUDED
 #define MATADJ_H_INCLUDED
-#define tailleMat 8
+#define tailleMat 10
 
 typedef struct sommet sommet;
 

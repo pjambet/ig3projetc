@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define tailleMat 5
+#define tailleMat 8
 typedef struct sommet sommet;
 
 struct sommet {

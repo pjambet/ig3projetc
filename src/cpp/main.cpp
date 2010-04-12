@@ -21,7 +21,9 @@ int** allocMat (int** M) { // Alloue une matrice adjacente
 
 void printMat (int** M) { // Affiche la matrice adjacente
     int i, j;
+    printf("  1 2 3 4 5 6 7 8\n");
     for (i = 0; i < tailleMat; i++) {
+        printf("%d ", i+1);
         for (j = 0; j < tailleMat; j++) {
             printf("%d ", M[i][j]);
         }
@@ -52,16 +54,19 @@ int** matDuale (int** M) { // Renvoie la matrice duale de M
     return Mp;
 }
 
-void PProf (int* M, int i, sommet* s, int t) { // Parcours en profondeur
+void PProf (int** M, int i, sommet* s, int t) { // Parcours en profondeur
+    int j;
+    printf("Sommet %d\n", i+1);
     s[i].etat = 0; // Etat atteint
     t++;
     s[i].deb = t;
-    for (i = 0; i < tailleMat; i++) {
-        printf("M[%d] = %d s[%d].etat = %d\n", i, M[i], i, s[i].etat);
-        if ((M[i] > 0) && (s[i].etat == -1)) // Successeur non atteint
-            PProf(M, i, s, t);
+    for (j = 0; j < tailleMat; j++) {
+        printf("M[%d] = %d s[%d].etat = %d\n", j+1, M[i][j], j+1, s[j].etat);
+        if ((M[i][j] > 0) && (s[j].etat == -1)) { // Successeur non atteint
+            printf("OK ! Appel sur M[%d]\n", j+1);
+            PProf(M, j, s, t);
+        }
     }
-    printf("\n");
     s[i].etat = 1; // Etat explore
     t++;
     s[i].fin = t;
@@ -74,7 +79,7 @@ sommet* PP (int** M) { // Parcours en profondeur
         s[i].etat = -1; // Etat non atteint
     }
     for (i = 0; i < tailleMat; i++) {
-        PProf(M[i], i, s, t);
+        PProf(M, i, s, t);
     }
     return s;
 }
@@ -82,7 +87,7 @@ sommet* PP (int** M) { // Parcours en profondeur
 void printSommet (sommet* s) { // Affiche le tableau d'informations des sommets
     int i;
     for (i = 0; i < tailleMat; i++) {
-        printf("Sommet %d : Etat=%d, d(%d)=%d, f(%d)=%d\n", i, s[i].etat, i, s[i].deb, i, s[i].fin);
+        printf("Sommet %d : Etat=%d, d(%d)=%d, f(%d)=%d\n", i+1, s[i].etat, i+1, s[i].deb, i+1, s[i].fin);
     }
     printf("\n");
 }

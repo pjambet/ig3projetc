@@ -90,8 +90,9 @@ sommet* PP (int** M) { // Parcours en profondeur
 
 void printSommet (sommet* s) { // Affiche le tableau d'informations des sommets
     int i;
+    printf("\n");
     for (i = 0; i < tailleMat; i++) {
-        printf("Sommet %d : Etat=%d, d(%d)=%d, f(%d)=%d\n", i+1, s[i].etat, i+1, s[i].deb, i+1, s[i].fin);
+        printf("Sommet %d = %d / %d\n", i+1, s[i].etat, s[i].deb, s[i].fin);
     }
     printf("\n");
 }

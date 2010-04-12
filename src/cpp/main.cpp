@@ -59,11 +59,11 @@ void PProf (int** M, int i, sommet* s, int t) { // Parcours en profondeur
     s[i].etat = 0; // Etat atteint
     t++;
     s[i].deb = t;
-    printf("Sommet %d (%d / ?)\n", i+1, s[i].deb, s[i].fin);
+    printf("Sommet %d (%d / *)\n", i+1, s[i].deb, s[i].fin);
     for (j = 0; j < tailleMat; j++) {
         //printf("M[%d] = %d s[%d].etat = %d\n", j+1, M[i][j], j+1, s[j].etat);
         if ((M[i][j] > 0) && (s[j].etat == -1)) { // Successeur non atteint
-            printf("OK ! Appel sur M[%d]\n", j+1);
+            printf("M[%d][%d] = %d => Sommet %d\n", i+1, j+1, M[i][j], j+1);
             PProf(M, j, s, t);
         }
     }
@@ -92,7 +92,7 @@ void printSommet (sommet* s) { // Affiche le tableau d'informations des sommets
     int i;
     printf("\n");
     for (i = 0; i < tailleMat; i++) {
-        printf("Sommet %d = %d / %d\n", i+1, s[i].etat, s[i].deb, s[i].fin);
+        printf("Sommet %d = %d / %d\n", i+1, s[i].deb, s[i].fin);
     }
     printf("\n");
 }

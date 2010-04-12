@@ -77,6 +77,13 @@ sommet* PP (int** M) { // Parcours en profondeur
     return s;
 }
 
+void printSommet (sommet* s) { // Affiche le tableau d'informations des sommets
+    int i;
+    for (i = 0; i < tailleMat; i++) {
+        printf("Sommet %d : Etat=%d, d(%d)=%d, f(%d)=%d\n", i, s[i].etat, i, s[i].deb, i, s[i].fin);
+    }
+}
+
 void CFCx (int** M, int x) { // Composante Forcement Connexe d'un sommet
 
 }
@@ -128,6 +135,7 @@ int** fermetureTrans (int** M) {
 int main(int argc, char* argv[]) {
     int i = 0, j = 0;
     int** Mat = allocMat(Mat);
+    sommet* s = (sommet*) malloc(tailleMat*sizeof(int));
     char c;
     FILE* fichier;
 
@@ -145,6 +153,8 @@ int main(int argc, char* argv[]) {
         }
         fclose(fichier);
         printMat(Mat);
+        s = PP(Mat);
+        printSommet(s);
     }
     return 0;
 }

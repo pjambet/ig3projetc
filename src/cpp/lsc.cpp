@@ -4,7 +4,7 @@ NOM DU FICHIER   : lsc.cpp
 OBJET            : liste simplement chainée
 --------------------------------------------------------------------------------
 DATE DE CREATION : 12/04/2010
-AUTEUR           : Pierre JAMBET
+AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 --------------------------------------------------------------------------------
 
 ============================================================================= */
@@ -14,5 +14,5 @@ AUTEUR           : Pierre JAMBET
 #include "stdlib.h"
 #include "assert.h"
 
-#include "lsc.h"
+#include "../h/lsc.h"
 

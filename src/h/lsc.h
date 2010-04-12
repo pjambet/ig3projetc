@@ -4,7 +4,7 @@ NOM DU FICHIER   : lsc.h
 OBJET            : liste simplement chainée
 --------------------------------------------------------------------------------
 DATE DE CREATION : 12/04/2010
-AUTEUR           : Pierre JAMBET
+AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 --------------------------------------------------------------------------------
 
 ============================================================================= */

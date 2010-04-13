@@ -120,7 +120,6 @@ void PProfG (int** M, sommet* s, int i, int* t) { // Parcours en profondeur du g
     int j;
     s[i].etat = 0; // Etat atteint
     (*t)++;
-    printf("t=%d\n", *t);
     s[i].deb = *t;
     for (j = 0; j < tailleMat; j++) {
         if ((M[i][j] > 0) && (s[j].etat == -1)) { // Successeur non atteint
@@ -129,13 +128,13 @@ void PProfG (int** M, sommet* s, int i, int* t) { // Parcours en profondeur du g
     }
     s[i].etat = 1; // Etat explore
     (*t)++;
-    printf("t=%d\n", *t);
     s[i].fin = *t;
 }
 
 void PPGD (int** M, sommet* s) { // Parcours en profondeur du graphe dual (appel sur PProfG)
     int i;
-    int* t = 0;
+    int temps = 0;
+    int* t = &temps;
     for (i = 0; i < tailleMat; i++) {
         s[i].etat = -1; // Etat non atteint
         s[i].deb = 0;
@@ -152,7 +151,6 @@ void PProfGD (int** M, sommet* s, int i, int* t) { // Parcours en profondeur du 
     int j;
     s[i].etat = 0; // Etat atteint
     (*t)++;
-    printf("t=%d\n", *t);
     s[i].deb = *t;
     for (j = 0; j < tailleMat; j++) {
         if ((M[j][i] > 0) && (s[j].etat == -1)) { // Successeur non atteint
@@ -161,7 +159,6 @@ void PProfGD (int** M, sommet* s, int i, int* t) { // Parcours en profondeur du 
     }
     s[i].etat = 1; // Etat explore
     (*t)++;
-    printf("t=%d\n", *t);
     s[i].fin = *t;
 }
 

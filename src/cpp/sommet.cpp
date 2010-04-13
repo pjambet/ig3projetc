@@ -19,7 +19,7 @@ void printCFC (sommet* s) {
     printf("Les composantes fortement connexes du graphe sont :\n{%d", (s[i].num)+1);
     d = s[i].deb;
     f = s[i].fin;
-    while (i < tailleMat) {
+    while (i < TAILLE_MAT) {
         if ((d < (s[i+1].deb)) && (f > (s[i+1].fin))) {
             printf(", %d", (s[i+1].num)+1);
             i++;
@@ -27,7 +27,7 @@ void printCFC (sommet* s) {
             i++;
             d = s[i].deb;
             f = s[i].fin;
-            if (i < tailleMat)
+            if (i < TAILLE_MAT)
                 printf("}, {%d", (s[i].num)+1);
             else
                 printf("}.");
@@ -38,7 +38,7 @@ void printCFC (sommet* s) {
 
 void iniSommet (sommet* s) { // // Initialise les valeurs de la structure sommet
     int i;
-    for (i = 0; i < tailleMat; i++) {
+    for (i = 0; i < TAILLE_MAT; i++) {
         s[i].num = i;
     }
 }
@@ -47,7 +47,7 @@ void triDecroissant (sommet* s) { // Renvoie l'ordre de parcours de la matrice d
     int i, tmp = 0, continuer = 1;
     while (continuer) {
         continuer--;
-        for (i = 0; i < tailleMat-1; i++) {
+        for (i = 0; i < TAILLE_MAT-1; i++) {
             if (s[i].fin < s[i+1].fin) {
                 tmp = s[i+1].fin;
                 s[i+1].fin = s[i].fin;

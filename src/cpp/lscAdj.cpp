@@ -17,18 +17,18 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 
 void lscAdjCFC (char* a) { // Renvoie les composantes fortement connexes du graphe
     int i = 0, j = 0, k;
-    int** M = (int**) malloc(tailleMat*sizeof(int));
-    for (k = 0; k < tailleMat; k++) {
-        M[k] = (int*) malloc(tailleMat*sizeof(int));
+    int** M = (int**) malloc(TAILLE_MAT*sizeof(int));
+    for (k = 0; k < TAILLE_MAT; k++) {
+        M[k] = (int*) malloc(TAILLE_MAT*sizeof(int));
     }
-    sommet* s = (sommet*) malloc(tailleMat*sizeof(int));
+    sommet* s = (sommet*) malloc(TAILLE_MAT*sizeof(int));
     char c;
     FILE* fichier;
     fichier = fopen(a, "r");
     if (fichier != NULL) {
         while (!feof(fichier)) {
             c = fgetc(fichier);
-            if (i == tailleMat) {
+            if (i == TAILLE_MAT) {
                 j++;
                 i = 0;
             } else {

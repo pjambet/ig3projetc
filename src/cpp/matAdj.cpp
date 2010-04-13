@@ -14,8 +14,6 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include <string.h>
 #include "../h/matAdj.h"
 
-int temps;
-
 void matAdjCFC (char* a) { // Renvoie les composantes fortement connexes du graphe
     int i = 0, j = 0, k;
     int** M = (int**) malloc(tailleMat*sizeof(int));
@@ -104,7 +102,8 @@ void iniSommet (sommet* s) { // // Initialise les valeurs de la structure sommet
 
 void PPG (int** M, sommet* s) { // Parcours en profondeur du graphe (appel sur PProfG)
     int i;
-    temps = 0;
+    int temps = 0;
+    int* t = &temps;
     for (i = 0; i < tailleMat; i++) {
         s[i].etat = -1; // Etat non atteint
         s[i].deb = 0;
@@ -112,29 +111,31 @@ void PPG (int** M, sommet* s) { // Parcours en profondeur du graphe (appel sur P
     }
     for (i = 0; i < tailleMat; i++) {
         if (s[s[i].num].etat == -1) {
-            PProfG(M, s[i].num, s);
+            PProfG(M, s, s[i].num, t);
         }
     }
 }
 
-void PProfG (int** M, int i, sommet* s) { // Parcours en profondeur du graphe
+void PProfG (int** M, sommet* s, int i, int* t) { // Parcours en profondeur du graphe (recursif)
     int j;
     s[i].etat = 0; // Etat atteint
-    temps++;
-    s[i].deb = temps;
+    (*t)++;
+    printf("t=%d\n", *t);
+    s[i].deb = *t;
     for (j = 0; j < tailleMat; j++) {
         if ((M[i][j] > 0) && (s[j].etat == -1)) { // Successeur non atteint
-            PProfG(M, j, s);
+            PProfG(M, s, j, t);
         }
     }
     s[i].etat = 1; // Etat explore
-    temps++;
-    s[i].fin = temps;
+    (*t)++;
+    printf("t=%d\n", *t);
+    s[i].fin = *t;
 }
 
 void PPGD (int** M, sommet* s) { // Parcours en profondeur du graphe dual (appel sur PProfG)
     int i;
-    temps = 0;
+    int* t = 0;
     for (i = 0; i < tailleMat; i++) {
         s[i].etat = -1; // Etat non atteint
         s[i].deb = 0;
@@ -142,24 +143,26 @@ void PPGD (int** M, sommet* s) { // Parcours en profondeur du graphe dual (appel
     }
     for (i = 0; i < tailleMat; i++) {
         if (s[s[i].num].etat == -1) {
-            PProfGD(M, s[i].num, s);
+            PProfGD(M, s, s[i].num, t);
         }
     }
 }
 
-void PProfGD (int** M, int i, sommet* s) { // Parcours en profondeur du graphe dual (recursif)
+void PProfGD (int** M, sommet* s, int i, int* t) { // Parcours en profondeur du graphe dual (recursif)
     int j;
     s[i].etat = 0; // Etat atteint
-    temps++;
-    s[i].deb = temps;
+    (*t)++;
+    printf("t=%d\n", *t);
+    s[i].deb = *t;
     for (j = 0; j < tailleMat; j++) {
         if ((M[j][i] > 0) && (s[j].etat == -1)) { // Successeur non atteint
-            PProfGD(M, j, s);
+            PProfGD(M, s, j, t);
         }
     }
     s[i].etat = 1; // Etat explore
-    temps++;
-    s[i].fin = temps;
+    (*t)++;
+    printf("t=%d\n", *t);
+    s[i].fin = *t;
 }
 
 void triDecroissant (sommet* s) { // Renvoie l'ordre de parcours de la matrice duale (trié par ordre décroissant des temps d'accès finaux)

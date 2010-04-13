@@ -27,9 +27,9 @@ void printMat (int** M); // Affiche la matrice adjacente
 void printCFC (sommet* s); // Affiche les CFC
 void iniSommet (sommet* s); // Initialise les valeurs de la structure sommet
 void PPG (int** M, sommet* s); // Parcours en profondeur du graphe (appel sur PProfG)
-void PProfG (int** M, int i, sommet* s); // Parcours en profondeur du graphe (recursif)
+void PProfG (int** M, sommet*, int i, int* t); // Parcours en profondeur du graphe (recursif)
 void PPGD (int** M, sommet* s); // Parcours en profondeur du graphe dual (appel sur PProfGD)
-void PProfGD (int** M, int i, sommet* s); // Parcours en profondeur du graphe dual (recursif)
+void PProfGD (int** M, sommet* s, int i, int* t); // Parcours en profondeur du graphe dual (recursif)
 void triDecroissant (sommet* s); // Renvoie l'ordre de parcours de la matrice duale (trié par ordre décroissant des temps d'accès finaux)
 
 #endif // MATADJ_H_INCLUDED

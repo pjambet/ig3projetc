@@ -43,6 +43,7 @@ void matAdjCFC (char* a) { // Renvoie les composantes fortement connexes du grap
         PPGD(M, s);
         iniSommet(s);
         printCFC(s);
+
     } else {
         printf("Lecture du fichier impossible\n");
     }

@@ -1,7 +1,7 @@
 /* =============================================================================
 PROJET           : projet C ig3 - FACEBOOK
 NOM DU FICHIER   : matAdj.cpp
-OBJET            : matrice adjacente
+OBJET            : matrice d'adjacence
 --------------------------------------------------------------------------------
 DATE DE CREATION : 12/04/2010
 AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
@@ -12,6 +12,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "../h/sommet.h"
 #include "../h/matAdj.h"
 
 void matAdjCFC (char* a) { // Renvoie les composantes fortement connexes du graphe
@@ -23,7 +24,7 @@ void matAdjCFC (char* a) { // Renvoie les composantes fortement connexes du grap
     sommet* s = (sommet*) malloc(tailleMat*sizeof(int));
     char c;
     FILE* fichier;
-    fichier = fopen(a, "r"); //fichier = fopen("./test/graph.txt", "r");
+    fichier = fopen(a, "r");
     if (fichier != NULL) {
         while (!feof(fichier)) {
             c = fgetc(fichier);
@@ -70,35 +71,6 @@ void printMat (int** M) { // Affiche la matrice adjacente
         printf("\n");
     }
     printf("\n");
-}
-
-void printCFC (sommet* s) {
-    int d, f, i = 0;
-    printf("Les composantes fortement connexes du graphe sont :\n{%d", (s[i].num)+1);
-    d = s[i].deb;
-    f = s[i].fin;
-    while (i < tailleMat) {
-        if ((d < (s[i+1].deb)) && (f > (s[i+1].fin))) {
-            printf(", %d", (s[i+1].num)+1);
-            i++;
-        } else {
-            i++;
-            d = s[i].deb;
-            f = s[i].fin;
-            if (i < tailleMat)
-                printf("}, {%d", (s[i].num)+1);
-            else
-                printf("}.");
-        }
-    }
-    printf("\n");
-}
-
-void iniSommet (sommet* s) { // // Initialise les valeurs de la structure sommet
-    int i;
-    for (i = 0; i < tailleMat; i++) {
-        s[i].num = i;
-    }
 }
 
 void PPG (int** M, sommet* s) { // Parcours en profondeur du graphe (appel sur PProfG)
@@ -161,27 +133,4 @@ void PProfGD (int** M, sommet* s, int i, int* t) { // Parcours en profondeur du 
     s[i].etat = 1; // Etat explore
     (*t)++;
     s[i].fin = *t;
-}
-
-void triDecroissant (sommet* s) { // Renvoie l'ordre de parcours de la matrice duale (trié par ordre décroissant des temps d'accès finaux)
-    int i, tmp = 0, continuer = 1;
-    while (continuer) {
-        continuer--;
-        for (i = 0; i < tailleMat-1; i++) {
-            if (s[i].fin < s[i+1].fin) {
-                tmp = s[i+1].fin;
-                s[i+1].fin = s[i].fin;
-                s[i].fin = tmp;
-
-                tmp = s[i+1].deb;
-                s[i+1].deb = s[i].deb;
-                s[i].deb = tmp;
-
-                tmp = s[i+1].num;
-                s[i+1].num = s[i].num;
-                s[i].num = tmp;
-                continuer++;
-            }
-        }
-    }
 }

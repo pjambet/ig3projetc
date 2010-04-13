@@ -12,10 +12,10 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include <stdio.h>
 #include <stdlib.h>
 #include "../h/matAdj.h"
-#include "../h/lsc.h"
-#include "../h/generate_mat.h"
+#include "../h/lscAdj.h"
 
 int main(int argc, char* argv[]) {
-  matAdjCFC(argv[1]);
-  return 0;
+    matAdjCFC(argv[1]); //matAdjCFC("./test/graph.txt");
+
+    return 0;
 }

@@ -17,12 +17,12 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 int temps;
 
 void matAdjCFC (char* a) { // Renvoie les composantes fortement connexes du graphe
-    int i = 0, j = 0, k, d, f;
-    int** Mat = (int**) malloc(tailleMat*sizeof(int));
+    int i = 0, j = 0, k;
+    int** M = (int**) malloc(tailleMat*sizeof(int));
     for (k = 0; k < tailleMat; k++) {
-        Mat[k] = (int*) malloc(tailleMat*sizeof(int));
+        M[k] = (int*) malloc(tailleMat*sizeof(int));
     }
-    sommet* S = (sommet*) malloc(tailleMat*sizeof(int));
+    sommet* s = (sommet*) malloc(tailleMat*sizeof(int));
     char c;
     FILE* fichier;
     fichier = fopen(a, "r"); //fichier = fopen("./test/graph.txt", "r");
@@ -33,35 +33,18 @@ void matAdjCFC (char* a) { // Renvoie les composantes fortement connexes du grap
                 j++;
                 i = 0;
             } else {
-                Mat[j][i] = atoi(&c);
+                M[j][i] = atoi(&c);
                 i++;
             }
         }
         fclose(fichier);
-        printMat(Mat);
-        iniSommet(S);
-        PP(Mat, S, 1);
-        triDecroissant(S);
-        PP(Mat, S, 0);
-        iniSommet(S);
-        printf("Les composantes fortement connexes du graphe sont :\n{%d", (S[i].num)+1);
-        d = S[i].deb;
-        f = S[i].fin;
-        while (i < tailleMat) {
-            if ((d < (S[i+1].deb)) && (f > (S[i+1].fin))) {
-                printf(", %d", (S[i+1].num)+1);
-                i++;
-            } else {
-                i++;
-                d = S[i].deb;
-                f = S[i].fin;
-                if (i < tailleMat)
-                    printf("}, {%d", (S[i].num)+1);
-                else
-                    printf("}.");
-            }
-        }
-        printf("\n");
+        printMat(M);
+        iniSommet(s);
+        PPG(M, s);
+        triDecroissant(s);
+        PPGD(M, s);
+        iniSommet(s);
+        printCFC(s);
     } else {
         printf("Lecture du fichier impossible\n");
     }
@@ -90,6 +73,28 @@ void printMat (int** M) { // Affiche la matrice adjacente
     printf("\n");
 }
 
+void printCFC (sommet* s) {
+    int d, f, i = 0;
+    printf("Les composantes fortement connexes du graphe sont :\n{%d", (s[i].num)+1);
+    d = s[i].deb;
+    f = s[i].fin;
+    while (i < tailleMat) {
+        if ((d < (s[i+1].deb)) && (f > (s[i+1].fin))) {
+            printf(", %d", (s[i+1].num)+1);
+            i++;
+        } else {
+            i++;
+            d = s[i].deb;
+            f = s[i].fin;
+            if (i < tailleMat)
+                printf("}, {%d", (s[i].num)+1);
+            else
+                printf("}.");
+        }
+    }
+    printf("\n");
+}
+
 void iniSommet (sommet* s) { // // Initialise les valeurs de la structure sommet
     int i;
     for (i = 0; i < tailleMat; i++) {
@@ -97,7 +102,7 @@ void iniSommet (sommet* s) { // // Initialise les valeurs de la structure sommet
     }
 }
 
-void PP (int** M, sommet* s, int mode) { // Parcours en profondeur
+void PPG (int** M, sommet* s) { // Parcours en profondeur du graphe (appel sur PProfG)
     int i;
     temps = 0;
     for (i = 0; i < tailleMat; i++) {
@@ -107,11 +112,7 @@ void PP (int** M, sommet* s, int mode) { // Parcours en profondeur
     }
     for (i = 0; i < tailleMat; i++) {
         if (s[s[i].num].etat == -1) {
-            if (mode) {
-                PProfG(M, s[i].num, s);
-            } else {
-                PProfGD(M, s[i].num, s);
-            }
+            PProfG(M, s[i].num, s);
         }
     }
 }
@@ -131,7 +132,22 @@ void PProfG (int** M, int i, sommet* s) { // Parcours en profondeur du graphe
     s[i].fin = temps;
 }
 
-void PProfGD (int** M, int i, sommet* s) { // Parcours en profondeur du graphe dual
+void PPGD (int** M, sommet* s) { // Parcours en profondeur du graphe dual (appel sur PProfG)
+    int i;
+    temps = 0;
+    for (i = 0; i < tailleMat; i++) {
+        s[i].etat = -1; // Etat non atteint
+        s[i].deb = 0;
+        s[i].fin = 0;
+    }
+    for (i = 0; i < tailleMat; i++) {
+        if (s[s[i].num].etat == -1) {
+            PProfGD(M, s[i].num, s);
+        }
+    }
+}
+
+void PProfGD (int** M, int i, sommet* s) { // Parcours en profondeur du graphe dual (recursif)
     int j;
     s[i].etat = 0; // Etat atteint
     temps++;

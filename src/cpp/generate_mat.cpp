@@ -9,7 +9,6 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 
 ============================================================================= */
 
-
 #include "../h/generate_mat.h"
 
 void generate_matrix(int x){

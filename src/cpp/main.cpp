@@ -13,6 +13,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include <stdlib.h>
 #include "../h/matAdj.h"
 #include "../h/lscAdj.h"
+#include "../h/generate_mat.h"
 
 int main(int argc, char* argv[]) {
     matAdjCFC(argv[1]); //matAdjCFC("./test/graph.txt");

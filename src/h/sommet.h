@@ -11,7 +11,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 
 #ifndef SOMMET_H_INCLUDED
 #define SOMMET_H_INCLUDED
-#define tailleMat 10
+#define TAILLE_MAT 10
 
 typedef struct sommet sommet;
 struct sommet {

@@ -1,7 +1,7 @@
 /* =============================================================================
 PROJET           : projet C ig3 - FACEBOOK
-NOM DU FICHIER   : lsc.cpp
-OBJET            : liste simplement chainÃ©e
+NOM DU FICHIER   : ListeSC.cpp
+OBJET            : liste simplement chainée
 --------------------------------------------------------------------------------
 DATE DE CREATION : 12/04/2010
 AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
@@ -14,5 +14,5 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include "stdlib.h"
 #include "assert.h"
 
-#include "../h/lsc.h"
+#include "../h/ListeSC.h"
 

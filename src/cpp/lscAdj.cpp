@@ -50,8 +50,8 @@ void lscAdjCFC (char* a) { // Renvoie les composantes fortement connexes du grap
             }
         }
         fclose(fichier);
-        printListeAdj(l);
         iniSommet(s);
+        printListeAdj(l);
         PPG(l, s);
         printf("lala");
         triDecroissant(s);

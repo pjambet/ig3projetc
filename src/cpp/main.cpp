@@ -16,6 +16,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include "../h/generate_mat.h"
 
 int main(int argc, char* argv[]) {
+    //generate_matrix(10);
     //matAdjCFC(argv[1]);
     lscAdjCFC(argv[1]);
     return 0;

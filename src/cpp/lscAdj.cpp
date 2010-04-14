@@ -50,10 +50,10 @@ void lscAdjCFC (char* a) { // Renvoie les composantes fortement connexes du grap
             }
         }
         fclose(fichier);
-
-        iniSommet(s);
         printListeAdj(l);
+        iniSommet(s);
         PPG(l, s);
+        printf("lala");
         triDecroissant(s);
         PPGD(l, s);
         iniSommet(s);
@@ -87,7 +87,6 @@ void PPG (liste* l, sommet* s) { // Parcours en profondeur du graphe (appel sur 
         s[i].deb = 0;
         s[i].fin = 0;
     }
-    printListeAdj(l);
     for (i = 0; i < TAILLE_MAT; i++) {
         if (s[s[i].num].etat == -1) {
             PProfG(l, s, s[i].num, t);
@@ -99,9 +98,9 @@ void PProfG (liste* l, sommet* s, int i, int* t) { // Parcours en profondeur du 
     s[i].etat = 0; // Etat atteint
     (*t)++;
     s[i].deb = *t;
+    printf("deb s(%d) = %d / xxx\n", i+1, s[i].deb);
     liste temp = l[i];
     while (temp != NULL) {
-        //printf("Voisin de %d = %d\n", i+1, (temp->val)+1);
         if (s[temp->val].etat == -1) {
             PProfG(l, s, temp->val, t);
         }
@@ -110,7 +109,7 @@ void PProfG (liste* l, sommet* s, int i, int* t) { // Parcours en profondeur du 
     s[i].etat = 1; // Etat explore
     (*t)++;
     s[i].fin = *t;
-    //printf("fin s(%d) = %d / %d\n", i+1, s[i].deb, s[i].fin);
+    printf("fin s(%d) = %d / %d\n", i+1, s[i].deb, s[i].fin);
 }
 
 void PPGD (liste* l, sommet* s) { // Parcours en profondeur du graphe dual (appel sur PProfGD)

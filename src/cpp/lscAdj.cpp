@@ -51,8 +51,8 @@ void lscAdjCFC (char* a) { // Renvoie les composantes fortement connexes du grap
         }
         fclose(fichier);
 
-        printListeAdj(l);
         iniSommet(s);
+        printListeAdj(l);
         PPG(l, s);
         triDecroissant(s);
         PPGD(l, s);
@@ -87,6 +87,7 @@ void PPG (liste* l, sommet* s) { // Parcours en profondeur du graphe (appel sur 
         s[i].deb = 0;
         s[i].fin = 0;
     }
+    printListeAdj(l);
     for (i = 0; i < TAILLE_MAT; i++) {
         if (s[s[i].num].etat == -1) {
             PProfG(l, s, s[i].num, t);
@@ -95,21 +96,21 @@ void PPG (liste* l, sommet* s) { // Parcours en profondeur du graphe (appel sur 
 }
 
 void PProfG (liste* l, sommet* s, int i, int* t) { // Parcours en profondeur du graphe (recursif)
-    int j;
     s[i].etat = 0; // Etat atteint
     (*t)++;
     s[i].deb = *t;
     liste temp = l[i];
-    while (temp != NULL && i > 3) {
-        printf("Voisin de %d = %d\n", i+1, (temp->val)+1);
-        if (s[temp->val].etat == -1)
+    while (temp != NULL) {
+        //printf("Voisin de %d = %d\n", i+1, (temp->val)+1);
+        if (s[temp->val].etat == -1) {
             PProfG(l, s, temp->val, t);
+        }
         temp = temp->suiv;
     }
     s[i].etat = 1; // Etat explore
     (*t)++;
     s[i].fin = *t;
-    printf("s(%d) = %d / %d\n", i+1, s[i].deb, s[i].fin);
+    //printf("fin s(%d) = %d / %d\n", i+1, s[i].deb, s[i].fin);
 }
 
 void PPGD (liste* l, sommet* s) { // Parcours en profondeur du graphe dual (appel sur PProfGD)
@@ -128,17 +129,9 @@ void PPGD (liste* l, sommet* s) { // Parcours en profondeur du graphe dual (appe
     }
 }
 void PProfGD (liste* l, sommet* s, int i, int* t) { // Parcours en profondeur du graphe dual (recursif)
-    int j;
     s[i].etat = 0; // Etat atteint
     (*t)++;
     s[i].deb = *t;
-    /*for (j = 0; j < TAILLE_MAT; j++) {
-        liste temp = l[j];
-        while (temp != NULL) {
-            PProfGD(l, s, temp->val, t);
-            temp = temp->suiv;
-        }
-    }*/
     s[i].etat = 1; // Etat explore
     (*t)++;
     s[i].fin = *t;

@@ -15,17 +15,17 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 
 typedef struct cell cell;
 struct cell {
-    struct cell* suiv;
     int val;
+    struct cell* suiv;
 };
 
-typedef cell* LSC;
+typedef cell* liste;
 
 void lscAdjCFC (char* a); // Renvoie les composantes fortement connexes du graphe
-void printLSC (int** M); // Affiche la liste adjacente
-void PPG (int* M, sommet* s); // Parcours en profondeur du graphe (appel sur PProfG)
-void PProfG (int* M, sommet*, int i, int* t); // Parcours en profondeur du graphe (recursif)
-void PPGD (int* M, sommet* s); // Parcours en profondeur du graphe dual (appel sur PProfGD)
-void PProfGD (int* M, sommet* s, int i, int* t); // Parcours en profondeur du graphe dual (recursif)
+void printListeAdj (liste* l); // Affiche la liste adjacente
+void PPG (liste* l, sommet* s); // Parcours en profondeur du graphe (appel sur PProfG)
+void PProfG (liste* l, sommet* s, int i, int* t); // Parcours en profondeur du graphe (recursif)
+void PPGD (liste* l, sommet* s); // Parcours en profondeur du graphe dual (appel sur PProfGD)
+void PProfGD (liste* l, sommet* s, int i, int* t); // Parcours en profondeur du graphe dual (recursif)
 
 #endif // LSCADJ_H_INCLUDED

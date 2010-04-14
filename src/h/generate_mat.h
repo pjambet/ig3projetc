@@ -17,7 +17,6 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include <string.h>
 #include <time.h>
 
-
 void generate_matrix(int x);
 /*
 Genere une matrice carre x*x de 0 et de 1

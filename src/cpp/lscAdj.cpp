@@ -17,9 +17,9 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 
 void lscAdjCFC (char* a) { // Renvoie les composantes fortement connexes du graphe
     int i = 0, j = 0, k;
-    int** M = (int**) malloc(TAILLE_MAT*sizeof(int));
+    liste* l = (liste*) malloc(TAILLE_MAT*sizeof(liste));
     for (k = 0; k < TAILLE_MAT; k++) {
-        M[k] = (int*) malloc(TAILLE_MAT*sizeof(int));
+        l[k] = NULL;
     }
     sommet* s = (sommet*) malloc(TAILLE_MAT*sizeof(int));
     char c;
@@ -32,33 +32,114 @@ void lscAdjCFC (char* a) { // Renvoie les composantes fortement connexes du grap
                 j++;
                 i = 0;
             } else {
-                M[j][i] = atoi(&c);
+                if (atoi(&c)) { // Ajout à la fin de l[j] de i
+                    liste p = (liste) malloc(sizeof(cell));
+                    p->val = i;
+                    p->suiv = NULL;
+                    if (l[j] == NULL) {
+                        l[j] = p;
+                    } else {
+                        liste temp = l[j];
+                        while (temp->suiv != NULL) {
+                            temp = temp->suiv;
+                        }
+                        temp->suiv = p;
+                    }
+                }
                 i++;
             }
         }
         fclose(fichier);
+
+        printListeAdj(l);
+        iniSommet(s);
+        PPG(l, s);
+        triDecroissant(s);
+        PPGD(l, s);
+        iniSommet(s);
+        printCFC(s);
 
     } else {
         printf("Lecture du fichier impossible\n");
     }
 }
 
-void printLSC (int** M) { // Affiche la liste adjacente
-
+void printListeAdj (liste* l) {
+    int i;
+    for (i = 0; i < TAILLE_MAT; i++) {
+        printf("%d ", i+1);
+        liste temp = l[i];
+        while (temp != NULL) {
+            printf("-> %d ", (temp->val)+1);
+            temp = temp->suiv;
+        }
+        printf("\n");
+    }
+    printf("\n");
 }
 
-void PPG (int* M, sommet* s) { // Parcours en profondeur du graphe (appel sur PProfG)
-
+void PPG (liste* l, sommet* s) { // Parcours en profondeur du graphe (appel sur PProfG)
+    int i;
+    int temps = 0;
+    int* t = &temps;
+    for (i = 0; i < TAILLE_MAT; i++) {
+        s[i].etat = -1; // Etat non atteint
+        s[i].deb = 0;
+        s[i].fin = 0;
+    }
+    for (i = 0; i < TAILLE_MAT; i++) {
+        if (s[s[i].num].etat == -1) {
+            PProfG(l, s, s[i].num, t);
+        }
+    }
 }
 
-void PProfG (int* M, sommet*, int i, int* t) { // Parcours en profondeur du graphe (recursif)
-
+void PProfG (liste* l, sommet* s, int i, int* t) { // Parcours en profondeur du graphe (recursif)
+    int j;
+    s[i].etat = 0; // Etat atteint
+    (*t)++;
+    s[i].deb = *t;
+    liste temp = l[i];
+    while (temp != NULL && i > 3) {
+        printf("Voisin de %d = %d\n", i+1, (temp->val)+1);
+        if (s[temp->val].etat == -1)
+            PProfG(l, s, temp->val, t);
+        temp = temp->suiv;
+    }
+    s[i].etat = 1; // Etat explore
+    (*t)++;
+    s[i].fin = *t;
+    printf("s(%d) = %d / %d\n", i+1, s[i].deb, s[i].fin);
 }
 
-void PPGD (int* M, sommet* s) { // Parcours en profondeur du graphe dual (appel sur PProfGD)
-
+void PPGD (liste* l, sommet* s) { // Parcours en profondeur du graphe dual (appel sur PProfGD)
+    int i;
+    int temps = 0;
+    int* t = &temps;
+    for (i = 0; i < TAILLE_MAT; i++) {
+        s[i].etat = -1; // Etat non atteint
+        s[i].deb = 0;
+        s[i].fin = 0;
+    }
+    for (i = 0; i < TAILLE_MAT; i++) {
+        if (s[s[i].num].etat == -1) {
+            PProfGD(l, s, s[i].num, t);
+        }
+    }
 }
-
-void PProfGD (int* M, sommet* s, int i, int* t) { // Parcours en profondeur du graphe dual (recursif)
-
+void PProfGD (liste* l, sommet* s, int i, int* t) { // Parcours en profondeur du graphe dual (recursif)
+    int j;
+    s[i].etat = 0; // Etat atteint
+    (*t)++;
+    s[i].deb = *t;
+    /*for (j = 0; j < TAILLE_MAT; j++) {
+        liste temp = l[j];
+        while (temp != NULL) {
+            PProfGD(l, s, temp->val, t);
+            temp = temp->suiv;
+        }
+    }*/
+    s[i].etat = 1; // Etat explore
+    (*t)++;
+    s[i].fin = *t;
 }

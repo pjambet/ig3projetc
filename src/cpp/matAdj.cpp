@@ -37,6 +37,7 @@ void matAdjCFC (char* a) { // Renvoie les composantes fortement connexes du grap
             }
         }
         fclose(fichier);
+
         printMat(M);
         iniSommet(s);
         PPG(M, s);

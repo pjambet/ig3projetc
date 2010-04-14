@@ -9,38 +9,48 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 
 ============================================================================= */
 
-#ifndef DEF_LISTESC
-#define DEF_LISTESC
+#ifndef LISTESC_H_INCLUDED
+#define LISTESC_H_INCLUDED
 
 #include "node.h"
+
+/*Redefinition du type Node* */
+typedef Node* p_Node;
 
 class ListeSC{
 
   public :
 
-  typedef Node* Cell;
-
+  /*Methodes */
   ListeSC();
   ~ListeSC();
   bool isEmpty();
   int length();
-  Cell first();
+  p_Node first();
 
-  Cell getNext(Cell c);
-  Cell getPrev(Cell c);
+  p_Node getNext(p_Node c);
 
-  void addAfter(Cell c, int v);
-  void addBefore(Cell c, int v);
-  void addFirst(Cell c, int v);
-  void addLast(Cell c, int v);
+  void addAfter(p_Node c, int v);
+  void addBefore(p_Node c, int v);
+  void addFirst(p_Node c, int v);
+  void addLast(p_Node c, int v);
+
+  /*Accesseurs*/
+  void setHead(p_Node c);
+  p_Node getHead();
+  void SetNbElem(int n);
+  int getNbElem();
 
   private :
 
-  void setNext(Cell c, Cell next);
-  void setPrev(Cell c, Cell prev);
+  /*Methodes privées permettant de modifier le contenu de la liste*/
+  /*Ces methodes sont privées car on n'en a besoin uniquement pour les methodes de la classe ListeSC*/
+  void setNext(p_Node c, p_Node next);
+  void setPrev(p_Node c, p_Node prev);
 
-  Cell head;
-  int nbElem;
+  /*Attributs*/
+  p_Node m_head;
+  int m_nbElem;
 
 };
 

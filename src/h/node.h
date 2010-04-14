@@ -9,26 +9,29 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 
 ============================================================================= */
 
-#ifndef DEF_NODE
-#define DEF_NODE
+#ifndef NODE_H_INCLUDED
+#define NODE_H_INCLUDED
+
 #include <iostream>
 
 class Node{
 
-  private :
+  public :
 
   Node();
   ~Node();
-
-
-
-  public :
 
   /*ACCESSEURS*/
   Node* getNext();
   void setNext(Node* n);
   int getVal();
   void setVal(int v);
+
+  private :
+
+  int m_val;
+  Node* m_next;
+
 
 };
 

@@ -21,11 +21,11 @@ struct cell {
 
 typedef cell* liste;
 
-void lscAdjCFC (char* a); // Renvoie les composantes fortement connexes du graphe
-void printListeAdj (liste* l); // Affiche la liste adjacente
-void PPG (liste* l, sommet* s); // Parcours en profondeur du graphe (appel sur PProfG)
-void PProfG (liste* l, sommet* s, int i, int* t); // Parcours en profondeur du graphe (recursif)
-void PPGD (liste* l, sommet* s); // Parcours en profondeur du graphe dual (appel sur PProfGD)
-void PProfGD (liste* l, sommet* s, int i, int* t); // Parcours en profondeur du graphe dual (recursif)
+void lscAdjCFC (char* a, int n); // Renvoie les composantes fortement connexes du graphe
+void printListeAdj (liste* l, int n); // Affiche la liste adjacente
+void PPG (liste* l, sommet* s, int n); // Parcours en profondeur du graphe (appel sur PProfG)
+void PProfG (liste* l, sommet* s, int i, int* t, int n); // Parcours en profondeur du graphe (recursif)
+void PPGD (liste* l, sommet* s, int n); // Parcours en profondeur du graphe dual (appel sur PProfGD)
+void PProfGD (liste* l, sommet* s, int i, int* t, int n); // Parcours en profondeur du graphe dual (recursif)
 
 #endif // LSCADJ_H_INCLUDED

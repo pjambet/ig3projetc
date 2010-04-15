@@ -26,5 +26,4 @@ La stocke ensuite dans un fichier
 int number_nodes(char* fileName);
 /* va renvoyer le nombre colonne, et donc le nombre de ligne du fichier soit le nombre de noeud du graphe */
 
-
 #endif // GENERATE_MAT_H_INCLUDED

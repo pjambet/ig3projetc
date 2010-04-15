@@ -73,7 +73,7 @@ void lscAdjCFC (char* a, int n) { // Renvoie les composantes fortement connexes 
         triDecroissant(s, n);
         PPGD(ld, s, n);
         iniSommet(s, n);
-        //printCFC(s, n);
+        printCFC(s, n);
 
     } else {
         printf("Lecture du fichier impossible\n");

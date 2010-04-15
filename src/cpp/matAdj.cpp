@@ -44,7 +44,7 @@ void matAdjCFC (char* a, int n) { // Renvoie les composantes fortement connexes 
         triDecroissant(s, n);
         PPGD(M, s, n);
         iniSommet(s, n);
-        //printCFC(s, n);
+        printCFC(s, n);
 
     } else {
         printf("Lecture du fichier impossible\n");

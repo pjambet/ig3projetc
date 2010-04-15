@@ -15,27 +15,34 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include "../h/sommet.h"
 #include "../h/lscAdj.h"
 
-void lscAdjCFC (char* a) { // Renvoie les composantes fortement connexes du graphe
+void lscAdjCFC (char* a, int n) { // Renvoie les composantes fortement connexes du graphe
     int i = 0, j = 0, k;
-    liste* l = (liste*) malloc(TAILLE_MAT*sizeof(liste));
-    for (k = 0; k < TAILLE_MAT; k++) {
+    liste* l = (liste*) malloc(n*sizeof(liste));
+    for (k = 0; k < n; k++) {
         l[k] = NULL;
     }
-    sommet* s = (sommet*) malloc(TAILLE_MAT*sizeof(int));
+    liste* ld = (liste*) malloc(n*sizeof(liste));
+    for (k = 0; k < n; k++) {
+        ld[k] = NULL;
+    }
+    sommet* s = (sommet*) malloc(n*sizeof(sommet));
     char c;
     FILE* fichier;
     fichier = fopen(a, "r");
     if (fichier != NULL) {
         while (!feof(fichier)) {
             c = fgetc(fichier);
-            if (i == TAILLE_MAT) {
+            if (i == n) {
                 j++;
                 i = 0;
             } else {
                 if (atoi(&c)) { // Ajout à la fin de l[j] de i
                     liste p = (liste) malloc(sizeof(cell));
+                    liste pd = (liste) malloc(sizeof(cell));
                     p->val = i;
+                    pd->val = j;
                     p->suiv = NULL;
+                    pd->suiv = NULL;
                     if (l[j] == NULL) {
                         l[j] = p;
                     } else {
@@ -45,28 +52,37 @@ void lscAdjCFC (char* a) { // Renvoie les composantes fortement connexes du grap
                         }
                         temp->suiv = p;
                     }
+                    if (ld[i] == NULL) {
+                        ld[i] = pd;
+                    } else {
+                        liste temp = ld[i];
+                        while (temp->suiv != NULL) {
+                            temp = temp->suiv;
+                        }
+                        temp->suiv = pd;
+                    }
                 }
                 i++;
             }
         }
         fclose(fichier);
-        iniSommet(s);
-        printListeAdj(l);
-        PPG(l, s);
-        printf("lala");
-        triDecroissant(s);
-        PPGD(l, s);
-        iniSommet(s);
-        printCFC(s);
+
+        //printListeAdj(l);
+        iniSommet(s, n);
+        PPG(l, s, n);
+        triDecroissant(s, n);
+        PPGD(ld, s, n);
+        iniSommet(s, n);
+        //printCFC(s, n);
 
     } else {
         printf("Lecture du fichier impossible\n");
     }
 }
 
-void printListeAdj (liste* l) {
+void printListeAdj (liste* l, int n) {
     int i;
-    for (i = 0; i < TAILLE_MAT; i++) {
+    for (i = 0; i < n; i++) {
         printf("%d ", i+1);
         liste temp = l[i];
         while (temp != NULL) {
@@ -78,59 +94,64 @@ void printListeAdj (liste* l) {
     printf("\n");
 }
 
-void PPG (liste* l, sommet* s) { // Parcours en profondeur du graphe (appel sur PProfG)
+void PPG (liste* l, sommet* s, int n) { // Parcours en profondeur du graphe (appel sur PProfG)
     int i;
     int temps = 0;
     int* t = &temps;
-    for (i = 0; i < TAILLE_MAT; i++) {
+    for (i = 0; i < n; i++) {
         s[i].etat = -1; // Etat non atteint
         s[i].deb = 0;
         s[i].fin = 0;
     }
-    for (i = 0; i < TAILLE_MAT; i++) {
+    for (i = 0; i < n; i++) {
         if (s[s[i].num].etat == -1) {
-            PProfG(l, s, s[i].num, t);
+            PProfG(l, s, s[i].num, t, n);
         }
     }
 }
 
-void PProfG (liste* l, sommet* s, int i, int* t) { // Parcours en profondeur du graphe (recursif)
+void PProfG (liste* l, sommet* s, int i, int* t, int n) { // Parcours en profondeur du graphe (recursif)
     s[i].etat = 0; // Etat atteint
     (*t)++;
     s[i].deb = *t;
-    printf("deb s(%d) = %d / xxx\n", i+1, s[i].deb);
     liste temp = l[i];
     while (temp != NULL) {
         if (s[temp->val].etat == -1) {
-            PProfG(l, s, temp->val, t);
+            PProfG(l, s, temp->val, t, n);
         }
         temp = temp->suiv;
     }
     s[i].etat = 1; // Etat explore
     (*t)++;
     s[i].fin = *t;
-    printf("fin s(%d) = %d / %d\n", i+1, s[i].deb, s[i].fin);
 }
 
-void PPGD (liste* l, sommet* s) { // Parcours en profondeur du graphe dual (appel sur PProfGD)
+void PPGD (liste* l, sommet* s, int n) { // Parcours en profondeur du graphe dual (appel sur PProfGD)
     int i;
     int temps = 0;
     int* t = &temps;
-    for (i = 0; i < TAILLE_MAT; i++) {
+    for (i = 0; i < n; i++) {
         s[i].etat = -1; // Etat non atteint
         s[i].deb = 0;
         s[i].fin = 0;
     }
-    for (i = 0; i < TAILLE_MAT; i++) {
+    for (i = 0; i < n; i++) {
         if (s[s[i].num].etat == -1) {
-            PProfGD(l, s, s[i].num, t);
+            PProfGD(l, s, s[i].num, t, n);
         }
     }
 }
-void PProfGD (liste* l, sommet* s, int i, int* t) { // Parcours en profondeur du graphe dual (recursif)
+void PProfGD (liste* l, sommet* s, int i, int* t, int n) { // Parcours en profondeur du graphe dual (recursif)
     s[i].etat = 0; // Etat atteint
     (*t)++;
     s[i].deb = *t;
+    liste temp = l[i];
+    while (temp != NULL) {
+        if (s[temp->val].etat == -1) {
+            PProfG(l, s, temp->val, t, n);
+        }
+        temp = temp->suiv;
+    }
     s[i].etat = 1; // Etat explore
     (*t)++;
     s[i].fin = *t;

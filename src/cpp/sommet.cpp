@@ -14,12 +14,12 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include <string.h>
 #include "../h/sommet.h"
 
-void printCFC (sommet* s) {
+void printCFC (sommet* s, int n) {
     int d, f, i = 0;
     printf("Les composantes fortement connexes du graphe sont :\n{%d", (s[i].num)+1);
     d = s[i].deb;
     f = s[i].fin;
-    while (i < TAILLE_MAT) {
+    while (i < n-1) {
         if ((d < (s[i+1].deb)) && (f > (s[i+1].fin))) {
             printf(", %d", (s[i+1].num)+1);
             i++;
@@ -27,27 +27,25 @@ void printCFC (sommet* s) {
             i++;
             d = s[i].deb;
             f = s[i].fin;
-            if (i < TAILLE_MAT)
+            if (i < n)
                 printf("}, {%d", (s[i].num)+1);
-            else
-                printf("}.");
         }
     }
-    printf("\n");
+    printf("}.\n");
 }
 
-void iniSommet (sommet* s) { // // Initialise les valeurs de la structure sommet
+void iniSommet (sommet* s, int n) { // // Initialise les valeurs de la structure sommet
     int i;
-    for (i = 0; i < TAILLE_MAT; i++) {
+    for (i = 0; i < n; i++) {
         s[i].num = i;
     }
 }
 
-void triDecroissant (sommet* s) { // Renvoie l'ordre de parcours de la matrice duale (trié par ordre décroissant des temps d'accès finaux)
+void triDecroissant (sommet* s, int n) { // Renvoie l'ordre de parcours de la matrice duale (trié par ordre décroissant des temps d'accès finaux)
     int i, tmp = 0, continuer = 1;
     while (continuer) {
         continuer--;
-        for (i = 0; i < TAILLE_MAT-1; i++) {
+        for (i = 0; i < n-1; i++) {
             if (s[i].fin < s[i+1].fin) {
                 tmp = s[i+1].fin;
                 s[i+1].fin = s[i].fin;

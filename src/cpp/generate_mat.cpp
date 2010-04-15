@@ -18,7 +18,7 @@ void generate_matrix(int x){
   int i, j;
   FILE* file_mat;
 
-  file_mat = fopen("./test/lol.matrice", "w+"); // Chemin à changer
+  file_mat = fopen("test/matrix", "w+"); // Chemin à changer
 
   /* On genere aleatoirement des 0 et des 1, puis on les met dans le fichier */
   for (i = 0; i < x; i++){

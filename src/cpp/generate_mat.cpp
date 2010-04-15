@@ -10,22 +10,28 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 ============================================================================= */
 
 #include "../h/generate_mat.h"
+#define RATIO_MIN 10
+#define RATIO_MAX 40
 
 void generate_matrix(int x){
   srand(time(NULL));
 
   int random;
+  int ratio;
   int i, j;
   FILE* file_mat;
 
-  file_mat = fopen("test/matrix", "w+"); // Chemin à changer
+  file_mat = fopen("test/matrix", "w+");
 
-  /* On genere aleatoirement des 0 et des 1, puis on les met dans le fichier */
+  /* Generation aleatoire de 0 et de 1 */
+  // 1 - Determiner le taux de nombre de 1 dans la matrice (entre RATIO_MIN et RATIO_MAX)
+  ratio = RATIO_MIN + rand()%(RATIO_MAX - RATIO_MIN + 1);
+
+  // 2 - Remplir la matrice avec ce taux de remplissage
   for (i = 0; i < x; i++){
     for (j = 0; j < x; j++){
       random = rand()%101;
-      // On fait un random pour avoir 80% de 0 et 20% de 1
-      if (random < 80){
+      if (random > ratio){
         fputc('0', file_mat);
       } else {
         fputc('1', file_mat);

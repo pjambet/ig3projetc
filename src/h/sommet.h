@@ -18,6 +18,8 @@ struct sommet {
     int num;
     int deb;
     int fin;
+    char nom[32];
+    int freq;
 };
 
 void printCFC (sommet* s, int n); // Affiche les CFC

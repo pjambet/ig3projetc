@@ -15,42 +15,6 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include "../h/sommet.h"
 #include "../h/matAdj.h"
 
-void matAdjCFC (char* a, int n) { // Renvoie les composantes fortement connexes du graphe
-    int i = 0, j = 0, k;
-    int** M = (int**) malloc(n*sizeof(int));
-    for (k = 0; k < n; k++) {
-        M[k] = (int*) malloc(n*sizeof(int));
-    }
-    sommet* s = (sommet*) malloc(n*sizeof(sommet));
-    char c;
-    FILE* fichier;
-    fichier = fopen(a, "r");
-    if (fichier != NULL) {
-        while (!feof(fichier)) {
-            c = fgetc(fichier);
-            if (i == n) {
-                j++;
-                i = 0;
-            } else {
-                M[j][i] = atoi(&c);
-                i++;
-            }
-        }
-        fclose(fichier);
-
-        //printMat(M);
-        iniSommet(s, n);
-        PPG(M, s, n);
-        triDecroissant(s, n);
-        PPGD(M, s, n);
-        iniSommet(s, n);
-        printCFC(s, n);
-
-    } else {
-        printf("Lecture du fichier impossible\n");
-    }
-}
-
 void printMat (int** M, int n) { // Affiche la matrice adjacente
     int i, j;
     printf(" ");

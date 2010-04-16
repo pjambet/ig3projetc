@@ -123,6 +123,8 @@ int main(int argc, char* argv[]) {
                     j = 0;
                     printf("\"%s\" ", buffer);
                     fgetc(fichier);
+                    fgetc(fichier);
+                    fgetc(fichier);
                 }
             } else {
                 buffer[j] = '\0';

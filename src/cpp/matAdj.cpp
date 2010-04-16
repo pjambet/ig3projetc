@@ -15,6 +15,20 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include "../h/sommet.h"
 #include "../h/matAdj.h"
 
+int** iniMat (int n) { // Renvoie la matrice d'adjacence
+    int i, j;
+    int** M = (int**) malloc(n*sizeof(int));
+    for (i = 0; i < n; i++) {
+        M[i] = (int*) malloc(n*sizeof(int));
+    }
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++) {
+            M[j][i] = 0;
+        }
+    }
+    return M;
+}
+
 void printMat (int** M, int n) { // Affiche la matrice adjacente
     int i, j;
     printf(" ");

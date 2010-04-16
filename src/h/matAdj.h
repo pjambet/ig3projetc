@@ -13,7 +13,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #define MATADJ_H_INCLUDED
 #include "../h/sommet.h"
 
-void matAdjCFC (char* a, int n); // Renvoie les composantes fortement connexes du graphe
+int** iniMat (int n); // Renvoie la matrice d'adjacence
 void printMat (int** M, int n); // Affiche la matrice adjacente
 void PPG (int** M, sommet* s, int n); // Parcours en profondeur du graphe (appel sur PProfG)
 void PProfG (int** M, sommet*, int i, int* t, int n); // Parcours en profondeur du graphe (recursif)

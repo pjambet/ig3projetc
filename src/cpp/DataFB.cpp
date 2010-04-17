@@ -19,8 +19,8 @@ DataFB::DataFB(){
 
 DataFB::DataFB(string n, int i, int f){
   name = n;
-  id_number = 0;
-  frequency = 0;
+  id_number = i;
+  frequency = f;
 }
 
 DataFB::~DataFB() {

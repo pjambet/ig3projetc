@@ -93,7 +93,7 @@ int getNbCFC (sommet* s, int n) { // Renvoie le nombre de composantes fortement 
 char* getCFC (sommet* s, int n) { // Renvoie les CFC
     int d = s[0].deb, f = s[0].fin, i;
     char* buffer;
-    char* cfc = (char*) malloc (512*sizeof(char));
+    char* cfc = (char*) malloc (((3*n)+1)*sizeof(char));
     itoa(s[0].id, buffer, 10);
     strcpy(cfc, buffer);
     for (i = 0; i < n-1; i++) {
@@ -104,8 +104,12 @@ char* getCFC (sommet* s, int n) { // Renvoie les CFC
         } else {
             d = s[i+1].deb;
             f = s[i+1].fin;
+            if (i+1 < n) {
+                itoa(s[i+1].id, buffer, 10);
+                strcat(cfc, "\n");
+                strcat(cfc, buffer);
+            }
         }
     }
-    strcat(cfc, "\n");
     return cfc;
 }

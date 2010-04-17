@@ -17,47 +17,42 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 
 int main(int argc, char* argv[]) {
 
-    int i, n, m, x = 0, y = 0;
-    int** M;
-    liste* L;
-    liste* P;
+    int i, n, m, x = 0, y = 0, **M;
+    char *nom_in, *nom_out, dir_in[6] = "test/", dir_out[6] = "test/", typestruct, *buffer;
+    liste *L, *P;
     sommet* s;
-    char* NOM_IN;
-    char* NOM_OUT;
-    char DIR_IN[6] = "test/";
-    char DIR_OUT[6] = "test/";
-    char TYPE_STRUCT;
-    char buffer[32], buffer2[32];
     FILE* fichier;
 
-    if (argc > 2) {
-        NOM_IN = argv[1];
-        NOM_OUT = argv[2];
-    } else if (argc > 1) {
-        NOM_IN = argv[1];
-        NOM_OUT = (char*) malloc(16*sizeof(char));
-        strcpy(NOM_OUT, NOM_IN);
-        strcat(NOM_OUT, ".res");
-    } else {
-        NOM_IN = (char*) malloc(16*sizeof(char));
-        NOM_OUT = (char*) malloc(16*sizeof(char));
+    if (argc > 2) { // s'il y a 2 arguments, on les utilise comme noms de fichiers d'entrée et de sortie
+        nom_in = argv[1];
+        nom_out = argv[2];
+    } else if (argc > 1) { // s'il n'y a qu'un seul argument, le fichier de sortie sera argv[1].res
+        nom_in = argv[1];
+        nom_out = (char*) malloc(16*sizeof(char));
+        strcpy(nom_out, nom_in);
+        strcat(nom_out, ".res");
+    } else { // s'il n'y a pas d'argument, on demande à l'utilisateur d'entrer les noms des fichiers d'entrée et de sortie
+        nom_in = (char*) malloc(16*sizeof(char));
+        nom_out = (char*) malloc(16*sizeof(char));
         printf("Entrez le nom du graphe.\n");
-        scanf("%s", NOM_IN);
+        scanf("%s", nom_in);
         printf("Entrez le nom du fichier resultat.\n");
-        scanf("%s", NOM_OUT);
+        scanf("%s", nom_out);
         printf("\n");
     }
-    strcat(DIR_IN, NOM_IN);
-    strcat(DIR_OUT, NOM_OUT);
+
+    strcat(dir_in, nom_in);
+    strcat(dir_out, nom_out);
 
     printf("Choix de la structure (m ou l) :\n");
-    while ((TYPE_STRUCT != 'm') && (TYPE_STRUCT != 'l')) {
-        scanf("%c", &TYPE_STRUCT);
+    while ((typestruct != 'm') && (typestruct != 'l')) {
+        scanf("%c", &typestruct);
     }
 
-    fichier = fopen(DIR_IN, "r");
-    if (fichier != NULL) {
+    fichier = fopen(dir_in, "r");
+    if (fichier != NULL) { // lecture du graphe
 
+        buffer = (char*) malloc(((3*n)+1)*sizeof(char));
         fgets(buffer, 8, fichier); // lecture du nombre de sommets du graphe
         i = 0;
         n = atoi(buffer);
@@ -66,8 +61,6 @@ int main(int argc, char* argv[]) {
 
         while (i < n) { // lecture des id / nom / frequence
             fscanf(fichier, "%[^,], %d, %d\n", buffer, &x, &y);
-            strcat(buffer, " ");
-            strcat(buffer, buffer2);
             strcpy(s[i].nom, buffer);
             s[i].num = i;
             s[i].id = x;
@@ -97,8 +90,7 @@ int main(int argc, char* argv[]) {
 
         fclose(fichier);
 
-        if (TYPE_STRUCT == 'm') { // Matrice
-
+        if (typestruct == 'm') { // Matrice
 
             PPG(M, s, n);
             triDecroissant(s, n);
@@ -112,15 +104,11 @@ int main(int argc, char* argv[]) {
 
         }
 
-        m = getNbCFC(s, n);
-        itoa(m, buffer, 10);
-        fichier = fopen(DIR_OUT, "w+");
-        fputc(buffer[0], fichier);
-        fputc('\n', fichier);
-        for (i = 0; i < m; i++) {
-
-        }
-
+        fichier = fopen(dir_out, "w+");
+        m = getNbCFC(s, n); // recuperation du nombre de cfc
+        fprintf(fichier, "%d\n", m);
+        buffer = getCFC(s, n); // recuperation des cfc
+        fprintf(fichier, "%s\n", buffer);
         fclose(fichier);
 
     } else {

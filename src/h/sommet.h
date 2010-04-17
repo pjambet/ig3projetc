@@ -28,5 +28,7 @@ void printCFC (sommet* s, int n); // Affiche les CFC
 sommet* iniSommet (int n); // Initialise les valeurs de la structure sommet
 void triDecroissant (sommet* s, int n); // Renvoie l'ordre de parcours de la matrice duale (trié par ordre décroissant des temps d'accès finaux)
 int getIndice (sommet* s, int n, int x); // Renvoie l'indice du tableau correspondant a l'id x
+int getNbCFC (sommet* s, int n); // Renvoie le nombre de composantes fortement connexes
+char* getCFC (sommet* s, int n); // Renvoie les CFC
 
 #endif // SOMMET_H_INCLUDED

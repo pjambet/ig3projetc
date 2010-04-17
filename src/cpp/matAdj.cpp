@@ -31,19 +31,8 @@ int** iniMat (int n) { // Renvoie la matrice d'adjacence
 
 void printMat (int** M, int n) { // Affiche la matrice adjacente
     int i, j;
-    printf(" ");
-    for (i = 0; i < n; i++) {
-        if (i <= 9)
-            printf("  %d", i+1);
-        else
-            printf(" %d", i+1);
-    }
     printf("\n");
     for (i = 0; i < n; i++) {
-        if (i < 9)
-            printf("%d  ", i+1);
-        else
-            printf("%d ", i+1);
         for (j = 0; j < n; j++) {
             printf("%d  ", M[i][j]);
         }
@@ -66,6 +55,7 @@ void PPG (int** M, sommet* s, int n) { // Parcours en profondeur du graphe (appe
             PProfG(M, s, s[i].num, t, n);
         }
     }
+    triDecroissant(s, n);
 }
 
 void PProfG (int** M, sommet* s, int i, int* t, int n) { // Parcours en profondeur du graphe (recursif)

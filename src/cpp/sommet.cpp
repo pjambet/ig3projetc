@@ -79,9 +79,7 @@ int getIndice (sommet* s, int n, int x) { // Renvoie l'indice du tableau corresp
 int getNbCFC (sommet* s, int n) { // Renvoie le nombre de composantes fortement connexes
     int d = s[0].deb, f = s[0].fin, i, r = 1;
     for (i = 0; i < n-1; i++) {
-        if ((d < (s[i+1].deb)) && (f > (s[i+1].fin))) {
-            //null;
-        } else {
+        if (!((d < (s[i+1].deb)) && (f > (s[i+1].fin)))) {
             r++;
             d = s[i+1].deb;
             f = s[i+1].fin;

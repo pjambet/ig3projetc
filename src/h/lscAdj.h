@@ -21,6 +21,8 @@ struct cell {
 
 typedef cell* liste;
 
+liste* iniListe (int n); // Renvoie la liste d'adjacence
+liste* ajoutFin (liste* l, int i, int x); // Ajoute à la fin de la liste l[i] la valeur x
 void lscAdjCFC (char* a, int n); // Renvoie les composantes fortement connexes du graphe
 void printListeAdj (liste* l, int n); // Affiche la liste adjacente
 void PPG (liste* l, sommet* s, int n); // Parcours en profondeur du graphe (appel sur PProfG)

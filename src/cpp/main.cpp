@@ -18,10 +18,12 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 int main(int argc, char* argv[]) {
 
     int i, n, m, x = 0, y = 0, **M;
-    char *nom_in, *nom_out, dir_in[6] = "test/", dir_out[6] = "test/", typestruct, *buffer;
+    char *nom_in, *nom_out, dir_in[6] = "test/", dir_out[6] = "test/", *buffer, typestruct;
     liste *L, *P;
     sommet* s;
     FILE* fichier;
+
+    typestruct = 'm'; // Choix de la structure, m pour matrice, l pour liste
 
     if (argc > 2) { // s'il y a 2 arguments, on les utilise comme noms de fichiers d'entrée et de sortie
         nom_in = argv[1];
@@ -44,11 +46,6 @@ int main(int argc, char* argv[]) {
     strcat(dir_in, nom_in);
     strcat(dir_out, nom_out);
 
-    printf("Choix de la structure (m ou l) :\n");
-    while ((typestruct != 'm') && (typestruct != 'l')) {
-        scanf("%c", &typestruct);
-    }
-
     fichier = fopen(dir_in, "r");
     if (fichier != NULL) { // lecture du graphe
 
@@ -58,6 +55,8 @@ int main(int argc, char* argv[]) {
         n = atoi(buffer);
         s = iniSommet(n);
         M = iniMat(n);
+        L = iniListe(n);
+        P = iniListe(n);
 
         while (i < n) { // lecture des id / nom / frequence
             fscanf(fichier, "%[^,], %d, %d\n", buffer, &x, &y);
@@ -75,7 +74,12 @@ int main(int argc, char* argv[]) {
             fscanf(fichier, "%d, %d", &x, &y);
             x = getIndice(s, n, x);
             y = getIndice(s, n, y);
-            M[y][x] = 1;
+            if (typestruct == 'm') {
+                M[x][y] = 1; // remplissage de la matrice d'adjacence M
+            } else if (typestruct == 'l') {
+                ajoutFin(L, x, y); // creation de la liste d'adjacence L
+                ajoutFin(P, y, x); // creation de la liste duale d'adjacence P
+            }
             i++;
         }
 
@@ -92,23 +96,24 @@ int main(int argc, char* argv[]) {
 
         if (typestruct == 'm') { // Matrice
 
+            printf("Matrice");
             PPG(M, s, n);
-            triDecroissant(s, n);
             PPGD(M, s, n);
 
-        } else { // Liste
+        } else if (typestruct == 'l') { // Liste
 
+            printf("Liste");
             PPG(L, s, n);
-            triDecroissant(s, n);
             PPGD(P, s, n);
 
         }
 
-        fichier = fopen(dir_out, "w+");
+        fichier = fopen(dir_out, "w+"); // traiement du fichier resultat
         m = getNbCFC(s, n); // recuperation du nombre de cfc
         fprintf(fichier, "%d\n", m);
         buffer = getCFC(s, n); // recuperation des cfc
         fprintf(fichier, "%s\n", buffer);
+        // TODO : Traiment questions
         fclose(fichier);
 
     } else {
@@ -117,40 +122,6 @@ int main(int argc, char* argv[]) {
 
 }
 
-    /*L = (liste*) malloc(n*sizeof(liste));
-    for (i = 0; i < n; i++) {
-        L[i] = NULL;
-    }
-
-    P = (liste*) malloc(n*sizeof(liste));
-    for (i = 0; i < n; i++) {
-        P[i] = NULL;
-    }
-
-    if (atoi(&c)) { // Ajout à la fin de l[j] de i
-        liste p = (liste) malloc(sizeof(cell));
-        liste pd = (liste) malloc(sizeof(cell));
-        p->val = i;
-        pd->val = j;
-        p->suiv = NULL;
-        pd->suiv = NULL;
-        if (l[j] == NULL) {
-            l[j] = p;
-        } else {
-            liste temp = l[j];
-            while (temp->suiv != NULL) {
-                temp = temp->suiv;
-            }
-            temp->suiv = p;
-        }
-        if (ld[i] == NULL) {
-            ld[i] = pd;
-        } else {
-            liste temp = ld[i];
-            while (temp->suiv != NULL) {
-                temp = temp->suiv;
-            }
-            temp->suiv = pd;
-        }
+    /*if (atoi(&c)) { // Ajout à la fin de l[j] de i
     }
     i++;*/

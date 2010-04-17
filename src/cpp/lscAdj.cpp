@@ -15,6 +15,32 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include "../h/sommet.h"
 #include "../h/lscAdj.h"
 
+liste* iniListe (int n) { // Renvoie la liste d'adjacence
+    int i;
+    liste* l = (liste*) malloc(n*sizeof(liste));
+    for (i = 0; i < n; i++) {
+        l[i] = NULL;
+    }
+    return l;
+}
+
+liste* ajoutFin (liste* l, int i, int x) { // Ajoute à la fin de la liste* l la valeur x
+    liste t = (liste) malloc(sizeof(cell));
+    t->val = x;
+    t->suiv = NULL;
+    if (l[i] == NULL) {
+        l[i] = t;
+        return l;
+    } else {
+        liste temp = l[i];
+        while (temp->suiv != NULL) {
+            temp = temp->suiv;
+        }
+        temp->suiv = t;
+        return l;
+    }
+}
+
 void printListeAdj (liste* l, int n) {
     int i;
     for (i = 0; i < n; i++) {
@@ -43,6 +69,7 @@ void PPG (liste* l, sommet* s, int n) { // Parcours en profondeur du graphe (app
             PProfG(l, s, s[i].num, t, n);
         }
     }
+    triDecroissant(s, n);
 }
 
 void PProfG (liste* l, sommet* s, int i, int* t, int n) { // Parcours en profondeur du graphe (recursif)

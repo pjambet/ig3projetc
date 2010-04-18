@@ -45,27 +45,23 @@ void PPG (int** M, sommet* s, int n) { // Parcours en profondeur du graphe (appe
     int i;
     int temps = 0;
     int* t = &temps;
-    for (i = 0; i < n; i++) {
-        s[i].etat = -1; // Etat non atteint
-        s[i].deb = 0;
-        s[i].fin = 0;
-    }
+    iniEtatSommet(s, n);
     for (i = 0; i < n; i++) {
         if (s[s[i].num].etat == -1) {
-            PProfG(M, s, s[i].num, t, n);
+            PProfG(M, s, n, s[i].num, t);
         }
     }
     triDecroissant(s, n);
 }
 
-void PProfG (int** M, sommet* s, int i, int* t, int n) { // Parcours en profondeur du graphe (recursif)
+void PProfG (int** M, sommet* s, int n, int i, int* t) { // Parcours en profondeur du graphe (recursif)
     int j;
     s[i].etat = 0; // Etat atteint
     (*t)++;
     s[i].deb = *t;
     for (j = 0; j < n; j++) {
         if ((M[i][j] > 0) && (s[j].etat == -1)) { // Successeur non atteint
-            PProfG(M, s, j, t, n);
+            PProfG(M, s, n, j, t);
         }
     }
     s[i].etat = 1; // Etat explore
@@ -77,29 +73,52 @@ void PPGD (int** M, sommet* s, int n) { // Parcours en profondeur du graphe dual
     int i;
     int temps = 0;
     int* t = &temps;
-    for (i = 0; i < n; i++) {
-        s[i].etat = -1; // Etat non atteint
-        s[i].deb = 0;
-        s[i].fin = 0;
-    }
+    iniEtatSommet(s, n);
     for (i = 0; i < n; i++) {
         if (s[s[i].num].etat == -1) {
-            PProfGD(M, s, s[i].num, t, n);
+            PProfGD(M, s, n, s[i].num, t);
         }
     }
 }
 
-void PProfGD (int** M, sommet* s, int i, int* t, int n) { // Parcours en profondeur du graphe dual (recursif)
+void PProfGD (int** M, sommet* s, int n, int i, int* t) { // Parcours en profondeur du graphe dual (recursif)
     int j;
     s[i].etat = 0; // Etat atteint
     (*t)++;
     s[i].deb = *t;
     for (j = 0; j < n; j++) {
         if ((M[j][i] > 0) && (s[j].etat == -1)) { // Successeur non atteint
-            PProfGD(M, s, j, t, n);
+            PProfGD(M, s, n, j, t);
         }
     }
     s[i].etat = 1; // Etat explore
     (*t)++;
     s[i].fin = *t;
+}
+
+int getTMin (int** M, sommet* s, int n, int x, int y) { // Renvoie le temps min pour aller de x à y
+    int t;
+    int* tmin = &t;
+    x = getIndice(s, n, x);
+    y = getIndice(s, n, y);
+    t = - s[x].freq;
+    iniEtatSommet(s, n);
+    getTMinProf(M, s, n, x, y, tmin, t);
+    return *tmin;
+}
+
+void getTMinProf (int** M, sommet* s, int n, int x, int y, int* t, int temp) { // Parcours en profondeur
+    int j;
+    s[x].etat = 0; // Etat atteint
+    temp += s[x].freq;
+    if (x == y) {
+        *t = temp;
+    } else {
+        for (j = 0; j < n; j++) {
+            if ((M[x][j] > 0) && (s[j].etat == -1)) { // Successeur non atteint
+                getTMinProf(M, s, n, j, y, t, temp);
+            }
+        }
+    }
+    s[x].etat = 1; // Etat explore
 }

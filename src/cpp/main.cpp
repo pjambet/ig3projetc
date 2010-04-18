@@ -17,7 +17,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 
 int main(int argc, char* argv[]) {
 
-    int i, n, m, x = 0, y = 0, **M;
+    int i, n, m, temp, x = 0, y = 0, **M;
     char *nom_in, *nom_out, dir_in[6] = "test/", dir_out[6] = "test/", *buffer, typestruct;
     liste *L, *P;
     sommet* s;
@@ -43,8 +43,8 @@ int main(int argc, char* argv[]) {
         printf("\n");
     }
 
-    strcat(dir_in, nom_in);
-    strcat(dir_out, nom_out);
+    strcat(dir_in, nom_in); // concaténation du repertoire test avec le nom du fichier d'entrée
+    strcat(dir_out, nom_out); // concaténation du repertoire test avec le nom du fichier de sortie
 
     fichier = fopen(dir_in, "r");
     if (fichier != NULL) { // lecture du graphe
@@ -71,7 +71,7 @@ int main(int argc, char* argv[]) {
         i = 0;
         m = atoi(buffer);
         while (i < m) { // lecture les relations entre les sommets
-            fscanf(fichier, "%d, %d", &x, &y);
+            fscanf(fichier, "%d, %d\n", &x, &y);
             x = getIndice(s, n, x);
             y = getIndice(s, n, y);
             if (typestruct == 'm') {
@@ -86,31 +86,31 @@ int main(int argc, char* argv[]) {
         fgets(buffer, 8, fichier); // lecture du nombre de questions
         i = 0;
         m = atoi(buffer);
-        fgetc(fichier);
         while (i < m) { // lecture des questions
-            fscanf(fichier, "%d -> %d", &x, &y);
-            // TODO : Traitement des questions
+            fscanf(fichier, "%d -> %d\n", &x, &y);
+            temp = getTMin(M, s, n, x, y);
+            printf("%d -> %d = %d\n", x, y, temp);
+            i++;
         }
 
         fclose(fichier);
 
         if (typestruct == 'm') { // Matrice
 
-            printf("Matrice");
             PPG(M, s, n);
             PPGD(M, s, n);
 
         } else if (typestruct == 'l') { // Liste
 
-            printf("Liste");
             PPG(L, s, n);
             PPGD(P, s, n);
 
         }
 
+        printS(s, n);
         fichier = fopen(dir_out, "w+"); // traiement du fichier resultat
-        m = getNbCFC(s, n); // recuperation du nombre de cfc
-        fprintf(fichier, "%d\n", m);
+        temp = getNbCFC(s, n); // recuperation du nombre de cfc
+        fprintf(fichier, "%d\n", temp);
         buffer = getCFC(s, n); // recuperation des cfc
         fprintf(fichier, "%s\n", buffer);
         // TODO : Traiment questions
@@ -121,7 +121,3 @@ int main(int argc, char* argv[]) {
     }
 
 }
-
-    /*if (atoi(&c)) { // Ajout à la fin de l[j] de i
-    }
-    i++;*/

@@ -43,6 +43,15 @@ sommet* iniSommet (int n) { // // Initialise les valeurs de la structure sommet
     return s;
 }
 
+void iniEtatSommet (sommet* s, int n) { // Initialise les etats des sommets
+    int i;
+    for (i = 0; i < n; i++) {
+        s[i].etat = -1; // Etat non atteint
+        s[i].deb = 0;
+        s[i].fin = 0;
+    }
+}
+
 void triDecroissant (sommet* s, int n) { // Renvoie l'ordre de parcours de la matrice duale (trié par ordre décroissant des temps d'accès finaux)
     int i, tmp = 0, continuer = 1;
     while (continuer) {

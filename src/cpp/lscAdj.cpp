@@ -59,11 +59,7 @@ void PPG (liste* l, sommet* s, int n) { // Parcours en profondeur du graphe (app
     int i;
     int temps = 0;
     int* t = &temps;
-    for (i = 0; i < n; i++) {
-        s[i].etat = -1; // Etat non atteint
-        s[i].deb = 0;
-        s[i].fin = 0;
-    }
+    iniEtatSommet(s, n);
     for (i = 0; i < n; i++) {
         if (s[s[i].num].etat == -1) {
             PProfG(l, s, s[i].num, t, n);
@@ -92,11 +88,7 @@ void PPGD (liste* l, sommet* s, int n) { // Parcours en profondeur du graphe dua
     int i;
     int temps = 0;
     int* t = &temps;
-    for (i = 0; i < n; i++) {
-        s[i].etat = -1; // Etat non atteint
-        s[i].deb = 0;
-        s[i].fin = 0;
-    }
+    iniEtatSommet(s, n);
     for (i = 0; i < n; i++) {
         if (s[s[i].num].etat == -1) {
             PProfGD(l, s, s[i].num, t, n);

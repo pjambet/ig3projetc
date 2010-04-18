@@ -97,7 +97,6 @@ int main(int argc, char* argv[]) {
 
             PPG(M, s, n);
             PPGD(M, s, n);
-            algoDijkstra(M, s, n, x);
 
         } else if (typestruct == 'l') { // Liste
 
@@ -111,8 +110,10 @@ int main(int argc, char* argv[]) {
         fprintf(fichier, "%d\n", temp);
         buffer = getCFC(s, n); // recuperation des cfc
         fprintf(fichier, "%s\n", buffer);
-        // TODO : Traiment questions
         fclose(fichier);
+
+        algoDijkstra(M, s, n, x);
+
 
     } else {
         printf("Lecture du fichier impossible\n");

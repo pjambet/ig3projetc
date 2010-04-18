@@ -129,6 +129,7 @@ void algoDijkstra (int** M, sommet* s, int n, int x) { // Calcule les plus court
     iniEtatSommet(s, n); // F = X
     for (i = 0; i < n; i++) { // Source Unique Initialisation
         s[i].deb = INT_MAX;
+        s[i].fin = -1;
     }
     x = getIndice(s, n, x);
     z = x;
@@ -137,15 +138,22 @@ void algoDijkstra (int** M, sommet* s, int n, int x) { // Calcule les plus court
         x = getIndiceMinDeb(s, n); // x = ExtraireMin(F)
         s[x].etat = 0; // F = F - x
         for (y = 0; y < n; y++) {
-            //printf("M[%d][%d] = %d\n", x+1, y+1, M[x][y]);
             if (M[x][y] > 0) { // Successeur
                 if (s[y].deb > s[x].deb + s[y].freq) { // Relacher
                     s[y].deb = s[x].deb + s[y].freq;
+                    x = getIndice(s, n, s[x].id);
+                    s[y].fin = x;
                 }
             }
         }
     }
-    for (i = 0; i < n; i++) {
-        printf("%d -> %d = %d\n", s[z].id, s[i].id, s[i].deb);
+    for (i = 0; (i < n) && (i != z); i++) {
+        printf("%d -> %d\n  %d :", s[z].id, s[i].id, s[i].deb);
+        x = i;
+        while (x != -1) {
+            printf(" %d,", s[x].id);
+            x = s[x].fin;
+        }
+        printf(" (chemin inverse)\n");
     }
 }

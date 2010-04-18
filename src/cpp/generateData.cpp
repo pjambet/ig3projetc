@@ -9,7 +9,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 
 ============================================================================= */
 
-#include "generateData.h"
+#include "../h/generateData.h"
 
 #define RATIO_MIN 10
 #define RATIO_MAX 50

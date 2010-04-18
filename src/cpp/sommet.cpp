@@ -119,3 +119,7 @@ char* getCFC (sommet* s, int n) { // Renvoie les CFC
     }
     return cfc;
 }
+
+void relacher (sommet* s, int n, int x, int y) { // Met à jour les temps d'accès de x à y
+
+}

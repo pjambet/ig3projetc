@@ -88,8 +88,7 @@ int main(int argc, char* argv[]) {
         m = atoi(buffer);
         while (i < m) { // lecture des questions
             fscanf(fichier, "%d -> %d\n", &x, &y);
-            temp = getTMin(M, s, n, x, y);
-            printf("%d -> %d = %d\n", x, y, temp);
+            //temp = getTMin(M, s, n, x, y);
             i++;
         }
 

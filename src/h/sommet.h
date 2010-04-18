@@ -31,5 +31,6 @@ void triDecroissant (sommet* s, int n); // Renvoie l'ordre de parcours de la mat
 int getIndice (sommet* s, int n, int x); // Renvoie l'indice du tableau correspondant a l'id x
 int getNbCFC (sommet* s, int n); // Renvoie le nombre de composantes fortement connexes
 char* getCFC (sommet* s, int n); // Renvoie les CFC
+void relacher (sommet* s, int n, int x, int y); // Met à jour les temps d'accès de x à y
 
 #endif // SOMMET_H_INCLUDED

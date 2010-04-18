@@ -12,6 +12,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #include "../h/sommet.h"
 #include "../h/matAdj.h"
 
@@ -121,4 +122,30 @@ void getTMinProf (int** M, sommet* s, int n, int x, int y, int* t, int temp) { /
         }
     }
     s[x].etat = 1; // Etat explore
+}
+
+void algoDijkstra (int** M, sommet* s, int n, int x) { // Calcule les plus courts chemins à partir de x
+    int i, y, z;
+    iniEtatSommet(s, n); // F = X
+    for (i = 0; i < n; i++) { // Source Unique Initialisation
+        s[i].deb = INT_MAX;
+    }
+    x = getIndice(s, n, x);
+    z = x;
+    s[x].deb = 0;
+    while (nonExplore(s, n)) { // F != null
+        x = getIndiceMinDeb(s, n); // x = ExtraireMin(F)
+        s[x].etat = 0; // F = F - x
+        for (y = 0; y < n; y++) {
+            //printf("M[%d][%d] = %d\n", x+1, y+1, M[x][y]);
+            if (M[x][y] > 0) { // Successeur
+                if (s[y].deb > s[x].deb + s[y].freq) { // Relacher
+                    s[y].deb = s[x].deb + s[y].freq;
+                }
+            }
+        }
+    }
+    for (i = 0; i < n; i++) {
+        printf("%d -> %d = %d\n", s[z].id, s[i].id, s[i].deb);
+    }
 }

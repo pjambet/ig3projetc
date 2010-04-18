@@ -85,6 +85,17 @@ int getIndice (sommet* s, int n, int x) { // Renvoie l'indice du tableau corresp
     return 0;
 }
 
+int getIndiceMinDeb (sommet* s, int n) { // Renvoie l'indice du plus petit d(x)
+    int i, min = s[0].deb, imin = 0;
+    for (i = 1; i < n; i++) {
+        if ((s[i].deb < min) && (s[i].etat == -1)) {
+            min = s[i].deb;
+            imin = i;
+        }
+    }
+    return imin;
+}
+
 int getNbCFC (sommet* s, int n) { // Renvoie le nombre de composantes fortement connexes
     int d = s[0].deb, f = s[0].fin, i, r = 1;
     for (i = 0; i < n-1; i++) {
@@ -120,6 +131,11 @@ char* getCFC (sommet* s, int n) { // Renvoie les CFC
     return cfc;
 }
 
-void relacher (sommet* s, int n, int x, int y) { // Met à jour les temps d'accès de x à y
-
+int nonExplore (sommet* s, int n) { // Renvoie vrai s'il reste un sommet non exploré
+    int i;
+    for (i = 0; i < n; i++) {
+        if (s[i].etat == -1)
+            return 1;
+    }
+    return 0;
 }

@@ -88,7 +88,6 @@ int main(int argc, char* argv[]) {
         m = atoi(buffer);
         while (i < m) { // lecture des questions
             fscanf(fichier, "%d -> %d\n", &x, &y);
-            //temp = getTMin(M, s, n, x, y);
             i++;
         }
 
@@ -98,6 +97,7 @@ int main(int argc, char* argv[]) {
 
             PPG(M, s, n);
             PPGD(M, s, n);
+            algoDijkstra(M, s, n, x);
 
         } else if (typestruct == 'l') { // Liste
 

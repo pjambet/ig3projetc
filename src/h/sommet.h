@@ -29,8 +29,9 @@ sommet* iniSommet (int n); // Initialise les valeurs de la structure sommet
 void iniEtatSommet (sommet* s, int n); // Initialise les etats des sommets
 void triDecroissant (sommet* s, int n); // Renvoie l'ordre de parcours de la matrice duale (trié par ordre décroissant des temps d'accès finaux)
 int getIndice (sommet* s, int n, int x); // Renvoie l'indice du tableau correspondant a l'id x
+int getIndiceMinDeb (sommet* s, int n); // Renvoie l'indice du plus petit d(x)
 int getNbCFC (sommet* s, int n); // Renvoie le nombre de composantes fortement connexes
 char* getCFC (sommet* s, int n); // Renvoie les CFC
-void relacher (sommet* s, int n, int x, int y); // Met à jour les temps d'accès de x à y
+int nonExplore (sommet* s, int n); // Renvoie vrai s'il reste un sommet non exploré
 
 #endif // SOMMET_H_INCLUDED

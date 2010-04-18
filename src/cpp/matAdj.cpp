@@ -110,6 +110,7 @@ int getTMin (int** M, sommet* s, int n, int x, int y) { // Renvoie le temps min 
 void getTMinProf (int** M, sommet* s, int n, int x, int y, int* t, int temp) { // Parcours en profondeur
     int j;
     s[x].etat = 0; // Etat atteint
+    printf("s = %d (%d), t = %d\n", x+1, s[x].id, temp);
     temp += s[x].freq;
     if (x == y) {
         *t = temp;

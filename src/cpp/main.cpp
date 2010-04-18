@@ -107,7 +107,6 @@ int main(int argc, char* argv[]) {
 
         }
 
-        printS(s, n);
         fichier = fopen(dir_out, "w+"); // traiement du fichier resultat
         temp = getNbCFC(s, n); // recuperation du nombre de cfc
         fprintf(fichier, "%d\n", temp);

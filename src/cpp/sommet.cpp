@@ -12,6 +12,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #include "../h/sommet.h"
 
 void printS (sommet* s, int n) {
@@ -86,8 +87,8 @@ int getIndice (sommet* s, int n, int x) { // Renvoie l'indice du tableau corresp
 }
 
 int getIndiceMinDeb (sommet* s, int n) { // Renvoie l'indice du plus petit d(x)
-    int i, min = s[0].deb, imin = 0;
-    for (i = 1; i < n; i++) {
+    int i, imin, min = INT_MAX;
+    for (i = 0; i < n; i++) {
         if ((s[i].deb < min) && (s[i].etat == -1)) {
             min = s[i].deb;
             imin = i;
@@ -110,8 +111,8 @@ int getNbCFC (sommet* s, int n) { // Renvoie le nombre de composantes fortement 
 
 char* getCFC (sommet* s, int n) { // Renvoie les CFC
     int d = s[0].deb, f = s[0].fin, i;
-    char* buffer;
-    char* cfc = (char*) malloc (((3*n)+1)*sizeof(char));
+    char buffer[2*n];
+    char cfc[2*n];
     sprintf(cfc, "%d", s[0].id);
     for (i = 0; i < n-1; i++) {
         if ((d < (s[i+1].deb)) && (f > (s[i+1].fin))) {
@@ -134,8 +135,22 @@ char* getCFC (sommet* s, int n) { // Renvoie les CFC
 int nonExplore (sommet* s, int n) { // Renvoie vrai s'il reste un sommet non exploré
     int i;
     for (i = 0; i < n; i++) {
-        if (s[i].etat == -1)
+        if ((s[i].etat == -1) && (s[i].deb != INT_MAX))
             return 1;
     }
     return 0;
+}
+
+void getCheminMin (sommet* d, int n, int y) {
+    char buffer[2*n];
+    char chemin[2*n];
+    sprintf(chemin, "%d :", d[y].deb);
+    while (y != -1) {
+        sprintf(buffer, " %d,", d[y].id);
+        strcat(chemin, buffer);
+        y = d[y].fin;
+    }
+    strcat(chemin, "\n");
+    printf("%s", chemin);
+    //return chemin;
 }

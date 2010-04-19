@@ -97,63 +97,28 @@ void PProfGD (int** M, sommet* s, int n, int i, int* t) { // Parcours en profond
     s[i].fin = *t;
 }
 
-int getTMin (int** M, sommet* s, int n, int x, int y) { // Renvoie le temps min pour aller de x à y
-    int t;
-    int* tmin = &t;
-    x = getIndice(s, n, x);
-    y = getIndice(s, n, y);
-    t = - s[x].freq;
-    iniEtatSommet(s, n);
-    getTMinProf(M, s, n, x, y, tmin, t);
-    return *tmin;
-}
-
-void getTMinProf (int** M, sommet* s, int n, int x, int y, int* t, int temp) { // Parcours en profondeur
-    int j;
-    s[x].etat = 0; // Etat atteint
-    temp += s[x].freq;
-    if (x == y) {
-        *t = temp;
-    } else {
-        for (j = 0; j < n; j++) {
-            if ((M[x][j] > 0) && (s[j].etat == -1)) { // Successeur non atteint
-                getTMinProf(M, s, n, j, y, t, temp);
-            }
-        }
-    }
-    s[x].etat = 1; // Etat explore
-}
-
-void algoDijkstra (int** M, sommet* s, int n, int x) { // Calcule les plus courts chemins à partir de x
+void algoDijkstra (int** M, sommet* d, int n, int x) { // Calcule les plus courts chemins à partir de x
     int i, y, z;
-    iniEtatSommet(s, n); // F = X
+    iniEtatSommet(d, n); // F = X
     for (i = 0; i < n; i++) { // Source Unique Initialisation
-        s[i].deb = INT_MAX;
-        s[i].fin = -1;
+        d[i].deb = INT_MAX;
+        d[i].fin = -1;
     }
-    x = getIndice(s, n, x);
+    x = getIndice(d, n, x);
     z = x;
-    s[x].deb = 0;
-    while (nonExplore(s, n)) { // F != null
-        x = getIndiceMinDeb(s, n); // x = ExtraireMin(F)
-        s[x].etat = 0; // F = F - x
+    d[x].deb = 0;
+    while (nonExplore(d, n)) { // F != null
+        x = getIndiceMinDeb(d, n); // x = ExtraireMin(F)
+        d[x].etat = 0; // F = F - x
         for (y = 0; y < n; y++) {
             if (M[x][y] > 0) { // Successeur
-                if (s[y].deb > s[x].deb + s[y].freq) { // Relacher
-                    s[y].deb = s[x].deb + s[y].freq;
-                    x = getIndice(s, n, s[x].id);
-                    s[y].fin = x;
+                if (d[y].deb > d[x].deb + d[y].freq) { // Relacher
+                    printf("relacher(%d, %d) : %d > %d + %d => d(%d) = %d\n", d[x].id, d[y].id, d[y].deb, d[x].deb, d[y].freq, d[y].id, d[x].deb+d[y].freq);
+                    d[y].deb = d[x].deb + d[y].freq;
+                    x = getIndice(d, n, d[x].id);
+                    d[y].fin = x;
                 }
             }
         }
-    }
-    for (i = 0; (i < n) && (i != z); i++) {
-        printf("%d -> %d\n  %d :", s[z].id, s[i].id, s[i].deb);
-        x = i;
-        while (x != -1) {
-            printf(" %d,", s[x].id);
-            x = s[x].fin;
-        }
-        printf(" (chemin inverse)\n");
     }
 }

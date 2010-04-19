@@ -12,15 +12,15 @@ SUFFIXES ?= .cpp .o
 PROG	= CFC
 
 # Liste des fichiers objets nécessaures
-OBJS	= main.o
+OBJS	= main.o sommet.o matAdj.o lscAdj.o
 
 all: $(PROG) clean exec
 
 $(PROG): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o ../$(PROG) $(OBJS)
 
-main.o: ./cpp/main.cpp
-	$(CXX) $(CXXFLAGS) -c ./cpp/main.cpp
+%.o : ./cpp/%.cpp
+	$(CXX) $(CXXFLAGS) -c $<
 
 clean:
 	rm -rf $(OBJS)

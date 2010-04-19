@@ -33,5 +33,6 @@ int getIndiceMinDeb (sommet* s, int n); // Renvoie l'indice du plus petit d(x)
 int getNbCFC (sommet* s, int n); // Renvoie le nombre de composantes fortement connexes
 char* getCFC (sommet* s, int n); // Renvoie les CFC
 int nonExplore (sommet* s, int n); // Renvoie vrai s'il reste un sommet non exploré
+void getCheminMin (sommet* d, int n, int y); // Renvoie le temps et le plus cours chemin jusqu'à y
 
 #endif // SOMMET_H_INCLUDED

@@ -9,49 +9,68 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 
 ============================================================================= */
 
-/*=================================
-Includes
-===================================*/
 #include "../h/Generator.h"
 
-/*=================================*/
+/*=================================
+Constantes
+===================================*/
+#define RATIO_MIN 10
+#define RATIO_MAX 50
+
+#define RATIO_QUESTION 100
 
 
-void generateFile(string dest, int nb_person) {
+void generateFile(string source, string dest, int nb_person) {
   srand(time(NULL));
 
   int i, j;
   int random, ratio;
   char nom[50];
+  int id;
+
   FILE* fichier;
 
   int** matrice;
-  vector< string > database;
+  vector< string > database_nom;
+  vector< int > database_id;
 
   int nb_link, nb_question;
+  vector< int > liste_id;
 
 
   /* Initialisation du fichier de noms */
-  fichier = fopen(FICHIER_DAT, "r");
+  fichier = fopen(source.c_str(), "r");
 
   while (!feof(fichier)) {
-    fscanf(fichier, "%[^,\t\n\r]\n", nom);
-    database.push_back(nom);
+    fscanf(fichier, "%[^,\t\n\r], %d\n", nom, &id);
+    database_nom.push_back(nom);
+    database_id.push_back(id);
   }
+
   fclose(fichier);
 
-  fichier = fopen(dest.c_str(), "w+");
 
+  fichier = fopen(dest.c_str(), "w+");
 
   /* Nombre de personne */
   fprintf(fichier, "%d\n", nb_person);
 
   /* Personnes */
-  for (i = 0; i < nb_person; i++){
-    strcpy(nom, generateName(database).c_str());
+  i = 0;
+  while (i < nb_person){
+    random = rand()%database_nom.size();
+    strcpy(nom, database_nom[random].c_str());
+    id = database_id[random];
+
+    if (find(liste_id.begin(), liste_id.end(), id) == liste_id.end()) {
+      /* Teste si la personne est déjà dans la liste */
     random = rand()%100;
-    fprintf(fichier, "%s, %d, %d\n", nom, i, random);
-  }
+    fprintf(fichier, "%s, %d, %d\n", nom, id, random);
+
+    liste_id.push_back(id); /* Je stocke les id choisies */
+    i++;
+    }
+}
 
   /* Initialisation de la matrice */
   matrice = (int**) malloc(nb_person*sizeof(int*));
@@ -68,8 +87,8 @@ void generateFile(string dest, int nb_person) {
 
   for (i = 0; i < nb_person; i++){
     for (j = 0; j < nb_person; j++){
-      if (matrice[i][j]) {
-        fprintf(fichier, "%d, %d\n", i, j);
+      if ((matrice[i][j])) {
+        fprintf(fichier, "%d, %d\n", liste_id[i], liste_id[j]);
       }
     }
   }
@@ -81,8 +100,8 @@ void generateFile(string dest, int nb_person) {
 
   for (i = 0; i < nb_person; i++){
     for (j = 0; j < nb_person; j++){
-      if (matrice[i][j] && (i != j)) {
-        fprintf(fichier, "%d -> %d\n", i, j);
+      if (matrice[i][j]) {
+        fprintf(fichier, "%d -> %d\n", liste_id[i], liste_id[j]);
       }
     }
   }
@@ -113,12 +132,12 @@ int generateMatrix(int nb, int** m, int r) {
     }
   }
 
+  for (i = 0; i < nb; i++) {
+    if (m[i][i]) {
+      m[i][i] = 0;
+      cpt--;
+    }
+  }
+
   return cpt;
-}
-
-string generateName(vector< string > v) {
-  int random;
-
-  random = rand()%v.size();
-  return v[random];
 }

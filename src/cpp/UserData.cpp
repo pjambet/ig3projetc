@@ -80,7 +80,6 @@ UserData::UserData(string fileName) {
         (*it1).second.sortFriends();
       }
 
-
     /* Etape 5 - Lecture du nombre de question */
     fscanf(filedata, "%d\n", &nb_question);
 

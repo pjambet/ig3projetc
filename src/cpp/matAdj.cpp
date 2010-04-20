@@ -113,7 +113,7 @@ void algoDijkstra (int** M, sommet* d, int n, int x) { // Calcule les plus court
         for (y = 0; y < n; y++) {
             if (M[x][y] > 0) { // Successeur
                 if (d[y].deb > d[x].deb + d[y].freq) { // Relacher
-                    printf("relacher(%d, %d) : %d > %d + %d => d(%d) = %d\n", d[x].id, d[y].id, d[y].deb, d[x].deb, d[y].freq, d[y].id, d[x].deb+d[y].freq);
+                    //printf("relacher(%d, %d) : %d > %d + %d => d(%d) = %d\n", d[x].id, d[y].id, d[y].deb, d[x].deb, d[y].freq, d[y].id, d[x].deb+d[y].freq);
                     d[y].deb = d[x].deb + d[y].freq;
                     x = getIndice(d, n, d[x].id);
                     d[y].fin = x;

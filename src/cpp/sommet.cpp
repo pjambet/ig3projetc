@@ -94,7 +94,10 @@ int getIndiceMinDeb (sommet* s, int n) { // Renvoie l'indice du plus petit d(x)
             imin = i;
         }
     }
-    return imin;
+    if (imin != INT_MAX)
+        return imin;
+    else
+        return 0;
 }
 
 int getNbCFC (sommet* s, int n) { // Renvoie le nombre de composantes fortement connexes
@@ -111,9 +114,10 @@ int getNbCFC (sommet* s, int n) { // Renvoie le nombre de composantes fortement 
 
 char* getCFC (sommet* s, int n) { // Renvoie les CFC
     int d = s[0].deb, f = s[0].fin, i;
-    char buffer[2*n];
-    char cfc[2*n];
-    sprintf(cfc, "%d", s[0].id);
+    char* buffer = (char*) malloc(5*n*sizeof(char));
+    char* cfc = (char*) malloc(5*n*sizeof(char));
+    sprintf(buffer, "%d", s[0].id);
+    strcpy(cfc, buffer);
     for (i = 0; i < n-1; i++) {
         if ((d < (s[i+1].deb)) && (f > (s[i+1].fin))) {
             sprintf(buffer, "%d", s[i+1].id);
@@ -141,16 +145,22 @@ int nonExplore (sommet* s, int n) { // Renvoie vrai s'il reste un sommet non exp
     return 0;
 }
 
-void getCheminMin (sommet* d, int n, int y) {
-    char buffer[2*n];
-    char chemin[2*n];
-    sprintf(chemin, "%d :", d[y].deb);
+char* getCheminMin (sommet* d, int n, int y) {
+    int i;
+    char* buffer = (char*) malloc(5*n*sizeof(char));
+    char* buffer2 = (char*) malloc(5*n*sizeof(char));
+    char* chemin = (char*) malloc(5*n*sizeof(char));
+    sprintf(buffer, "%d :", d[y].deb);
+    strcpy(chemin, buffer);
     while (y != -1) {
-        sprintf(buffer, " %d,", d[y].id);
-        strcat(chemin, buffer);
+        sprintf(buffer, ",%d ", d[y].id);
+        strcat(buffer2, buffer);
         y = d[y].fin;
     }
+    for (i = 0; i < strlen(buffer2)-1; i++) {
+        buffer[i] = buffer2[strlen(buffer2)-i-1];
+    }
+    strcat(chemin, buffer);
     strcat(chemin, "\n");
-    printf("%s", chemin);
-    //return chemin;
+    return chemin;
 }

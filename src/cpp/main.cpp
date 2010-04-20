@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
     char *nom_in, *nom_out, dir_in[6] = "test/", dir_out[6] = "test/", *buffer, typestruct;
     liste *L, *P;
     sommet* s, *d;
-    FILE* fichier;
+    FILE* fic_in, *fic_out;
 
     typestruct = 'm'; // Choix de la structure, m pour matrice, l pour liste
     nom_in = (char*) malloc(16*sizeof(char));
@@ -45,10 +45,10 @@ int main(int argc, char* argv[]) {
     strcat(dir_in, nom_in); // concaténation du repertoire test avec le nom du fichier d'entrée
     strcat(dir_out, nom_out); // concaténation du repertoire test avec le nom du fichier de sortie
 
-    fichier = fopen(dir_in, "r");
-    if (fichier != NULL) { // lecture du graphe
+    fic_in = fopen(dir_in, "r");
+    if (fic_in != NULL) { // lecture du graphe
 
-        fscanf(fichier, "%d\n", &n); // lecture du nombre de sommets du graphe
+        fscanf(fic_in, "%d\n", &n); // lecture du nombre de sommets du graphe
         i = 0;
         s = iniSommet(n);
         d = iniSommet(n);
@@ -58,19 +58,20 @@ int main(int argc, char* argv[]) {
         buffer = (char*) malloc(((3*n)+1)*sizeof(char));
 
         while (i < n) { // lecture des id / nom / frequence
-            fscanf(fichier, "%[^,], %d, %d\n", buffer, &x, &y);
+            fscanf(fic_in, "%[^,], %d, %d\n", buffer, &x, &y);
             strcpy(s[i].nom, buffer);
             s[i].num = i;
             s[i].id = x;
+            s[i].freq = y;
             d[i].id = x;
             d[i].freq = y;
             i++;
         }
 
-        fscanf(fichier, "%d\n", &m); // lecture du nombre de sommets du graphe
+        fscanf(fic_in, "%d\n", &m); // lecture du nombre de sommets du graphe
         i = 0;
         while (i < m) { // lecture les relations entre les sommets
-            fscanf(fichier, "%d, %d\n", &x, &y);
+            fscanf(fic_in, "%d, %d\n", &x, &y);
             x = getIndice(s, n, x);
             y = getIndice(s, n, y);
             if (typestruct == 'm') {
@@ -81,20 +82,6 @@ int main(int argc, char* argv[]) {
             }
             i++;
         }
-
-        fscanf(fichier, "%d\n", &m); // lecture du nombre de sommets du graphe
-        i = 0;
-        while (i < m) { // lecture des questions
-            fscanf(fichier, "%d -> %d\n", &x, &y);
-            if (x != temp) {
-                temp = x;
-                algoDijkstra(M, d, n, x);
-            }
-            y = getIndice(s, n, y);
-            //getCheminMin(d, n, y);
-            i++;
-        }
-        fclose(fichier);
 
         if (typestruct == 'm') { // Matrice
 
@@ -108,12 +95,25 @@ int main(int argc, char* argv[]) {
 
         }
 
-        fichier = fopen(dir_out, "w+"); // traiement du fichier resultat
+        fic_out = fopen(dir_out, "w+"); // traiement du fichier resultat
         temp = getNbCFC(s, n); // recuperation du nombre de cfc
-        fprintf(fichier, "%d\n", temp);
+        fprintf(fic_out, "%d\n", temp);
         buffer = getCFC(s, n); // recuperation des cfc
-        fprintf(fichier, "%s\n", buffer);
-        fclose(fichier);
+        fprintf(fic_out, "%s\n", buffer);
+
+        fscanf(fic_in, "%d\n", &m); // lecture du nombre de sommets du graphe
+        i = 0;
+        while (i < m) { // lecture des questions
+            fscanf(fic_in, "%d -> %d\n", &x, &y);
+            algoDijkstra(M, d, n, x);
+            y = getIndice(s, n, y);
+            buffer = getCheminMin(d, n, y);
+            fprintf(fic_out, "%s", buffer);
+            i++;
+        }
+
+        fclose(fic_in);
+        fclose(fic_out);
 
     } else {
         printf("Lecture du fichier impossible\n");

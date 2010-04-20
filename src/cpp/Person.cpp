@@ -86,6 +86,10 @@ vector <int> Person::get_listLink() {
   return listLink;
 }
 
+vector <int> Person::get_listDualLink() {
+  return listDualLink;
+}
+
 /*=================================*/
 
 

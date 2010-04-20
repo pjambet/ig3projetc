@@ -75,6 +75,7 @@ class Person {
     int get_id();
     int get_freq();
     vector <int> get_listLink();
+    vector <int> get_listDualLink();
 
 
     /* Autres et optionnels  */

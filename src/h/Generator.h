@@ -6,6 +6,12 @@ OBJET            : Genere des fichiers de donnee
 DATE DE CREATION : 19/04/2010
 AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 --------------------------------------------------------------------------------
+  - Creation du fichier : (19/04/2010)
+    Genere un autre fichier a partir d'une liste de nom externe
+
+  - Modification : (19/04/2010)
+    Possibilite de mettre la liste de nom externe en parametre
+    La liste de nom contient en plus des nom, les id lie a chaque nom
 
 ============================================================================= */
 

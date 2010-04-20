@@ -34,10 +34,10 @@ UserData::UserData(string fileName) {
 
     /* Etape 4 */
     int x, y;
-    map<int, Person>::iterator it1;
+    map<int, Person>::iterator itPers;
 
     /* Etape 6 */
-    map<int, vector<int> >::iterator it2;
+    map<int, vector<int> >::iterator itQuest;
 
 
 
@@ -71,13 +71,17 @@ UserData::UserData(string fileName) {
       for (i = 0; i < nb_link; i++){
         fscanf(filedata, "%d, %d\n", &x, &y);
 
-        it1 = listPerson.find(x);
-        (*it1).second.addFriend(y);
+        /* On ajoute a x un ami */
+        listPerson[x].addFriend(y);
+
+        /* On ajoute a y quelqu'un qui lui fait confiance */
+        listPerson[y].addDualFriend(x);
+
        }
 
        /* Tri de tous les amis */
-      for (it1 = listPerson.begin() ; it1 != listPerson.end(); it1++) {
-        (*it1).second.sortFriends();
+      for (itPers = listPerson.begin() ; itPers != listPerson.end(); itPers++) {
+        (*itPers).second.sortFriends();
       }
 
     /* Etape 5 - Lecture du nombre de question */
@@ -89,8 +93,8 @@ UserData::UserData(string fileName) {
       addQuestion(x, y);
     }
 
-    for (it2 = listQuestion.begin() ; it2 != listQuestion.end(); it2++) {
-        sort( (*it2).second.begin(), (*it2).second.end() );
+    for (itQuest = listQuestion.begin() ; itQuest != listQuestion.end(); itQuest++) {
+        sort( (*itQuest).second.begin(), (*itQuest).second.end() );
     }
   }
 }
@@ -107,11 +111,13 @@ Accesseurs en ecriture
 void UserData::addPerson(Person p) {
   map<int, Person>::iterator it;
 
+
   it = listPerson.find(p.get_id());
 
   if (it != listPerson.end()) {
     /* Si l'id est deja utilise en tant que cle */
     cerr << "Erreur - Redondance d'identifiant : " << p.get_id() << endl;
+    exit (-1);
   } else {
     listPerson[p.get_id()] = p;
   }
@@ -135,6 +141,21 @@ map < int, vector<int> > UserData::get_listQuestion() {
   return listQuestion;
 }
 
+Person UserData::get_Person(int id) {
+  map<int, Person>::iterator it;
+
+
+  it = listPerson.find(id);
+
+  if (it != listPerson.end()) {
+    /* Si l'id est deja utilise en tant que cle */
+    cerr << "Erreur - Id inexistant : " << id << endl;
+    exit (-1);
+  }
+
+  return listPerson[id];
+}
+
 /*=================================*/
 
 
@@ -147,16 +168,18 @@ bool UserData::is_link(int id1, int id2) {
   int i;
   bool link;
 
+
   link = false;
   i = 0;
   it = listPerson.find(id1);
-  v = (*it).second.get_listLink();
 
   if (listPerson.find(id1) == listPerson.end()) {
     /* Si l'id n'est pas dans la liste */
     cerr << "Erreur - Identifiant introuvable : " << id1 << endl;
     exit (-1);
   } else {
+
+    v = (*it).second.get_listLink();
     while ((v[i] < id2) && (i < v.size())) {
       i++;
     }
@@ -171,11 +194,44 @@ bool UserData::is_link(int id1, int id2) {
   return link;
 }
 
+bool is_dualLink(int id1, int id2) {
+  map< int, Person >::iterator it;
+  vector< int > v;
+  int i;
+  bool dualLink;
+
+
+  link = false;
+  i = 0;
+  it = listPerson.find(id1);
+
+  if (listPerson.find(id1) == listPerson.end()) {
+    /* Si l'id n'est pas dans la liste */
+    cerr << "Erreur - Identifiant introuvable : " << id1 << endl;
+    exit (-1);
+  } else {
+
+    v = (*it).second.get_listDualLink();
+    while ((v[i] < id2) && (i < v.size())) {
+      i++;
+    }
+
+    if (i == v.size()) {
+      dualLink = false;
+    } else if (v[i] == id2){
+      dualLink = true;
+    }
+  }
+
+  return dualLink;
+}
+
 bool UserData::is_question(int id1, int id2) {
   map< int, vector<int> >::iterator it;
   vector< int > v;
   bool question;
   int i;
+
 
   question = false;
   i = 0;

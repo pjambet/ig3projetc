@@ -24,6 +24,7 @@ Person::Person(){
   id_number = 0;
   frequency = 0;
   listLink.resize(0);
+  listDualLink.resize(0);
 }
 
 Person::Person(string n, int i, int f){
@@ -31,6 +32,7 @@ Person::Person(string n, int i, int f){
   id_number = i;
   frequency = f;
   listLink.resize(0);
+  listDualLink.resize(0);
 }
 
 Person::~Person() {
@@ -56,6 +58,10 @@ void Person::set_freq(int f) {
 
 void Person::addFriend(int i) {
   listLink.push_back(i);
+}
+
+void Person::addDualFriend(int i) {
+  listDualLink.push_back(i);
 }
 
 /*=================================*/
@@ -88,15 +94,24 @@ Autres et optionnels
 ===================================*/
 void Person::sortFriends() {
   sort(listLink.begin(), listLink.end());
+  sort(listDualLink.begin(), listDualLink.end());
 }
 
 void Person::display() {
   cout << name << " " << id_number << " " << frequency << endl;
-  cout << "Friends : [ ";
+  cout << "   Friends : [ ";
   for (int i = 0; i < listLink.size(); i++) {
     cout << listLink[i] << " ";
   }
   cout << "]" << endl;
+
+  cout << "   Dual Friends : [ ";
+  for (int i = 0; i < listDualLink.size(); i++) {
+    cout << listDualLink[i] << " ";
+  }
+  cout << "]" << endl;
+
+  cout << endl;
 }
 
 /*=================================*/

@@ -146,21 +146,25 @@ int nonExplore (sommet* s, int n) { // Renvoie vrai s'il reste un sommet non exp
 }
 
 char* getCheminMin (sommet* d, int n, int y) {
-    int i;
+    int i, p, l;
+    char temp;
     char* buffer = (char*) malloc(5*n*sizeof(char));
-    char* buffer2 = (char*) malloc(5*n*sizeof(char));
     char* chemin = (char*) malloc(5*n*sizeof(char));
     sprintf(buffer, "%d :", d[y].deb);
     strcpy(chemin, buffer);
+    l = strlen(chemin);
     while (y != -1) {
         sprintf(buffer, ",%d ", d[y].id);
-        strcat(buffer2, buffer);
+        strcat(chemin, buffer);
         y = d[y].fin;
     }
-    for (i = 0; i < strlen(buffer2)-1; i++) {
-        buffer[i] = buffer2[strlen(buffer2)-i-1];
+    p = strlen(chemin);
+    for (i = 0; i < (p/2)-1; i++) {
+        temp = chemin[i+l];
+        chemin[i+l] = chemin[p-i-1];
+        chemin[p-i-1] = temp;
     }
-    strcat(chemin, buffer);
+    chemin[p-1] = '\0'; // on elève la dernière virgule
     strcat(chemin, "\n");
     return chemin;
 }

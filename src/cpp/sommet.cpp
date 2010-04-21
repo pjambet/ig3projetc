@@ -114,8 +114,8 @@ int getNbCFC (sommet* s, int n) { // Renvoie le nombre de composantes fortement 
 
 char* getCFC (sommet* s, int n) { // Renvoie les CFC
     int d = s[0].deb, f = s[0].fin, i;
-    char* buffer = (char*) malloc(5*n*sizeof(char));
-    char* cfc = (char*) malloc(5*n*sizeof(char));
+    char* buffer = (char*) malloc(1000*sizeof(char));
+    char* cfc = (char*) malloc(1000*sizeof(char));
     sprintf(buffer, "%d", s[0].id);
     strcpy(cfc, buffer);
     for (i = 0; i < n-1; i++) {
@@ -146,25 +146,40 @@ int nonExplore (sommet* s, int n) { // Renvoie vrai s'il reste un sommet non exp
 }
 
 char* getCheminMin (sommet* d, int n, int y) {
-    int i, p, l;
+    int i, j, k, p, l, m;
     char temp;
-    char* buffer = (char*) malloc(5*n*sizeof(char));
-    char* chemin = (char*) malloc(5*n*sizeof(char));
-    sprintf(buffer, "%d :", d[y].deb);
-    strcpy(chemin, buffer);
-    l = strlen(chemin);
+    char* buffer = (char*) malloc(1000*sizeof(char));
+    char* chemin = (char*) malloc(1000*sizeof(char));
+    sprintf(chemin, "%d : ", d[y].deb);
+    strcpy(buffer, chemin);
+    m = strlen(buffer);
     while (y != -1) {
-        sprintf(buffer, ",%d ", d[y].id);
-        strcat(chemin, buffer);
+        sprintf(chemin, "%d, ", d[y].id);
+        strcat(buffer, chemin);
         y = d[y].fin;
     }
-    p = strlen(chemin);
-    for (i = 0; i < (p/2)-1; i++) {
-        temp = chemin[i+l];
-        chemin[i+l] = chemin[p-i-1];
-        chemin[p-i-1] = temp;
+    p = strlen(buffer);
+    strcpy(chemin, buffer);
+    i = m;
+    while (i < p) { // inversion de l'ordre (fonction super bordelique!)
+        l = 0;
+        while (buffer[i] != ' ') {
+            i++;
+            l++;
+        }
+        i = i-l;
+        l++;
+        k = 0;
+        j = p-l-i;
+        while (k < l) {
+            //printf("Var : (l=%d p=%d i=%d), chemin[%d] = %c\n", l, p, i, j+m, buffer[i]);
+            chemin[j+m] = buffer[i];
+            i++;
+            k++;
+            j++;
+        }
     }
-    chemin[p-1] = '\0'; // on elève la dernière virgule
+    chemin[p-2] = '\0'; // on elève la dernière virgule et le dernier espace
     strcat(chemin, "\n");
     return chemin;
 }

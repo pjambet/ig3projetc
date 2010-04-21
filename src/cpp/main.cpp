@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
         M = iniMat(n);
         L = iniListe(n);
         P = iniListe(n);
-        buffer = (char*) malloc(((3*n)+1)*sizeof(char));
+        buffer = (char*) malloc(1000*sizeof(char));
 
         while (i < n) { // lecture des id / nom / frequence
             fscanf(fic_in, "%[^,], %d, %d\n", buffer, &x, &y);

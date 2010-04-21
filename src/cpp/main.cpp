@@ -77,8 +77,8 @@ int main(int argc, char* argv[]) {
             if (typestruct == 'm') {
                 M[x][y] = 1; // remplissage de la matrice d'adjacence M
             } else if (typestruct == 'l') {
-                //ajoutFin(L, x, y); // creation de la liste d'adjacence L
-                //ajoutFin(P, y, x); // creation de la liste duale d'adjacence P
+                ajoutFin(L, x, y); // creation de la liste d'adjacence L
+                ajoutFin(P, y, x); // creation de la liste duale d'adjacence P
             }
             i++;
         }
@@ -105,7 +105,14 @@ int main(int argc, char* argv[]) {
         i = 0;
         while (i < m) { // lecture des questions
             fscanf(fic_in, "%d -> %d\n", &x, &y);
-            algoDijkstra(M, d, n, x);
+            if (x != temp) {
+                temp = x;
+                if (typestruct == 'm') {
+                    algoDijkstra(M, d, n, x);
+                } else if (typestruct == 'l') {
+                    algoDijkstra(L, d, n, x);
+                }
+            }
             y = getIndice(s, n, y);
             buffer = getCheminMin(d, n, y);
             fprintf(fic_out, "%s", buffer);

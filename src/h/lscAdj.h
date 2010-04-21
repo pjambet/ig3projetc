@@ -29,5 +29,6 @@ void PPG (liste* l, sommet* s, int n); // Parcours en profondeur du graphe (appe
 void PProfG (liste* l, sommet* s, int i, int* t, int n); // Parcours en profondeur du graphe (recursif)
 void PPGD (liste* l, sommet* s, int n); // Parcours en profondeur du graphe dual (appel sur PProfGD)
 void PProfGD (liste* l, sommet* s, int i, int* t, int n); // Parcours en profondeur du graphe dual (recursif)
+void algoDijkstra (liste* l, sommet* d, int n, int x); // Calcule les plus courts chemins à partir de x
 
 #endif // LSCADJ_H_INCLUDED

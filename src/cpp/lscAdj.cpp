@@ -110,3 +110,29 @@ void PProfGD (liste* l, sommet* s, int i, int* t, int n) { // Parcours en profon
     (*t)++;
     s[i].fin = *t;
 }
+
+void algoDijkstra (liste* l, sommet* d, int n, int x) { // Calcule les plus courts chemins à partir de x
+    int i, y, z;
+    iniEtatSommet(d, n); // F = X
+    for (i = 0; i < n; i++) { // Source Unique Initialisation
+        d[i].deb = INT_MAX;
+        d[i].fin = -1;
+    }
+    x = getIndice(d, n, x);
+    z = x;
+    d[x].deb = 0;
+    while (nonExplore(d, n)) { // F != null
+        x = getIndiceMinDeb(d, n); // x = ExtraireMin(F)
+        d[x].etat = 0; // F = F - x
+        liste temp = l[x];
+        while (temp != NULL) {
+            if (d[temp->val].deb > d[x].deb + d[temp->val].freq) { // Relacher
+                //printf("relacher(%d, %d) : %d > %d + %d => d(%d) = %d\n", d[x].id, d[y].id, d[y].deb, d[x].deb, d[y].freq, d[y].id, d[x].deb+d[y].freq);
+                d[temp->val].deb = d[x].deb + d[temp->val].freq;
+                x = getIndice(d, n, d[x].id);
+                d[temp->val].fin = x;
+            }
+            temp = temp->suiv;
+        }
+    }
+}

@@ -97,6 +97,8 @@ void generateFile(string source, string dest, int nb_person) {
 
 
   /* Matrice de question */
+
+  /*
   nb_question = generateMatrix(nb_person, matrice, RATIO_QUESTION);
   fprintf(fichier, "%d\n", nb_question);
   fprintf(fichier_questions, "%d\n", nb_question);
@@ -109,6 +111,24 @@ void generateFile(string source, string dest, int nb_person) {
       }
     }
   }
+  */
+
+  nb_question = nb_person - 1;
+    fprintf(fichier, "%d\n", nb_question);
+    fprintf(fichier_questions, "%d\n", nb_question);
+
+  random = rand()%nb_person;
+    /* On choisit une id au hasard dans la liste */
+
+
+  for (i = 0; i < nb_person; i++){
+    if (i != random) {
+        fprintf(fichier, "%d -> %d\n", liste_id[random], liste_id[i]);
+        fprintf(fichier_questions, "%d -> %d\n", liste_id[random], liste_id[i]);
+    }
+  }
+  /* On se pose les questions random -> "tous les autres" */
+
 
   for (i = 0; i < nb_person; i++){
     free(matrice[i]);

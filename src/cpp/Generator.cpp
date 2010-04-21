@@ -29,6 +29,7 @@ void generateFile(string source, string dest, int nb_person) {
   int id;
 
   FILE* fichier;
+  FILE* fichier_questions;
 
   int** matrice;
   vector< string > database_nom;
@@ -51,6 +52,7 @@ void generateFile(string source, string dest, int nb_person) {
 
 
   fichier = fopen(dest.c_str(), "w+");
+  fichier_questions = fopen("test_question.txt", "w+");
 
   /* Nombre de personne */
   fprintf(fichier, "%d\n", nb_person);
@@ -97,11 +99,13 @@ void generateFile(string source, string dest, int nb_person) {
   /* Matrice de question */
   nb_question = generateMatrix(nb_person, matrice, RATIO_QUESTION);
   fprintf(fichier, "%d\n", nb_question);
+  fprintf(fichier_questions, "%d\n", nb_question);
 
   for (i = 0; i < nb_person; i++){
     for (j = 0; j < nb_person; j++){
       if (matrice[i][j]) {
         fprintf(fichier, "%d -> %d\n", liste_id[i], liste_id[j]);
+        fprintf(fichier_questions, "%d -> %d\n", liste_id[i], liste_id[j]);
       }
     }
   }

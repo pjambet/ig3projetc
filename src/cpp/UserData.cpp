@@ -194,14 +194,14 @@ bool UserData::is_link(int id1, int id2) {
   return link;
 }
 
-bool is_dualLink(int id1, int id2) {
+bool UserData::is_dualLink(int id1, int id2) {
   map< int, Person >::iterator it;
   vector< int > v;
   int i;
   bool dualLink;
 
 
-  link = false;
+  dualLink = false;
   i = 0;
   it = listPerson.find(id1);
 

@@ -14,6 +14,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include "../h/matAdj.h"
 #include "../h/lscAdj.h"
 #include "../h/generate_mat.h"
+#include "../h/Generator.h"
 
 int main(int argc, char* argv[]) {
 
@@ -23,6 +24,7 @@ int main(int argc, char* argv[]) {
     sommet* s, *d;
     FILE* fic_in, *fic_out;
 
+    //generateFile("test/noms.dat", "test/gene", 2000);
     typestruct = 'm'; // Choix de la structure, m pour matrice, l pour liste
     nom_in = (char*) malloc(16*sizeof(char));
     nom_out = (char*) malloc(16*sizeof(char));
@@ -55,7 +57,7 @@ int main(int argc, char* argv[]) {
         M = iniMat(n);
         L = iniListe(n);
         P = iniListe(n);
-        buffer = (char*) malloc(1000*sizeof(char));
+        buffer = (char*) malloc(10*n*sizeof(char));
 
         while (i < n) { // lecture des id / nom / frequence
             fscanf(fic_in, "%[^,], %d, %d\n", buffer, &x, &y);

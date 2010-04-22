@@ -84,35 +84,8 @@ void PProfG (liste* l, sommet* s, int i, int* t, int n) { // Parcours en profond
     s[i].fin = *t;
 }
 
-void PPGD (liste* l, sommet* s, int n) { // Parcours en profondeur du graphe dual (appel sur PProfGD)
-    int i;
-    int temps = 0;
-    int* t = &temps;
-    iniEtatSommet(s, n);
-    for (i = 0; i < n; i++) {
-        if (s[s[i].num].etat == -1) {
-            PProfGD(l, s, s[i].num, t, n);
-        }
-    }
-}
-void PProfGD (liste* l, sommet* s, int i, int* t, int n) { // Parcours en profondeur du graphe dual (recursif)
-    s[i].etat = 0; // Etat atteint
-    (*t)++;
-    s[i].deb = *t;
-    liste temp = l[i];
-    while (temp != NULL) {
-        if (s[temp->val].etat == -1) {
-            PProfG(l, s, temp->val, t, n);
-        }
-        temp = temp->suiv;
-    }
-    s[i].etat = 1; // Etat explore
-    (*t)++;
-    s[i].fin = *t;
-}
-
 void algoDijkstra (liste* l, sommet* d, int n, int x) { // Calcule les plus courts chemins à partir de x
-    int i, y, z;
+    int i, z;
     iniEtatSommet(d, n); // F = X
     for (i = 0; i < n; i++) { // Source Unique Initialisation
         d[i].deb = INT_MAX;

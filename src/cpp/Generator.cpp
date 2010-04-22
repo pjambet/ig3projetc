@@ -52,7 +52,6 @@ void generateFile(string source, string dest, int nb_person) {
 
 
   fichier = fopen(dest.c_str(), "w+");
-  fichier_questions = fopen("test_question.txt", "w+");
 
   /* Nombre de personne */
   fprintf(fichier, "%d\n", nb_person);
@@ -115,7 +114,6 @@ void generateFile(string source, string dest, int nb_person) {
 
   nb_question = nb_person - 1;
     fprintf(fichier, "%d\n", nb_question);
-    fprintf(fichier_questions, "%d\n", nb_question);
 
   random = rand()%nb_person;
     /* On choisit une id au hasard dans la liste */
@@ -124,7 +122,6 @@ void generateFile(string source, string dest, int nb_person) {
   for (i = 0; i < nb_person; i++){
     if (i != random) {
         fprintf(fichier, "%d -> %d\n", liste_id[random], liste_id[i]);
-        fprintf(fichier_questions, "%d -> %d\n", liste_id[random], liste_id[i]);
     }
   }
   /* On se pose les questions random -> "tous les autres" */

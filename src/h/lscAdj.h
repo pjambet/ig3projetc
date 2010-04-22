@@ -27,8 +27,6 @@ void lscAdjCFC (char* a, int n); // Renvoie les composantes fortement connexes d
 void printListeAdj (liste* l, int n); // Affiche la liste adjacente
 void PPG (liste* l, sommet* s, int n); // Parcours en profondeur du graphe (appel sur PProfG)
 void PProfG (liste* l, sommet* s, int i, int* t, int n); // Parcours en profondeur du graphe (recursif)
-void PPGD (liste* l, sommet* s, int n); // Parcours en profondeur du graphe dual (appel sur PProfGD)
-void PProfGD (liste* l, sommet* s, int i, int* t, int n); // Parcours en profondeur du graphe dual (recursif)
 void algoDijkstra (liste* l, sommet* d, int n, int x); // Calcule les plus courts chemins à partir de x
 
 #endif // LSCADJ_H_INCLUDED

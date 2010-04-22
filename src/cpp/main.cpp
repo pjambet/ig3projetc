@@ -25,7 +25,8 @@ int main(int argc, char* argv[]) {
 
     int i, n, m, temp, x, y, t_ini, t_fin, **M, choix, *tabQ;
     bool continuer = true;
-    char *nom_in, *nom_out, *buffer, typestruct, dir_in[6] = "test/", dir_out[6] = "test/";
+    char *buffer, typestruct;
+    string nom_in, nom_out, dir_in("test/"), dir_out("test/");
     liste *L, *P;
     sommet* s, *d;
     FILE* fic_in, *fic_out;
@@ -37,7 +38,7 @@ int main(int argc, char* argv[]) {
     cout << "    |  _ \\ _ __ ___ (_) ___| |_    ___        " << endl;
     cout << "    | |_) | '__/ _ \\| |/ _ \\ __|  / __|       " << endl;
     cout << "    |  __/| | | (_) | |  __/ |_  | (__        " << endl;
-    cout << "    |_|   |_|  \\___// |\\___|\\__|  \\___|       " << endl;
+    cout << "    |_|   |_|  \\___// |\\___|\\__|  \\___|      " << endl;
     cout << "                   |__/                       " << endl;
     cout << "                                              " << endl;
     cout << "                                              " << endl;
@@ -60,19 +61,18 @@ int main(int argc, char* argv[]) {
 
             case 1 :
 
-                nom_in = (char*) malloc(16*sizeof(char));
                 if (argc > 1) { // s'il y a 1 argument, on l'utilise comme nom de fichier d'entrée
                     nom_in = argv[1];
                 } else { // s'il n'y a pas d'argument, on demande à l'utilisateur d'entrer les noms des fichiers d'entrée et de sortie
-                    printf("Entrez le nom du graphe.\n");
-                    scanf("%s", nom_in);
-                    printf("\n");
+                    cout << "Entrez le nom du graphe." << endl;
+                    cin >> nom_in;
+                    cout << endl;
                 }
                 t_ini = GetTickCount();
 
-                strcat(dir_in, nom_in); // concaténation du repertoire test avec le nom du fichier d'entrée
+                dir_in += nom_in; // concaténation du repertoire test avec le nom du fichier d'entrée
 
-                fic_in = fopen(dir_in, "r"); // ouverture de "test/nom_in"
+                fic_in = fopen(dir_in.c_str(), "r"); // ouverture de "test/nom_in"
 
                 if (fic_in != NULL) { // lecture du graphe
 
@@ -125,7 +125,7 @@ int main(int argc, char* argv[]) {
                     fclose(fic_in); // fermeture de "test/nom_in"
 
                 } else {
-                    printf("Lecture du fichier impossible\n");
+                    cerr << "Lecture du fichier impossible" << endl;
                 }
 
                 t_fin = GetTickCount() - t_ini;
@@ -134,22 +134,21 @@ int main(int argc, char* argv[]) {
 
             case 2 :
 
-                nom_out = (char*) malloc(16*sizeof(char));
                 if (argc > 2) { // s'il y a 2 arguments, on utilise le 2eme argument comme nom de fichier de sortie
                     nom_out = argv[2];
                 } else if (argc > 1) { // s'il n'y a qu'un seul argument, le fichier de sortie sera argv[1].res
-                    strcpy(nom_out, nom_in);
-                    strcat(nom_out, ".res");
+                    nom_out = nom_in;
+                    nom_out += ".res";
                 } else { // s'il n'y a pas d'argument, on demande à l'utilisateur d'entrer le nom du fichier de sortie
-                    printf("Entrez le nom du fichier resultat.\n");
-                    scanf("%s", nom_out);
-                    printf("\n");
+                    cout << "Entrez le nom du fichier resultat." << endl;
+                    cin >> nom_out;
+                    cout << endl;
                 }
                 t_ini = GetTickCount();
 
-                strcat(dir_out, nom_out); // concaténation du repertoire test avec le nom du fichier de sortie
+                dir_out += nom_out; // concaténation du repertoire test avec le nom du fichier de sortie
 
-                fic_out = fopen(dir_out, "w+"); // création de "test/nom_out"
+                fic_out = fopen(dir_out.c_str(), "w+"); // création de "test/nom_out"
 
                 if (typestruct == 'm') { // Matrice
 

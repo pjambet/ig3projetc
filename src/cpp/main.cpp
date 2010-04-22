@@ -60,7 +60,6 @@ int main(int argc, char* argv[]) {
 
             case 1 :
 
-                t_ini = GetTickCount();
                 nom_in = (char*) malloc(16*sizeof(char));
                 if (argc > 1) { // s'il y a 1 argument, on l'utilise comme nom de fichier d'entrée
                     nom_in = argv[1];
@@ -69,6 +68,7 @@ int main(int argc, char* argv[]) {
                     scanf("%s", nom_in);
                     printf("\n");
                 }
+                t_ini = GetTickCount();
 
                 strcat(dir_in, nom_in); // concaténation du repertoire test avec le nom du fichier d'entrée
 
@@ -134,7 +134,6 @@ int main(int argc, char* argv[]) {
 
             case 2 :
 
-                t_ini = GetTickCount();
                 nom_out = (char*) malloc(16*sizeof(char));
                 if (argc > 2) { // s'il y a 2 arguments, on utilise le 2eme argument comme nom de fichier de sortie
                     nom_out = argv[2];
@@ -146,6 +145,7 @@ int main(int argc, char* argv[]) {
                     scanf("%s", nom_out);
                     printf("\n");
                 }
+                t_ini = GetTickCount();
 
                 strcat(dir_out, nom_out); // concaténation du repertoire test avec le nom du fichier de sortie
 

@@ -29,7 +29,6 @@ void generateFile(string source, string dest, int nb_person) {
   int id;
 
   FILE* fichier;
-  FILE* fichier_questions;
 
   int** matrice;
   vector< string > database_nom;

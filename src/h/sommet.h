@@ -19,10 +19,11 @@ struct sommet {
     int etat; // -1 = Non atteint, 0 = Atteint, 1 = Exploré
     int deb;
     int fin;
-    int num;
+    int num; // position
     char nom[32];
     int id;
     int freq;
+    int important;
 };
 
 void printS (sommet* s, int n); // Affiche les informations des sommets

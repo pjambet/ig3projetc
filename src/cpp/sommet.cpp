@@ -116,18 +116,27 @@ char* getCFC (sommet* s, int n) { // Renvoie les CFC
     int d = s[0].deb, f = s[0].fin, i;
     char* buffer = (char*) malloc(6*n*sizeof(char));
     char* cfc = (char*) malloc(6*n*sizeof(char));
-    sprintf(buffer, "%d", s[0].id);
+    if (s[0].important == 1)
+        sprintf(buffer, "*%d", s[0].id);
+    else
+        sprintf(buffer, "%d", s[0].id);
     strcpy(cfc, buffer);
     for (i = 0; i < n-1; i++) {
         if ((d < (s[i+1].deb)) && (f > (s[i+1].fin))) {
-            sprintf(buffer, "%d", s[i+1].id);
+            if (s[i+1].important == 1)
+                sprintf(buffer, "*%d", s[i+1].id);
+            else
+                sprintf(buffer, "%d", s[i+1].id);
             strcat(cfc, ", ");
             strcat(cfc, buffer);
         } else {
             d = s[i+1].deb;
             f = s[i+1].fin;
             if (i+1 < n) {
-                sprintf(buffer, "%d", s[i+1].id);
+                if (s[i+1].important == 1)
+                    sprintf(buffer, "*%d", s[i+1].id);
+                else
+                    sprintf(buffer, "%d", s[i+1].id);
                 strcat(cfc, "\n");
                 strcat(cfc, buffer);
             }
@@ -148,7 +157,6 @@ int nonExplore (sommet* s, int n) { // Renvoie vrai s'il reste un sommet non exp
 
 char* getCheminMin (sommet* d, int n, int y) {
     int i, j, k, p, l, m;
-    char temp;
     char* buffer = (char*) malloc(1000*sizeof(char));
     char* chemin = (char*) malloc(1000*sizeof(char));
     sprintf(chemin, "%d : ", d[y].deb);

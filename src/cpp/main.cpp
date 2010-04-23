@@ -23,8 +23,8 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
 
-    int i, n, m, temp, x, y, t_ini, t_fin, **M, choix, *tabQ;
-    bool continuer = true;
+    int i, n, m, temp, x, y, **M, choix, *tabQ;
+    float t_ini, t_fin;
     char *buffer, typestruct;
     string nom_in, nom_out, dir_in("test/"), dir_out("test/");
     liste *L, *P;
@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
     cout << "- Appuyez sur 3 pour generer un graphe aleatoire" << endl;
     cout << "- Appuyez sur 0 pour fermer le programme" << endl << endl;
 
-    while (continuer) {
+    while (1) {
 
         cout << "Entrez votre choix." << endl;
         cin >> choix;
@@ -128,8 +128,8 @@ int main(int argc, char* argv[]) {
                     cerr << "Lecture du fichier impossible" << endl;
                 }
 
-                t_fin = GetTickCount() - t_ini;
-                cout << "(Temps d'execution : " << t_fin << "ms)" << endl << endl;
+                t_fin = (GetTickCount() - t_ini) / 1000;
+                cout << "(Temps d'execution : " << t_fin << " sec)" << endl << endl;
                 break;
 
             case 2 :
@@ -152,6 +152,7 @@ int main(int argc, char* argv[]) {
 
                 if (typestruct == 'm') { // Matrice
 
+                    findCutVertex(M, s, n);
                     PPG(M, s, n); // création de la structure sommet s pour recupérer le nombre de cfc et les cfc
                     PPGD(M, s, n);
 
@@ -204,8 +205,8 @@ int main(int argc, char* argv[]) {
 
                 fclose(fic_out); // fermeture de "test/nom_out"
 
-                t_fin = GetTickCount() - t_ini;
-                cout << "(Temps d'execution : " << t_fin << "ms)" << endl << endl;
+                t_fin = (GetTickCount() - t_ini) / 1000;
+                cout << "(Temps d'execution : " << t_fin << " sec)" << endl << endl;
                 break;
 
             case 3 :
@@ -214,8 +215,8 @@ int main(int argc, char* argv[]) {
                 cin >> i;
                 t_ini = GetTickCount();
                 generateFile("test/noms.dat", "test/gene", i);
-                t_fin = GetTickCount() - t_ini;
-                cout << "(Temps d'execution : " << t_fin << "ms)" << endl << endl;
+                t_fin = (GetTickCount() - t_ini) / 1000;
+                cout << "(Temps d'execution : " << t_fin << " sec)" << endl << endl;
                 break;
 
         }

@@ -13,8 +13,12 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
+#include <iostream>
+#include <string>
 #include "../h/sommet.h"
 #include "../h/matAdj.h"
+
+using namespace std;
 
 int** iniMat (int n) { // Renvoie la matrice d'adjacence
     int i, j;
@@ -117,6 +121,56 @@ void algoDijkstra (int** M, sommet* d, int n, int x) { // Calcule les plus court
                     d[y].deb = d[x].deb + d[y].freq;
                     x = getIndice(d, n, d[x].id);
                     d[y].fin = x;
+                }
+            }
+        }
+    }
+}
+
+void findCutVertex (int** M, sommet* s, int n) {
+    int i;
+    int temps = 0;
+    int* t = &temps;
+    iniEtatSommet(s, n);
+    for (i = 0; i < n; i++) {
+        if (s[i].etat == -1) {
+            findCutVertexRec(M, s, n, s[i].num, t);
+        }
+    }
+}
+
+void findCutVertexRec (int** M, sommet* s, int n, int i, int* t) {
+    int j, child = 0;
+    if (*t == 0) { // root check
+        for (j = 0; j < n; j++) {
+            if (M[i][j] > 0) {
+                child++;
+            }
+        }
+        if (child > 1) {
+            cout << s[i].nom << " (" << s[i].id << ") est une personne importante." << endl;
+            s[i].important = 1;
+        }
+    }
+    s[i].etat = 1;
+    (*t)++;
+    s[i].deb = *t;
+    s[i].fin = *t;
+    for (j = 0; j < n; j++) {
+        if (M[i][j] > 0) { // Successeur
+            if (s[j].etat == -1) { // forward edge
+                s[j].freq = i; // parent de j
+                findCutVertexRec(M, s, n, j, t);
+                if (s[j].fin >= s[i].deb) {
+                    cout << s[i].nom << " (" << s[i].id << ") est une personne importante." << endl;
+                    s[i].important = 1;
+                }
+                if (s[j].fin < s[i].fin) {
+                    s[i].fin = s[j].fin;
+                }
+            } else if (s[i].freq != j) { // back edge
+                if (s[j].deb < s[i].fin) {
+                    s[i].fin = s[j].deb;
                 }
             }
         }

@@ -68,10 +68,8 @@ void DepthFirstSearch (liste* l, sommet* s, int n) { // Parcours en profondeur d
             }
         }
         for (i = 1; i < n; i++) { // root check
-            cout << "parent = " << s[i].parent << endl;
             if (s[i].parent == 0) {
                 child++;
-                cout << "child = " << child << " (" << s[i].id << ")" << endl;
             }
         }
         if (child > 1) {

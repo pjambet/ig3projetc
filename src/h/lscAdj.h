@@ -23,10 +23,9 @@ typedef cell* liste;
 
 liste* iniListe (int n); // Renvoie la liste d'adjacence
 liste* ajoutFin (liste* l, int i, int x); // Ajoute à la fin de la liste l[i] la valeur x
-void lscAdjCFC (char* a, int n); // Renvoie les composantes fortement connexes du graphe
 void printListeAdj (liste* l, int n); // Affiche la liste adjacente
-void PPG (liste* l, sommet* s, int n); // Parcours en profondeur du graphe (appel sur PProfG)
-void PProfG (liste* l, sommet* s, int i, int* t, int n); // Parcours en profondeur du graphe (recursif)
-void algoDijkstra (liste* l, sommet* d, int n, int x); // Calcule les plus courts chemins à partir de x
+void DepthFirstSearch (liste* l, sommet* s, int n); // Parcours en profondeur du graphe
+void DepthFirstSearchVisit (liste* l, sommet* s, int n, int i, int* t); // Parcours en profondeur du graphe (récursif)
+void ShortestPath (liste* l, sommet* s, int n, int x); // Algorithme de Dijkstra : calcule les plus courts chemins à partir de x
 
 #endif // LSCADJ_H_INCLUDED

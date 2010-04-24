@@ -18,7 +18,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 void printS (sommet* s, int n) {
     int i;
     for (i = 0; i < n; i++) {
-        printf("sommet %d :\n  nom = %s, freq = %d, d(%d), f(%d)\n", s[i].id, s[i].nom, s[i].freq, s[i].deb, s[i].fin);
+        printf("sommet %d :\n  nom = %s, freq = %d, d(%d), f(%d), l(%d)\n", s[i].id, s[i].nom, s[i].freq, s[i].deb, s[i].fin, s[i].low);
     }
 }
 
@@ -48,8 +48,6 @@ void iniEtatSommet (sommet* s, int n) { // Initialise les etats des sommets
     int i;
     for (i = 0; i < n; i++) {
         s[i].etat = -1; // Etat non atteint
-        s[i].deb = 0;
-        s[i].fin = 0;
     }
 }
 

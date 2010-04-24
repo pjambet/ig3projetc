@@ -26,9 +26,9 @@ int main(int argc, char* argv[]) {
     int i, n, m, temp, x, y, **M, choix, *tabQ;
     float t_ini, t_fin;
     char *buffer, typestruct;
-    string nom_in, nom_out, dir_in("test/"), dir_out("test/");
+    string nom_in, nom_out, dir_in, dir_out;
     liste *L, *P;
-    sommet* s, *d;
+    sommet* s;
     FILE* fic_in, *fic_out;
 
     typestruct = 'm'; // Choix de la structure, m pour matrice, l pour liste
@@ -70,7 +70,7 @@ int main(int argc, char* argv[]) {
                 }
                 t_ini = GetTickCount();
 
-                dir_in += nom_in; // concaténation du repertoire test avec le nom du fichier d'entrée
+                dir_in = "test/" + nom_in; // concaténation du repertoire test avec le nom du fichier d'entrée
 
                 fic_in = fopen(dir_in.c_str(), "r"); // ouverture de "test/nom_in"
 
@@ -79,7 +79,6 @@ int main(int argc, char* argv[]) {
                     fscanf(fic_in, "%d\n", &n); // lecture du nombre de sommets du graphe
                     i = 0;
                     s = iniSommet(n);
-                    d = iniSommet(n);
                     M = iniMat(n);
                     L = iniListe(n);
                     P = iniListe(n);
@@ -88,11 +87,10 @@ int main(int argc, char* argv[]) {
                     while (i < n) { // lecture des id / nom / frequence
                         fscanf(fic_in, "%[^,], %d, %d\n", buffer, &x, &y);
                         strcpy(s[i].nom, buffer);
+                        iniEtatSommet(s, n);
                         s[i].num = i;
                         s[i].id = x;
                         s[i].freq = y;
-                        d[i].id = x;
-                        d[i].freq = y;
                         i++;
                     }
 
@@ -146,15 +144,14 @@ int main(int argc, char* argv[]) {
                 }
                 t_ini = GetTickCount();
 
-                dir_out += nom_out; // concaténation du repertoire test avec le nom du fichier de sortie
+                dir_out = "test/" + nom_out; // concaténation du repertoire test avec le nom du fichier de sortie
 
                 fic_out = fopen(dir_out.c_str(), "w+"); // création de "test/nom_out"
 
                 if (typestruct == 'm') { // Matrice
 
-                    findCutVertex(M, s, n);
-                    PPG(M, s, n); // création de la structure sommet s pour recupérer le nombre de cfc et les cfc
-                    PPGD(M, s, n);
+                    DepthFirstSearch(M, s, n); // Premier DFS de M
+                    DepthFirstSearch(M, s, n); // Deuxième DFS de M transposé
 
                     temp = getNbCFC(s, n); // recuperation du nombre de cfc
                     fprintf(fic_out, "%d\n", temp);
@@ -167,19 +164,19 @@ int main(int argc, char* argv[]) {
                         i++;
                         if (x != temp) {
                             temp = x;
-                            algoDijkstra(M, d, n, x); // création de la structure sommet d pour récupérer les temps d'accès du sommet x aux autres sommets
+                            ShortestPath(M, s, n, x); // modification de la structure sommet s pour récupérer les temps d'accès du sommet x aux autres sommets
                         }
                         y = tabQ[i];
                         i++;
                         y = getIndice(s, n, y);
-                        buffer = getCheminMin(d, n, y); // récupération du t_min et du chemin de x à y
+                        buffer = getCheminMin(s, n, y); // récupération du t_min et du chemin de x à y
                         fprintf(fic_out, "%s", buffer);
                     }
 
                 } else if (typestruct == 'l') { // Liste
 
-                    PPG(L, s, n); // création de la structure sommet s pour recupérer le nombre de cfc et les cfc
-                    PPG(P, s, n);
+                    DepthFirstSearch(L, s, n); // Premier DFS de L
+                    DepthFirstSearch(P, s, n); // Deuxième DFS de L transposé (P)
 
                     temp = getNbCFC(s, n); // récuperation du nombre de cfc
                     fprintf(fic_out, "%d\n", temp);
@@ -192,12 +189,12 @@ int main(int argc, char* argv[]) {
                         i++;
                         if (x != temp) {
                             temp = x;
-                            algoDijkstra(L, d, n, x); // création de la structure sommet d pour récupérer les temps d'accès du sommet x aux autres sommets
+                            ShortestPath(L, s, n, x); // création de la structure sommet d pour récupérer les temps d'accès du sommet x aux autres sommets
                         }
                         y = tabQ[i];
                         i++;
                         y = getIndice(s, n, y);
-                        buffer = getCheminMin(d, n, y); // récupération du t_min et du chemin de x à y
+                        buffer = getCheminMin(s, n, y); // récupération du t_min et du chemin de x à y
                         fprintf(fic_out, "%s", buffer);
                     }
 
@@ -217,6 +214,11 @@ int main(int argc, char* argv[]) {
                 generateFile("test/noms.dat", "test/gene", i);
                 t_fin = (GetTickCount() - t_ini) / 1000;
                 cout << "(Temps d'execution : " << t_fin << " sec)" << endl << endl;
+                break;
+
+            default :
+
+                cout << "Veuillez entrer un chiffre correct." << endl << endl;
                 break;
 
         }

@@ -19,6 +19,8 @@ struct sommet {
     int etat; // -1 = Non atteint, 0 = Atteint, 1 = Exploré
     int deb;
     int fin;
+    int low;
+    int parent;
     int num; // position
     char nom[32];
     int id;

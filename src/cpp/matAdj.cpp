@@ -46,131 +46,102 @@ void printMat (int** M, int n) { // Affiche la matrice adjacente
     printf("\n");
 }
 
-void PPG (int** M, sommet* s, int n) { // Parcours en profondeur du graphe (appel sur PProfG)
-    int i;
-    int temps = 0;
+void DepthFirstSearch (int** M, sommet* s, int n) { // Parcours en profondeur du graphe
+    int i, child = 0, temps = 0;
     int* t = &temps;
-    iniEtatSommet(s, n);
-    for (i = 0; i < n; i++) {
-        if (s[s[i].num].etat == -1) {
-            PProfG(M, s, n, s[i].num, t);
-        }
-    }
-    triDecroissant(s, n);
-}
-
-void PProfG (int** M, sommet* s, int n, int i, int* t) { // Parcours en profondeur du graphe (recursif)
-    int j;
-    s[i].etat = 0; // Etat atteint
-    (*t)++;
-    s[i].deb = *t;
-    for (j = 0; j < n; j++) {
-        if ((M[i][j] > 0) && (s[j].etat == -1)) { // Successeur non atteint
-            PProfG(M, s, n, j, t);
-        }
-    }
-    s[i].etat = 1; // Etat explore
-    (*t)++;
-    s[i].fin = *t;
-}
-
-void PPGD (int** M, sommet* s, int n) { // Parcours en profondeur du graphe dual (appel sur PProfG)
-    int i;
-    int temps = 0;
-    int* t = &temps;
-    iniEtatSommet(s, n);
-    for (i = 0; i < n; i++) {
-        if (s[s[i].num].etat == -1) {
-            PProfGD(M, s, n, s[i].num, t);
-        }
-    }
-}
-
-void PProfGD (int** M, sommet* s, int n, int i, int* t) { // Parcours en profondeur du graphe dual (recursif)
-    int j;
-    s[i].etat = 0; // Etat atteint
-    (*t)++;
-    s[i].deb = *t;
-    for (j = 0; j < n; j++) {
-        if ((M[j][i] > 0) && (s[j].etat == -1)) { // Successeur non atteint
-            PProfGD(M, s, n, j, t);
-        }
-    }
-    s[i].etat = 1; // Etat explore
-    (*t)++;
-    s[i].fin = *t;
-}
-
-void algoDijkstra (int** M, sommet* d, int n, int x) { // Calcule les plus courts chemins à partir de x
-    int i, y, z;
-    iniEtatSommet(d, n); // F = X
-    for (i = 0; i < n; i++) { // Source Unique Initialisation
-        d[i].deb = INT_MAX;
-        d[i].fin = -1;
-    }
-    x = getIndice(d, n, x);
-    z = x;
-    d[x].deb = 0;
-    while (nonExplore(d, n)) { // F != null
-        x = getIndiceMinDeb(d, n); // x = ExtraireMin(F)
-        d[x].etat = 0; // F = F - x
-        for (y = 0; y < n; y++) {
-            if (M[x][y] > 0) { // Successeur
-                if (d[y].deb > d[x].deb + d[y].freq) { // Relacher
-                    //printf("relacher(%d, %d) : %d > %d + %d => d(%d) = %d\n", d[x].id, d[y].id, d[y].deb, d[x].deb, d[y].freq, d[y].id, d[x].deb+d[y].freq);
-                    d[y].deb = d[x].deb + d[y].freq;
-                    x = getIndice(d, n, d[x].id);
-                    d[y].fin = x;
-                }
+    if (s[0].etat == -1) { // Premier DFS
+        for (i = 0; i < n; i++) {
+            if (s[s[i].num].etat == -1) {
+                DepthFirstSearchVisit(M, s, n, s[i].num, t, 1);
             }
         }
-    }
-}
-
-void findCutVertex (int** M, sommet* s, int n) {
-    int i;
-    int temps = 0;
-    int* t = &temps;
-    iniEtatSommet(s, n);
-    for (i = 0; i < n; i++) {
-        if (s[i].etat == -1) {
-            findCutVertexRec(M, s, n, s[i].num, t);
-        }
-    }
-}
-
-void findCutVertexRec (int** M, sommet* s, int n, int i, int* t) {
-    int j, child = 0;
-    if (*t == 0) { // root check
-        for (j = 0; j < n; j++) {
-            if (M[i][j] > 0) {
+        for (i = 1; i < n; i++) { // root check
+            cout << "parent = " << s[i].parent << endl;
+            if (s[i].parent == 0) {
                 child++;
+                cout << "child = " << child << " (" << s[i].id << ")" << endl;
             }
         }
         if (child > 1) {
-            cout << s[i].nom << " (" << s[i].id << ") est une personne importante." << endl;
-            s[i].important = 1;
+            s[0].important = 1;
+        }
+        triDecroissant(s, n);
+    } else { // Second DFS avec M transposé
+        iniEtatSommet(s, n);
+        for (i = 0; i < n; i++) {
+            if (s[s[i].num].etat == -1) {
+                DepthFirstSearchVisit(M, s, n, s[i].num, t, 2);
+            }
         }
     }
-    s[i].etat = 1;
+}
+
+void DepthFirstSearchVisit (int** M, sommet* s, int n, int i, int* t, int numDFS) { // Parcours en profondeur du graphe (recursif)
+    int j;
+    s[i].etat = 0; // Etat atteint
     (*t)++;
     s[i].deb = *t;
-    s[i].fin = *t;
+    s[i].low = *t;
     for (j = 0; j < n; j++) {
-        if (M[i][j] > 0) { // Successeur
-            if (s[j].etat == -1) { // forward edge
-                s[j].freq = i; // parent de j
-                findCutVertexRec(M, s, n, j, t);
-                if (s[j].fin >= s[i].deb) {
-                    cout << s[i].nom << " (" << s[i].id << ") est une personne importante." << endl;
-                    s[i].important = 1;
+        if (numDFS == 1) {
+            if (M[i][j] > 0) { // Successeur
+                if (s[j].etat == -1) { // forward edge
+                    s[j].parent = i;
+                    DepthFirstSearchVisit(M, s, n, j, t, numDFS);
+                    if (s[j].low >= s[i].deb && i != 0) {
+                        s[i].important = 1;
+                    }
+                    if (s[j].low < s[i].low) {
+                        s[i].low = s[j].low;
+                    }
+                } else if (s[i].parent != j) { // back edge
+                    if (s[j].deb < s[i].low) {
+                        s[i].low = s[j].deb;
+                    }
                 }
-                if (s[j].fin < s[i].fin) {
-                    s[i].fin = s[j].fin;
+            }
+        } else if (numDFS == 2) {
+            if (M[j][i] > 0) { // Successeur
+                if (s[j].etat == -1) { // forward edge
+                    s[j].parent = i;
+                    DepthFirstSearchVisit(M, s, n, j, t, numDFS);
+                    if (s[j].low >= s[i].deb && i != 0) {
+                        s[i].important = 1;
+                    }
+                    if (s[j].low < s[i].low) {
+                        s[i].low = s[j].low;
+                    }
+                } else if (s[i].parent != j) { // back edge
+                    if (s[j].deb < s[i].low) {
+                        s[i].low = s[j].deb;
+                    }
                 }
-            } else if (s[i].freq != j) { // back edge
-                if (s[j].deb < s[i].fin) {
-                    s[i].fin = s[j].deb;
+            }
+        }
+    }
+    (*t)++;
+    s[i].fin = *t;
+}
+
+void ShortestPath (int** M, sommet* s, int n, int x) { // Algorithme de Dijkstra : calcule les plus courts chemins à partir de x
+    int i, y, z;
+    iniEtatSommet(s, n); // F = X
+    for (i = 0; i < n; i++) { // Source Unique Initialisation
+        s[i].deb = INT_MAX;
+        s[i].fin = -1;
+    }
+    x = getIndice(s, n, x);
+    z = x;
+    s[x].deb = 0;
+    while (nonExplore(s, n)) { // F != null
+        x = getIndiceMinDeb(s, n); // x = ExtraireMin(F)
+        s[x].etat = 0; // F = F - x
+        for (y = 0; y < n; y++) {
+            if (M[x][y] > 0) { // Successeur
+                if (s[y].deb > s[x].deb + s[y].freq) { // Relacher
+                    s[y].deb = s[x].deb + s[y].freq;
+                    x = getIndice(s, n, s[x].id);
+                    s[y].fin = x;
                 }
             }
         }

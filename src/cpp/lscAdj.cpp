@@ -12,8 +12,11 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <iostream>
 #include "../h/sommet.h"
 #include "../h/lscAdj.h"
+
+using namespace std;
 
 liste* iniListe (int n) { // Renvoie la liste d'adjacence
     int i;
@@ -55,55 +58,96 @@ void printListeAdj (liste* l, int n) {
     printf("\n");
 }
 
-void PPG (liste* l, sommet* s, int n) { // Parcours en profondeur du graphe (appel sur PProfG)
-    int i;
-    int temps = 0;
+void DepthFirstSearch (liste* l, sommet* s, int n) { // Parcours en profondeur du graphe
+    int i, child = 0, temps = 0;
     int* t = &temps;
-    iniEtatSommet(s, n);
-    for (i = 0; i < n; i++) {
-        if (s[s[i].num].etat == -1) {
-            PProfG(l, s, s[i].num, t, n);
+    if (s[0].etat == -1) { // Premier DFS
+        for (i = 0; i < n; i++) {
+            if (s[s[i].num].etat == -1) {
+                DepthFirstSearchVisit(l, s, n, s[i].num, t);
+            }
+        }
+        for (i = 1; i < n; i++) { // root check
+            cout << "parent = " << s[i].parent << endl;
+            if (s[i].parent == 0) {
+                child++;
+                cout << "child = " << child << " (" << s[i].id << ")" << endl;
+            }
+        }
+        if (child > 1) {
+            s[0].important = 1;
+        }
+        triDecroissant(s, n);
+    } else { // Second DFS avec L transposé
+        iniEtatSommet(s, n);
+        for (i = 0; i < n; i++) {
+            if (s[s[i].num].etat == -1) {
+                DepthFirstSearchVisit(l, s, n, s[i].num, t);
+            }
         }
     }
-    triDecroissant(s, n);
 }
 
 void PProfG (liste* l, sommet* s, int i, int* t, int n) { // Parcours en profondeur du graphe (recursif)
     s[i].etat = 0; // Etat atteint
     (*t)++;
     s[i].deb = *t;
-    liste temp = l[i];
-    while (temp != NULL) {
-        if (s[temp->val].etat == -1) {
-            PProfG(l, s, temp->val, t, n);
-        }
-        temp = temp->suiv;
-    }
+
+
     s[i].etat = 1; // Etat explore
     (*t)++;
     s[i].fin = *t;
 }
 
-void algoDijkstra (liste* l, sommet* d, int n, int x) { // Calcule les plus courts chemins à partir de x
-    int i, z;
-    iniEtatSommet(d, n); // F = X
-    for (i = 0; i < n; i++) { // Source Unique Initialisation
-        d[i].deb = INT_MAX;
-        d[i].fin = -1;
+void DepthFirstSearchVisit (liste* l, sommet* s, int n, int i, int* t) { // Parcours en profondeur du graphe (récursif)
+    int j;
+    s[i].etat = 0; // Etat atteint
+    (*t)++;
+    s[i].deb = *t;
+    s[i].low = *t;
+    liste temp = l[i];
+    while (temp != NULL) { // Successeur
+        j = temp->val;
+        if (s[j].etat == -1) { // forward edge
+            s[j].parent = i;
+            DepthFirstSearchVisit(l, s, n, j, t);
+            if (s[j].low >= s[i].deb && i != 0) {
+                s[i].important = 1;
+            }
+            if (s[j].low < s[i].low) {
+                s[i].low = s[j].low;
+            }
+        } else if (s[i].parent != j) { // back edge
+            if (s[j].deb < s[i].low) {
+                s[i].low = s[j].deb;
+            }
+        }
+        temp = temp->suiv;
     }
-    x = getIndice(d, n, x);
+    (*t)++;
+    s[i].fin = *t;
+}
+
+void ShortestPath (liste* l, sommet* s, int n, int x) { // Algorithme de Dijkstra : calcule les plus courts chemins à partir de x
+    int i, y, z;
+    iniEtatSommet(s, n); // F = X
+    for (i = 0; i < n; i++) { // Source Unique Initialisation
+        s[i].deb = INT_MAX;
+        s[i].fin = -1;
+    }
+    x = getIndice(s, n, x);
     z = x;
-    d[x].deb = 0;
-    while (nonExplore(d, n)) { // F != null
-        x = getIndiceMinDeb(d, n); // x = ExtraireMin(F)
-        d[x].etat = 0; // F = F - x
-        liste temp = l[x];
-        while (temp != NULL) {
-            if (d[temp->val].deb > d[x].deb + d[temp->val].freq) { // Relacher
-                //printf("relacher(%d, %d) : %d > %d + %d => d(%d) = %d\n", d[x].id, d[y].id, d[y].deb, d[x].deb, d[y].freq, d[y].id, d[x].deb+d[y].freq);
-                d[temp->val].deb = d[x].deb + d[temp->val].freq;
-                x = getIndice(d, n, d[x].id);
-                d[temp->val].fin = x;
+    s[x].deb = 0;
+    liste temp = l[x];
+    while (nonExplore(s, n)) { // F != null
+        x = getIndiceMinDeb(s, n); // x = ExtraireMin(F)
+        s[x].etat = 0; // F = F - x
+        while (temp != NULL) { // Successeur
+            y = temp->val;
+            if (s[y].deb > s[x].deb + s[y].freq) { // Relacher
+                s[y].deb = s[x].deb + s[y].freq;
+                x = getIndice(s, n, s[x].id);
+                s[y].fin = x;
             }
             temp = temp->suiv;
         }

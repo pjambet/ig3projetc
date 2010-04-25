@@ -23,7 +23,7 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
 
-    int i, n, m, temp, x, y, **M, choix, *tabQ;
+    int i, nbSommet, nbArrete, nbQuest, choix, temp, x, y, **M, *tabQuest;
     float t_ini, t_fin;
     char *buffer, typestruct;
     string nom_in, nom_out, dir_in, dir_out;
@@ -32,6 +32,7 @@ int main(int argc, char* argv[]) {
     FILE* fic_in, *fic_out;
 
     typestruct = 'm'; // Choix de la structure, m pour matrice, l pour liste
+    nbSommet = -1;
 
     cout << "                                              " << endl;
     cout << "     ____            _      _                 " << endl;
@@ -44,7 +45,9 @@ int main(int argc, char* argv[]) {
     cout << "                                              " << endl;
     cout << "- Appuyez sur 1 pour charger un graphe" << endl;
     cout << "- Appuyez sur 2 pour analyser un graphe" << endl;
-    cout << "- Appuyez sur 3 pour generer un graphe aleatoire" << endl;
+    cout << "- Appuyez sur 3 pour recuperer les donnees de Facebook" << endl;
+    cout << "- Appuyez sur 4 pour generer un graphe aleatoire" << endl;
+    cout << "- Appuyez sur 5 pour changer de structure de donnee" << endl;
     cout << "- Appuyez sur 0 pour fermer le programme" << endl << endl;
 
     while (1) {
@@ -76,30 +79,30 @@ int main(int argc, char* argv[]) {
 
                 if (fic_in != NULL) { // lecture du graphe
 
-                    fscanf(fic_in, "%d\n", &n); // lecture du nombre de sommets du graphe
+                    fscanf(fic_in, "%d\n", &nbSommet); // lecture du nombre de sommets du graphe
                     i = 0;
-                    s = iniSommet(n);
-                    M = iniMat(n);
-                    L = iniListe(n);
-                    P = iniListe(n);
+                    s = iniSommet(nbSommet);
+                    M = iniMat(nbSommet);
+                    L = iniListe(nbSommet);
+                    P = iniListe(nbSommet);
                     buffer = (char*) malloc(1000*sizeof(char));
 
-                    while (i < n) { // lecture des id / nom / frequence
+                    while (i < nbSommet) { // lecture des id / nom / frequence
                         fscanf(fic_in, "%[^,], %d, %d\n", buffer, &x, &y);
                         strcpy(s[i].nom, buffer);
-                        iniEtatSommet(s, n);
+                        iniEtatSommet(s, nbSommet);
                         s[i].num = i;
                         s[i].id = x;
                         s[i].freq = y;
                         i++;
                     }
 
-                    fscanf(fic_in, "%d\n", &m); // lecture du nombre de sommets du graphe
+                    fscanf(fic_in, "%d\n", &nbArrete); // lecture du nombre d'arretes du graphe
                     i = 0;
-                    while (i < m) { // lecture les relations entre les sommets
+                    while (i < nbArrete) { // lecture les relations entre les sommets
                         fscanf(fic_in, "%d, %d\n", &x, &y);
-                        x = getIndice(s, n, x);
-                        y = getIndice(s, n, y);
+                        x = getIndice(s, nbSommet, x);
+                        y = getIndice(s, nbSommet, y);
                         if (typestruct == 'm') {
                             M[x][y] = 1; // remplissage de la matrice d'adjacence M
                         } else if (typestruct == 'l') {
@@ -109,104 +112,95 @@ int main(int argc, char* argv[]) {
                         i++;
                     }
 
-                    fscanf(fic_in, "%d\n", &m); // lecture du nombre de sommets du graphe
+                    fscanf(fic_in, "%d\n", &nbQuest); // lecture du nombre de sommets du graphe
                     i = 0;
-                    tabQ = (int*) malloc (2*m*sizeof(int)); // enregistrement des questions dans un tableau
-                    while (i/2 < m) { // lecture des questions
+                    tabQuest = (int*) malloc (2*nbQuest*sizeof(int)); // enregistrement des questions dans un tableau
+                    while (i/2 < nbQuest) { // lecture des questions
                         fscanf(fic_in, "%d -> %d\n", &x, &y);
-                        tabQ[i] = x; // les i paires contiennent la source (x) de la question
+                        tabQuest[i] = x; // les i paires contiennent la source (x) de la question
                         i++;
-                        tabQ[i] = y; // les i impaires contiennent la destination (y) de la question
+                        tabQuest[i] = y; // les i impaires contiennent la destination (y) de la question
                         i++;
                     }
 
                     fclose(fic_in); // fermeture de "test/nom_in"
+                    t_fin = (GetTickCount() - t_ini) / 1000;
+                    cout << "(Temps d'execution : " << t_fin << " sec)" << endl << endl;
 
                 } else {
-                    cerr << "Lecture du fichier impossible" << endl;
+                    cerr << "Lecture du fichier impossible !" << endl;
                 }
-
-                t_fin = (GetTickCount() - t_ini) / 1000;
-                cout << "(Temps d'execution : " << t_fin << " sec)" << endl << endl;
                 break;
 
             case 2 :
 
-                if (argc > 2) { // s'il y a 2 arguments, on utilise le 2eme argument comme nom de fichier de sortie
-                    nom_out = argv[2];
-                } else if (argc > 1) { // s'il n'y a qu'un seul argument, le fichier de sortie sera argv[1].res
-                    nom_out = nom_in;
-                    nom_out += ".res";
-                } else { // s'il n'y a pas d'argument, on demande à l'utilisateur d'entrer le nom du fichier de sortie
-                    cout << "Entrez le nom du fichier resultat." << endl;
-                    cin >> nom_out;
-                    cout << endl;
-                }
-                t_ini = GetTickCount();
+                if (nbSommet > 0) { // graphe enregistré
 
-                dir_out = "test/" + nom_out; // concaténation du repertoire test avec le nom du fichier de sortie
+                    if (argc > 2) { // s'il y a 2 arguments, on utilise le 2eme argument comme nom de fichier de sortie
+                        nom_out = argv[2];
+                    } else if (argc > 1) { // s'il n'y a qu'un seul argument, le fichier de sortie sera argv[1].res
+                        nom_out = nom_in;
+                        nom_out += ".res";
+                    } else { // s'il n'y a pas d'argument, on demande à l'utilisateur d'entrer le nom du fichier de sortie
+                        cout << "Entrez le nom du fichier resultat." << endl;
+                        cin >> nom_out;
+                        cout << endl;
+                    }
+                    t_ini = GetTickCount();
 
-                fic_out = fopen(dir_out.c_str(), "w+"); // création de "test/nom_out"
+                    dir_out = "test/" + nom_out; // concaténation du repertoire test avec le nom du fichier de sortie
 
-                if (typestruct == 'm') { // Matrice
+                    fic_out = fopen(dir_out.c_str(), "w+"); // création de "test/nom_out"
 
-                    DepthFirstSearch(M, s, n); // Premier DFS de M
-                    DepthFirstSearch(M, s, n); // Deuxième DFS de M transposé
+                    if (typestruct == 'm') { // Matrice
 
-                    temp = getNbCFC(s, n); // recuperation du nombre de cfc
+                        DepthFirstSearch(M, s, nbSommet); // Premier DFS de M
+                        DepthFirstSearch(M, s, nbSommet); // Deuxième DFS de M transposé
+
+                    } else if (typestruct == 'l') { // Liste
+
+                        DepthFirstSearch(L, s, nbSommet); // Premier DFS de L
+                        DepthFirstSearch(P, s, nbSommet); // Deuxième DFS de L transposé (P)
+
+                    }
+
+                    temp = getNbCFC(s, nbSommet); // recuperation du nombre de cfc
                     fprintf(fic_out, "%d\n", temp);
-                    buffer = getCFC(s, n); // recuperation des cfc
+                    buffer = getCFC(s, nbSommet); // recuperation des cfc
                     fprintf(fic_out, "%s\n", buffer);
 
                     i = 0;
-                    while (i/2 < m) {
-                        x = tabQ[i];
+                    while (i/2 < nbQuest) {
+                        x = tabQuest[i];
                         i++;
-                        if (x != temp) {
+                        if (x != temp) { // Check pour eviter de refaire un meme ShortestPath
                             temp = x;
-                            ShortestPath(M, s, n, x); // modification de la structure sommet s pour récupérer les temps d'accès du sommet x aux autres sommets
+                            if (typestruct == 'm') // Matrice
+                                ShortestPath(M, s, nbSommet, x); // modification de la structure sommet s pour récupérer les temps d'accès du sommet x aux autres sommets
+                            else if (typestruct == 'l')
+                                ShortestPath(L, s, nbSommet, x); // création de la structure sommet d pour récupérer les temps d'accès du sommet x aux autres sommets
                         }
-                        y = tabQ[i];
+                        y = tabQuest[i];
                         i++;
-                        y = getIndice(s, n, y);
-                        buffer = getCheminMin(s, n, y); // récupération du t_min et du chemin de x à y
+                        y = getIndice(s, nbSommet, y);
+                        buffer = getCheminMin(s, nbSommet, y); // récupération du t_min et du chemin de x à y
                         fprintf(fic_out, "%s", buffer);
                     }
 
-                } else if (typestruct == 'l') { // Liste
+                    fclose(fic_out); // fermeture de "test/nom_out"
+                    t_fin = (GetTickCount() - t_ini) / 1000;
+                    cout << "(Temps d'execution : " << t_fin << " sec)" << endl << endl;
 
-                    DepthFirstSearch(L, s, n); // Premier DFS de L
-                    DepthFirstSearch(P, s, n); // Deuxième DFS de L transposé (P)
-
-                    temp = getNbCFC(s, n); // récuperation du nombre de cfc
-                    fprintf(fic_out, "%d\n", temp);
-                    buffer = getCFC(s, n); // récuperation des cfc
-                    fprintf(fic_out, "%s\n", buffer);
-
-                    i = 0;
-                    while (i/2 < m) {
-                        x = tabQ[i];
-                        i++;
-                        if (x != temp) {
-                            temp = x;
-                            ShortestPath(L, s, n, x); // création de la structure sommet d pour récupérer les temps d'accès du sommet x aux autres sommets
-                        }
-                        y = tabQ[i];
-                        i++;
-                        y = getIndice(s, n, y);
-                        buffer = getCheminMin(s, n, y); // récupération du t_min et du chemin de x à y
-                        fprintf(fic_out, "%s", buffer);
-                    }
-
+                } else {
+                    cerr << "Graphe non enregistre !" << endl;
                 }
-
-                fclose(fic_out); // fermeture de "test/nom_out"
-
-                t_fin = (GetTickCount() - t_ini) / 1000;
-                cout << "(Temps d'execution : " << t_fin << " sec)" << endl << endl;
                 break;
 
             case 3 :
+
+                break;
+
+            case 4 :
 
                 cout << "Entrez le nombre de sommets desire" << endl;
                 cin >> i;
@@ -214,6 +208,17 @@ int main(int argc, char* argv[]) {
                 generateFile("test/noms.dat", "test/gene", i);
                 t_fin = (GetTickCount() - t_ini) / 1000;
                 cout << "(Temps d'execution : " << t_fin << " sec)" << endl << endl;
+                break;
+
+            case 5 :
+
+                cout << "Structure actuellement utilisee : " << typestruct << endl;
+                cout << "Veuillez choisir la nouvelle structure (m pour matrice ou l pour liste)" << endl;
+                typestruct = 'x';
+                while ((typestruct != 'm') && (typestruct != 'l')) {
+                    cin >> typestruct;
+                }
+                cout << endl;
                 break;
 
             default :

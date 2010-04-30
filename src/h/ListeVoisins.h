@@ -17,6 +17,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include <string>
 #include <map>
 #include <vector>
+#include <climits>
 
 #include "sommet.h"
 #include "UserData.h"

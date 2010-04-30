@@ -16,6 +16,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include <string>
 #include <vector>
 #include <numeric>
+#include <algorithm>
 
 using namespace std;
 

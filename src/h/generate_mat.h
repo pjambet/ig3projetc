@@ -12,10 +12,10 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #ifndef GENERATE_MAT_H_INCLUDED
 #define GENERATE_MAT_H_INCLUDED
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
 
 void generate_matrix(int x);
 /*

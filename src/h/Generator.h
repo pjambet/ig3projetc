@@ -24,8 +24,11 @@ Includes
 #include <iostream>
 #include <string>
 #include <vector>
+#include <stdio.h>
+#include <cstring>
 #include <algorithm>
-#include "time.h"
+#include <cassert>
+#include <ctime>
 
 using namespace std;
 

@@ -16,7 +16,7 @@ TODO :
 #include <stdlib.h>
 #include <iostream>
 #include <string>
-#include <windows.h>
+//#include <windows.h>
 
 #include "../h/Generator.h"
 #include "../h/UserData.h"
@@ -88,9 +88,9 @@ int main(int argc, char* argv[]) {
                 dir_in = REPERTOIRE + nom_in;
                   /* concaténation du repertoire test avec le nom du fichier d'entree */
 
-                t_ini = GetTickCount();
-                  D.openData(dir_in);
-                t_fin = (GetTickCount() - t_ini) / 1000;
+                //t_ini = GetTickCount();
+                D.openData(dir_in);
+                //t_fin = (GetTickCount() - t_ini) / 1000;
 
                  //D.print();
                 cout << "(Temps d'execution : " << t_fin << " sec)" << endl << endl;
@@ -114,7 +114,7 @@ int main(int argc, char* argv[]) {
                         cout << endl;
                     }
 
-                    t_ini = GetTickCount();
+                    //t_ini = GetTickCount();
                     G.resolution(&D);
                     G.saveGraphe(nom_out);
 
@@ -136,7 +136,7 @@ int main(int argc, char* argv[]) {
                         fprintf(fic_out, "%s", buffer);
                     }*/
 
-                    t_fin = (GetTickCount() - t_ini) / 1000;
+                    //t_fin = (GetTickCount() - t_ini) / 1000;
                     cout << "(Temps d'execution : " << t_fin << " sec)" << endl << endl;
 
                 } else {
@@ -159,9 +159,9 @@ int main(int argc, char* argv[]) {
                 cout << "Entrez la densite de question desiree (ratio pour 10 000) : ";
                 cin >> densite_question;
 
-                t_ini = GetTickCount();
+                //t_ini = GetTickCount();
                 generateFile("test/noms.dat", "test/gene.txt", nbPerson, densite_relation, densite_question);
-                t_fin = (GetTickCount() - t_ini) / 1000;
+                //t_fin = (GetTickCount() - t_ini) / 1000;
 
                 cout << "(Temps d'execution : " << t_fin << " sec)" << endl << endl;
                 break;

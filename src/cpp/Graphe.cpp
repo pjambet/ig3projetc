@@ -48,7 +48,8 @@ void Graphe::resolution(UserData* u) {
 
   loadCFC(tabSommetTemp);
 
-  free(tabSommetTemp);
+  delete tabSommetTemp;
+  //free(tabSommetTemp);
 }
 
 void Graphe::loadCFC(vector<s_sommet>* tabSommet) {

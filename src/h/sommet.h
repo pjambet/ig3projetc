@@ -17,6 +17,8 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include <string>
 #include <vector>
 #include <numeric>
+#include <climits>
+#include <cstring>
 
 #include "struct_sommet.h"
 #include "UserData.h"

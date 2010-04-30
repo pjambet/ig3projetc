@@ -23,7 +23,7 @@ Includes
 #include <numeric>
 
 #include "UserData.h"
-#include "Sommet.h"
+#include "sommet.h"
 #include "ListeVoisins.h"
 #include "matAdj.h"
 

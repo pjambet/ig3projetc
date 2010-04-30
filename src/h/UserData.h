@@ -26,7 +26,8 @@ Includes
 #include <map>
 #include <vector>
 #include <numeric>
-
+#include <cstdio>
+#include <cstdlib>
 #include "Person.h"
 #include "Friends.h"
 

@@ -27,27 +27,37 @@ Includes
 #include <vector>
 #include <numeric>
 
-#include "../h/Person.h"
+#include "Person.h"
+#include "Friends.h"
+
+
 
 class UserData {
   /* Attributs */
-  /* Le nombre de personne, de relation et de question au total
-     La liste des personnes
-     La liste des questions */
   private:
-  int nb_person;
-  int nb_link;
-  int nb_question;
-  map < int, Person > listPerson;
-  map < int, vector <int> > listQuestion;
+  bool analysable; /* Indique si fichier a ete charge */
+  int nbPerson; /* Nombre de personne */
+  int nbLink; /* Nombre de relations */
+  int nbQuestion; /* Nombre de questions */
+  map < int, Person > listPerson; /* Liste des personnes (id, nom et frequence) */
+
+  char structFriends; // 'm' pour matrice et 'l' pour liste
+  /* Selon la structure de stockage des relations
+     On choisira de remplir l'un des attributs suivants */
+  map < int, Friends > listFriends;
+
+  map <int, int> idToRank; // Associe une id a sa place dans la matrice
+  map <int, int> rankToId; // Associe un rang a son id dans la matrice
+  int** matFriends;
+
+  map < int, vector <int> > listQuestion; /* Liste des questions */
 
 
   public:
   /* Methodes */
 
     /* Constructeurs et Desctructeurs */
-    UserData(string fileName);
-
+    UserData();
     ~UserData();
 
 
@@ -58,21 +68,44 @@ class UserData {
 
     /* Accesseur en lecture */
     map < int, Person > get_listPerson();
+    map < int, Friends > get_listFriends();
+    int** get_matFriends();
     map < int, vector<int> > get_listQuestion();
+
     Person get_Person(int id);
+    int get_nbPerson();
+    int get_nbLink();
+    int get_nbQuestion();
+    char get_structFriends();
+
+    int get_idToRank(int id);
+    int get_rankToId(int rank);
 
 
     /* Autres et optionnels */
-    bool is_link(int id1, int id2);
-      /* Renvoie vrai s'il existe une relation de id1 vers id2 */
-    bool is_dualLink(int id1, int id2);
-      /* Renvoie vrai s'il existe une relation de id1 vers id2 dans les relations duales */
+    void openData(string fileName);
+      /* Ouvre le fichier indique par fileName */
+
+    void clear();
+      /* Reset la base de donnee */
+
+    char defineStructFriends();
+      /* Renvoie la structure la mieux adaptee pour stocker les donnees
+         'm' pour matrice, 'l' pour liste */
 
     bool is_question(int id1, int id2);
       /* Renvoie vrai si on se demande le temps minimum entre id1 et id2 */
 
-    void display();
+    bool is_analysable();
+      /* Renvoie vrai si un fichier a ete charge */
+
+
+    void print();
       /* Procedure d'affichage */
+    void printmatFriends();
+      /* Affichage de la matrice matFriends */
+    void printListFriends();
+      /* Affichage de la liste listFriends */
 
 };
 

@@ -6,6 +6,9 @@ OBJET            : programme principal
 DATE DE CREATION : 12/04/2010
 AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 --------------------------------------------------------------------------------
+TODO :
+- Gerer quand l'utilisateur entre autre chose qu'un entier au menu
+- TODO statistiques pour determiner quelle structure choisir
 
 ============================================================================= */
 
@@ -14,25 +17,33 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include <iostream>
 #include <string>
 #include <windows.h>
-#include "../h/matAdj.h"
-#include "../h/lscAdj.h"
-#include "../h/generate_mat.h"
+
 #include "../h/Generator.h"
+#include "../h/UserData.h"
+#include "../h/Graphe.h"
+
+#define REPERTOIRE "test/"
 
 using namespace std;
 
 int main(int argc, char* argv[]) {
+    /* Variables */
+    int choice; /* Choix de l'utilisateur */
+    float t_ini, t_fin; /* Stockage des temps d'execution */
 
-    int i, nbSommet, nbArrete, nbQuest, choix, temp, x, y, **M, *tabQuest;
-    float t_ini, t_fin;
-    char *buffer, typestruct;
-    string nom_in, nom_out, dir_in, dir_out;
-    liste *L, *P;
-    sommet* s;
-    FILE* fic_in, *fic_out;
+    string nom_in, nom_out;
+    string dir_in, dir_out;
 
-    typestruct = 'm'; // Choix de la structure, m pour matrice, l pour liste
-    nbSommet = -1;
+      /* Case 1 : */
+      UserData D;
+
+      /* Case 2 : */
+      Graphe G;
+
+      /* Case 4 : */
+      int nbPerson;
+      int densite_relation, densite_question;
+
 
     cout << "                                              " << endl;
     cout << "     ____            _      _                 " << endl;
@@ -47,129 +58,67 @@ int main(int argc, char* argv[]) {
     cout << "- Appuyez sur 2 pour analyser un graphe" << endl;
     cout << "- Appuyez sur 3 pour recuperer les donnees de Facebook" << endl;
     cout << "- Appuyez sur 4 pour generer un graphe aleatoire" << endl;
-    cout << "- Appuyez sur 5 pour changer de structure de donnee" << endl;
+    // cout << "- Appuyez sur 5 pour changer de structure de donnee" << endl;
     cout << "- Appuyez sur 0 pour fermer le programme" << endl << endl;
+
+
 
     while (1) {
 
-        cout << "Entrez votre choix." << endl;
-        cin >> choix;
+        cout << "Entrez votre choix : ";
+        cin >> choice;
 
-        switch (choix) {
+        switch (choice) {
 
             case 0 :
-
                 return 0;
                 break;
 
             case 1 :
 
-                if (argc > 1) { // s'il y a 1 argument, on l'utilise comme nom de fichier d'entrée
+                if (argc > 1) {
+                  /* S'il y a 1 argument, on l'utilise comme nom de fichier d'entree */
                     nom_in = argv[1];
-                } else { // s'il n'y a pas d'argument, on demande à l'utilisateur d'entrer les noms des fichiers d'entrée et de sortie
-                    cout << "Entrez le nom du graphe." << endl;
+                } else {
+                  /* S'il n'y a pas d'argument, on demande à l'utilisateur d'entrer les noms des fichiers d'entree et de sortie */
+                    cout << "Entrez le nom du graphe : ";
                     cin >> nom_in;
                     cout << endl;
                 }
+                dir_in = REPERTOIRE + nom_in;
+                  /* concaténation du repertoire test avec le nom du fichier d'entree */
+
                 t_ini = GetTickCount();
+                  D.openData(dir_in);
+                t_fin = (GetTickCount() - t_ini) / 1000;
 
-                dir_in = "test/" + nom_in; // concaténation du repertoire test avec le nom du fichier d'entrée
-
-                fic_in = fopen(dir_in.c_str(), "r"); // ouverture de "test/nom_in"
-
-                if (fic_in != NULL) { // lecture du graphe
-
-                    fscanf(fic_in, "%d\n", &nbSommet); // lecture du nombre de sommets du graphe
-                    i = 0;
-                    s = iniSommet(nbSommet);
-                    M = iniMat(nbSommet);
-                    L = iniListe(nbSommet);
-                    P = iniListe(nbSommet);
-                    buffer = (char*) malloc(1000*sizeof(char));
-
-                    while (i < nbSommet) { // lecture des id / nom / frequence
-                        fscanf(fic_in, "%[^,], %d, %d\n", buffer, &x, &y);
-                        strcpy(s[i].nom, buffer);
-                        iniEtatSommet(s, nbSommet);
-                        s[i].num = i;
-                        s[i].id = x;
-                        s[i].freq = y;
-                        i++;
-                    }
-
-                    fscanf(fic_in, "%d\n", &nbArrete); // lecture du nombre d'arretes du graphe
-                    i = 0;
-                    while (i < nbArrete) { // lecture les relations entre les sommets
-                        fscanf(fic_in, "%d, %d\n", &x, &y);
-                        x = getIndice(s, nbSommet, x);
-                        y = getIndice(s, nbSommet, y);
-                        if (typestruct == 'm') {
-                            M[x][y] = 1; // remplissage de la matrice d'adjacence M
-                        } else if (typestruct == 'l') {
-                            ajoutFin(L, x, y); // creation de la liste d'adjacence L
-                            ajoutFin(P, y, x); // creation de la liste duale d'adjacence P
-                        }
-                        i++;
-                    }
-
-                    fscanf(fic_in, "%d\n", &nbQuest); // lecture du nombre de sommets du graphe
-                    i = 0;
-                    tabQuest = (int*) malloc (2*nbQuest*sizeof(int)); // enregistrement des questions dans un tableau
-                    while (i/2 < nbQuest) { // lecture des questions
-                        fscanf(fic_in, "%d -> %d\n", &x, &y);
-                        tabQuest[i] = x; // les i paires contiennent la source (x) de la question
-                        i++;
-                        tabQuest[i] = y; // les i impaires contiennent la destination (y) de la question
-                        i++;
-                    }
-
-                    fclose(fic_in); // fermeture de "test/nom_in"
-                    t_fin = (GetTickCount() - t_ini) / 1000;
-                    cout << "(Temps d'execution : " << t_fin << " sec)" << endl << endl;
-
-                } else {
-                    cerr << "Lecture du fichier impossible !" << endl;
-                }
+                 //D.print();
+                cout << "(Temps d'execution : " << t_fin << " sec)" << endl << endl;
                 break;
 
             case 2 :
+                if (D.is_analysable()) {
+                  /* graphe enregistre */
 
-                if (nbSommet > 0) { // graphe enregistré
-
-                    if (argc > 2) { // s'il y a 2 arguments, on utilise le 2eme argument comme nom de fichier de sortie
+                    if (argc > 2) {
+                      /* s'il y a 2 arguments, on utilise le 2eme argument comme nom de fichier de sortie */
                         nom_out = argv[2];
-                    } else if (argc > 1) { // s'il n'y a qu'un seul argument, le fichier de sortie sera argv[1].res
+                    } else if (argc > 1) {
+                      /* s'il n'y a qu'un seul argument, le fichier de sortie sera argv[1].res */
                         nom_out = nom_in;
                         nom_out += ".res";
-                    } else { // s'il n'y a pas d'argument, on demande à l'utilisateur d'entrer le nom du fichier de sortie
-                        cout << "Entrez le nom du fichier resultat." << endl;
+                    } else {
+                      /* s'il n'y a pas d'argument, on demande à l'utilisateur d'entrer le nom du fichier de sortie */
+                        cout << "Entrez le nom du fichier resultat : ";
                         cin >> nom_out;
                         cout << endl;
                     }
+
                     t_ini = GetTickCount();
+                    G.resolution(&D);
+                    G.saveGraphe(nom_out);
 
-                    dir_out = "test/" + nom_out; // concaténation du repertoire test avec le nom du fichier de sortie
-
-                    fic_out = fopen(dir_out.c_str(), "w+"); // création de "test/nom_out"
-
-                    if (typestruct == 'm') { // Matrice
-
-                        DepthFirstSearch(M, s, nbSommet); // Premier DFS de M
-                        DepthFirstSearch(M, s, nbSommet); // Deuxième DFS de M transposé
-
-                    } else if (typestruct == 'l') { // Liste
-
-                        DepthFirstSearch(L, s, nbSommet); // Premier DFS de L
-                        DepthFirstSearch(P, s, nbSommet); // Deuxième DFS de L transposé (P)
-
-                    }
-
-                    temp = getNbCFC(s, nbSommet); // recuperation du nombre de cfc
-                    fprintf(fic_out, "%d\n", temp);
-                    buffer = getCFC(s, nbSommet); // recuperation des cfc
-                    fprintf(fic_out, "%s\n", buffer);
-
-                    i = 0;
+/*                   i = 0;
                     while (i/2 < nbQuest) {
                         x = tabQuest[i];
                         i++;
@@ -185,9 +134,8 @@ int main(int argc, char* argv[]) {
                         y = getIndice(s, nbSommet, y);
                         buffer = getCheminMin(s, nbSommet, y); // récupération du t_min et du chemin de x à y
                         fprintf(fic_out, "%s", buffer);
-                    }
+                    }*/
 
-                    fclose(fic_out); // fermeture de "test/nom_out"
                     t_fin = (GetTickCount() - t_ini) / 1000;
                     cout << "(Temps d'execution : " << t_fin << " sec)" << endl << endl;
 
@@ -202,14 +150,22 @@ int main(int argc, char* argv[]) {
 
             case 4 :
 
-                cout << "Entrez le nombre de sommets desire" << endl;
-                cin >> i;
+                cout << "Entrez le nombre de sommets desires : ";
+                cin >> nbPerson;
+
+                cout << "Entrez la densite de question desiree (ratio pour 10 000) : ";
+                cin >> densite_relation;
+
+                cout << "Entrez la densite de question desiree (ratio pour 10 000) : ";
+                cin >> densite_question;
+
                 t_ini = GetTickCount();
-                generateFile("test/noms.dat", "test/gene", i);
+                generateFile("test/noms.dat", "test/gene.txt", nbPerson, densite_relation, densite_question);
                 t_fin = (GetTickCount() - t_ini) / 1000;
+
                 cout << "(Temps d'execution : " << t_fin << " sec)" << endl << endl;
                 break;
-
+/*
             case 5 :
 
                 cout << "Structure actuellement utilisee : " << typestruct << endl;
@@ -220,7 +176,7 @@ int main(int argc, char* argv[]) {
                 }
                 cout << endl;
                 break;
-
+*/
             default :
 
                 cout << "Veuillez entrer un chiffre correct." << endl << endl;

@@ -30,10 +30,13 @@ Includes
 using namespace std;
 
 
-void generateFile(string source, string dest, int nb_person);
+void generateFile(string source, string dest, int n, int d_rel, int d_quest);
   /* Genere un fichier d'entree
      Les noms et id des personnes sont determines par le fichier indique par source
-     On indique ensuite le nom du fichier destination et le nombre de personne */
+     On indique ensuite le nom du fichier destination
+     n represente le nombre de personne
+     d_rel est la densite de relation, c'est-a-dire le pourcentage de relation a creer sur le nombre de relation possible
+     d_quest est la densite de question, le pourcentage de question a creer sur le nombre de question possible */
 
 int generateMatrix(int nb, int** m, int r);
   /* Genere une matrice m nb*nb avec des 0 et des 1

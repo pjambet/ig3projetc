@@ -8,140 +8,253 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 --------------------------------------------------------------------------------
 
 ============================================================================= */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <limits.h>
-#include <iostream>
-#include <string>
-#include "../h/sommet.h"
 #include "../h/matAdj.h"
 
-using namespace std;
+MatAdj::MatAdj () : m_size(0), m_Matrix(NULL){
+    m_summit = new Sommet();
+    m_Matrix = (int**) malloc (m_size*sizeof(int*));
+}
 
-int** iniMat (int n) { // Renvoie la matrice d'adjacence
+
+MatAdj::MatAdj (int s) : m_size(s) {
+    int i = 0, j = 0;
+    m_Matrix = new int*[m_size];
+    for (i = 0; i < m_size; i++){
+        m_Matrix[i] = new int[m_size];
+    }
+    for (i = 0; i < m_size; i++) {
+        for (j = 0; j < m_size; j++) {
+            m_Matrix[j][i] = 0;
+        }
+    }
+}
+
+
+
+MatAdj::~MatAdj () {
+    int i;
+
+    for (i = 0; i < m_size; i++) {
+      delete[] (m_Matrix[i]);
+    }
+    delete (m_Matrix);
+}
+
+
+void MatAdj::iniMat () { // Renvoie la matrice d'adjacence
     int i, j;
-    int** M = (int**) malloc(n*sizeof(int));
-    for (i = 0; i < n; i++) {
-        M[i] = (int*) malloc(n*sizeof(int));
+    m_Matrix = new int*[m_size];
+    for (i = 0; i < m_size; i++){
+        m_Matrix[i] = new int[m_size];
     }
-    for (i = 0; i < n; i++) {
-        for (j = 0; j < n; j++) {
-            M[j][i] = 0;
+    for (i = 0; i < m_size; i++) {
+        for (j = 0; j < m_size; j++) {
+            m_Matrix[j][i] = 0;
         }
     }
-    return M;
 }
 
-void printMat (int** M, int n) { // Affiche la matrice adjacente
+void MatAdj::iniMat (UserData* u) {
+    //On recopie dans la matrice la liste de voisins que l'on obtient a partir du userData
+    m_Matrix = (*u).get_matFriends();
+    m_size = (*u).get_nbPerson();
+
+    m_summit->setTaille(m_size);
+}
+
+void MatAdj::printMat () { // Affiche la matrice adjacente
     int i, j;
-    printf("\n");
-    for (i = 0; i < n; i++) {
-        for (j = 0; j < n; j++) {
-            printf("%d  ", M[i][j]);
+    cout << endl;
+    for (i = 0; i < m_size; i++) {
+        for (j = 0; j < m_size; j++) {
+            cout << m_Matrix[i][j] << " ";
         }
-        printf("\n");
+        cout << endl;
     }
-    printf("\n");
+    cout << endl;
 }
 
-void DepthFirstSearch (int** M, sommet* s, int n) { // Parcours en profondeur du graphe
-    int i, child = 0, temps = 0;
-    int* t = &temps;
-    if (s[0].etat == -1) { // Premier DFS
-        for (i = 0; i < n; i++) {
-            if (s[s[i].num].etat == -1) {
-                DepthFirstSearchVisit(M, s, n, s[i].num, t, 1);
-            }
-        }
-        for (i = 1; i < n; i++) { // root check
-            if (s[i].parent == 0) {
-                child++;
-            }
-        }
-        if (child > 1) {
-            s[0].important = 1;
-        }
-        triDecroissant(s, n);
-    } else { // Second DFS avec M transposé
-        iniEtatSommet(s, n);
-        for (i = 0; i < n; i++) {
-            if (s[s[i].num].etat == -1) {
-                DepthFirstSearchVisit(M, s, n, s[i].num, t, 2);
-            }
-        }
-    }
+
+void MatAdj::addSummit (int x, int y) {
+    m_Matrix[x][y] = 1;
 }
 
-void DepthFirstSearchVisit (int** M, sommet* s, int n, int i, int* t, int numDFS) { // Parcours en profondeur du graphe (recursif)
+
+
+
+
+void MatAdj::PPG (UserData* u) { // Parcours en profondeur du graphe (appel sur PProfG)
+    int i;
+    int temps = 0;
+    vector <s_sommet> newOrderTab;
+
+    m_summit->iniDataSommet(u, 'm');
+    for (i = 0; i < m_size; i++) {
+        if ( m_summit->getEtat(m_summit->getNum(i)) == -1 ){ // version c de quentin : s[s[i].num].etat == -1)
+        PProfG(i, &temps);
+        }
+    }
+
+    newOrderTab = m_summit->copyTabSommet();
+      /* On fait une copie du tableau */
+/*
+    for (int i = 0; i < newOrderTab.size(); i++) {
+      newOrderTab[i].id = i;
+    }*/
+
+      /* On renote l'ordre des elements en ecrasant ces id inutiles */
+    //m_summit->triDecroissant();
+    sort(newOrderTab.rbegin(), newOrderTab.rend(), orderFin);
+     /* On trie le tableau en decroissant par rapport aux finaux
+        Le nouvel ordre a suivre sera donc donne par les id de ce vecteur */
+
+    PPGD(u, &newOrderTab);
+}
+
+void MatAdj::PProfG (int i, int* t) { // Parcours en profondeur du graphe (recursif)
     int j;
-    s[i].etat = 0; // Etat atteint
+    m_summit->setEtat(i, 0); // Etat atteint
     (*t)++;
-    s[i].deb = *t;
-    s[i].low = *t;
-    for (j = 0; j < n; j++) {
-        if (numDFS == 1) {
-            if (M[i][j] > 0) { // Successeur
-                if (s[j].etat == -1) { // forward edge
-                    s[j].parent = i;
-                    DepthFirstSearchVisit(M, s, n, j, t, numDFS);
-                    if (s[j].low >= s[i].deb && i != 0) {
-                        s[i].important = 1;
-                    }
-                    if (s[j].low < s[i].low) {
-                        s[i].low = s[j].low;
-                    }
-                } else if (s[i].parent != j) { // back edge
-                    if (s[j].deb < s[i].low) {
-                        s[i].low = s[j].deb;
-                    }
-                }
-            }
-        } else if (numDFS == 2) {
-            if (M[j][i] > 0) { // Successeur
-                if (s[j].etat == -1) { // forward edge
-                    s[j].parent = i;
-                    DepthFirstSearchVisit(M, s, n, j, t, numDFS);
-                    if (s[j].low >= s[i].deb && i != 0) {
-                        s[i].important = 1;
-                    }
-                    if (s[j].low < s[i].low) {
-                        s[i].low = s[j].low;
-                    }
-                } else if (s[i].parent != j) { // back edge
-                    if (s[j].deb < s[i].low) {
-                        s[i].low = s[j].deb;
-                    }
-                }
-            }
+    m_summit->setDeb(i, *t);
+    for (j = 0; j < m_size; j++) {
+        if ((m_Matrix[i][j]) && (m_summit->getEtat(j) == -1)) { // Successeur non atteint
+            PProfG(j, t);
         }
     }
+    m_summit->setEtat(i, 1); // Etat explore
     (*t)++;
-    s[i].fin = *t;
+    m_summit->setFin(i, *t);
+
 }
 
-void ShortestPath (int** M, sommet* s, int n, int x) { // Algorithme de Dijkstra : calcule les plus courts chemins à partir de x
-    int i, y, z;
-    iniEtatSommet(s, n); // F = X
-    for (i = 0; i < n; i++) { // Source Unique Initialisation
-        s[i].deb = INT_MAX;
-        s[i].fin = -1;
+void MatAdj::PPGD (UserData* u, vector <s_sommet>* V) { // Parcours en profondeur du graphe dual (appel sur PProfG)
+//void MatAdj::PPGD () { // Parcours en profondeur du graphe dual (appel sur PProfG)
+    int i;
+    int temps;
+
+    temps = 0;
+    m_summit->iniEtatSommet();
+    for (i = 0; i < m_size; i++) {
+        if (m_summit->getEtat((*V)[i].num) == -1) {
+          PProfGD((*V)[i].num, &temps);
+        }
     }
-    x = getIndice(s, n, x);
-    z = x;
-    s[x].deb = 0;
-    while (nonExplore(s, n)) { // F != null
-        x = getIndiceMinDeb(s, n); // x = ExtraireMin(F)
-        s[x].etat = 0; // F = F - x
-        for (y = 0; y < n; y++) {
-            if (M[x][y] > 0) { // Successeur
-                if (s[y].deb > s[x].deb + s[y].freq) { // Relacher
-                    s[y].deb = s[x].deb + s[y].freq;
-                    x = getIndice(s, n, s[x].id);
-                    s[y].fin = x;
-                }
+
+//m_summit->printsommet();
+    m_summit->triCroissant();
+}
+
+void MatAdj::PProfGD (int i, int* t) { // Parcours en profondeur du graphe dual (recursif)
+    int j;
+
+    m_summit->setEtat(i, 0); // Etat atteint
+    (*t)++;
+    m_summit->setDeb(i, *t);
+
+    for (j = 0; j < m_size; j++) {
+        if ((m_Matrix[j][i]) && (m_summit->getEtat(j) == -1)) { // Successeur non atteint
+            PProfGD(j, t);
+        }
+    }
+
+    m_summit->setEtat(i, 1); // Etat explore
+    (*t)++;
+    m_summit->setFin(i,*t);
+}
+
+
+
+
+int MatAdj::getTMin (int x, int y) { // Renvoie le temps min pour aller de x à y
+    int t;
+    int* tmin = &t;
+    x = m_summit->getIndice(x);
+    y = m_summit->getIndice(y);
+    t = - m_summit->getFreq(x);
+    m_summit->iniEtatSommet();
+    getTMinProf(x, y, tmin, t);
+    return *tmin;
+}
+
+void MatAdj::getTMinProf (int x, int y, int* t, int temp) { // Parcours en profondeur
+    int j;
+    m_summit->setEtat(x,0); // Etat atteint
+    cout << "s = " << (x + 1) << " (" << m_summit->getId(x) << "), t = " << temp << endl;
+    temp += m_summit->getFreq(x);
+    if (x == y) {
+        *t = temp;
+    } else {
+        for (j = 0; j < m_size; j++) {
+            if ((m_Matrix[x][j] > 0) && (m_summit->getEtat(j) == -1)) { // Successeur non atteint
+                getTMinProf(j, y, t, temp);
             }
         }
     }
+    m_summit->setEtat(x, 1); // Etat explore
+}
+
+int MatAdj::getSize () {
+    return m_size;
+}
+
+void MatAdj::setSize (int s) {
+    m_size = s;
+    int i = 0, j = 0;
+    m_Matrix = new int*[m_size];
+    for (i = 0; i < m_size; i++){
+        m_Matrix[i] = new int[m_size];
+    }
+    for (i = 0; i < m_size; i++) {
+        for (j = 0; j < m_size; j++) {
+            m_Matrix[j][i] = 0;
+        }
+    }
+}
+
+vector <s_sommet>* MatAdj::recupTabSommet(){
+  return m_summit->getTabSommet();
+}
+
+void MatAdj::setSummitEtat (int i, int e) {
+    m_summit->setEtat(i, e);
+}
+
+void MatAdj::setSummitNom (int i, string s) {
+    m_summit->setNom(i, s);
+}
+
+void MatAdj::setSummitNum (int i, int n) {
+    m_summit->setNum(i, n);
+}
+
+void MatAdj::setSummitId (int i, int id) {
+    m_summit->setId(i, id);
+}
+
+void MatAdj::setSummitFreq (int i, int f) {
+    m_summit->setFreq(i, f);
+}
+
+void MatAdj::setSummitSize (int t) {
+    m_summit->setTaille(t);
+}
+
+int MatAdj::getSummitSize () {
+    return m_summit->getTaille();
+}
+
+int MatAdj::getIndice (int x) {
+    return m_summit->getIndice(x);
+}
+
+int MatAdj::getNbCFC(){
+    return m_summit->getNbCFC();
+}
+
+string MatAdj::getCFC(){
+    return m_summit->getCFC();
+}
+
+void MatAdj::printCFC(){
+  m_summit->printCFC();
 }

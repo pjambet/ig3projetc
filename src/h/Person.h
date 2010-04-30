@@ -19,6 +19,9 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
     => Attribut supplementaire
         - La liste des personnes qui lui font confiance (listDualLink)
 
+  - Modification : (29/04/2010)
+    Deplacement des amis dans une autre classe
+
 ============================================================================= */
 
 #ifndef PERSON_H_INCLUDED
@@ -30,8 +33,6 @@ Includes
 ===================================*/
 #include <iostream>
 #include <string>
-#include <vector>
-#include <numeric>
 /*=================================*/
 
 using namespace std;
@@ -39,14 +40,11 @@ using namespace std;
 
 class Person {
   /* Attributs */
-  /* Le nom, l'id de la personne, la frequence de ses visites
-     ainsi que la liste des id des personnes a qui il fait confiance */
+  /* Le nom, l'id de la personne, la frequence de ses visites */
   private:
   string name;
   int id_number;
   int frequency;
-  vector< int > listLink;
-  vector< int > listDualLink;
 
 
   public:
@@ -63,26 +61,13 @@ class Person {
     void set_id(int i);
     void set_freq(int f);
 
-    void addFriend(int i);
-      /* Ajoute un ami en entrant son id */
-
-    void addDualFriend(int i);
-      /* Ajoute un "ami dual", quelqu'un qui lui fait confiance */
-
 
     /* Accesseur en lecture */
     string get_name();
     int get_id();
     int get_freq();
-    vector <int> get_listLink();
-    vector <int> get_listDualLink();
 
-
-    /* Autres et optionnels  */
-    void sortFriends();
-      /* Trie le vecteur d'ami et le vecteur d'"amis dual" dans l'ordre croissant */
-
-    void display();
+    void print();
       /* Affichage d'une personne */
 
 };

@@ -277,7 +277,7 @@ bool UserData::is_question(int id1, int id2) {
   map< int, vector<int> >::iterator it;
   vector< int > v;
   bool question;
-  int i;
+  unsigned int i;
 
   question = false;
   i = 0;
@@ -310,7 +310,7 @@ bool UserData::is_analysable() {
 void UserData::print() {
   map< int, Person >::iterator it1;
   map< int, vector<int> >::iterator it2;
-  int i;
+  unsigned int i;
 
 
   cout << "Liste des personnes :" << endl;
@@ -320,7 +320,7 @@ void UserData::print() {
   }
 
   if (structFriends == 'm') {
-    printmatFriends();
+    printMatFriends();
   } else {
     printListFriends();
   }
@@ -333,7 +333,7 @@ void UserData::print() {
   }
 }
 
-void UserData::printmatFriends() {
+void UserData::printMatFriends() {
   int i, j;
 
 

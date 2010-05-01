@@ -228,7 +228,6 @@ bool Sommet::nonExplore () { // Renvoie vrai s'il reste un sommet non exploré
 
 char* Sommet::getCheminMin (int y) {
     int i, j, k, p, l, m;
-    char temp;
     char* buffer = (char*) malloc(5*m_tailleGraph*sizeof(char));
     char* chemin = (char*) malloc(5*m_tailleGraph*sizeof(char));
     sprintf(chemin, "%d : ", m_tabSommet[y].deb);
@@ -253,7 +252,6 @@ char* Sommet::getCheminMin (int y) {
         k = 0;
         j = p-l-i;
         while (k < l) {
-            //printf("Var : (l=%d p=%d i=%d), chemin[%d] = %c\n", l, p, i, j+m, buffer[i]);
             chemin[j+m] = buffer[i];
             i++;
             k++;

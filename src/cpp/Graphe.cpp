@@ -54,7 +54,7 @@ void Graphe::resolution(UserData* u) {
 
 void Graphe::loadCFC(vector<s_sommet>* tabSommet) {
   int d, f; /* Repères de debut et fin d'intervalle */
-  int i;
+  unsigned int i;
   int cpt_CFC; /* Compteur de CFC*/
   vector <int > v;
 
@@ -87,7 +87,7 @@ void Graphe::loadCFC(vector<s_sommet>* tabSommet) {
 
 void Graphe::saveGraphe(string fileName) {
   FILE* f_out;
-  int i, j;
+  unsigned int i, j;
   string choice;
 
   f_out = fopen(fileName.c_str(), "w+");
@@ -117,7 +117,7 @@ void Graphe::saveGraphe(string fileName) {
 Autres
 ===================================*/
 void Graphe::print() {
-  int i, j;
+  unsigned int i, j;
   cout << "Rapport de graphe :" << endl << endl;
   cout << "Nombre de CFC : " << nbCFC << endl;
   cout << "CFC : " << endl;

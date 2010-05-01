@@ -148,7 +148,7 @@ void ListeVoisins::PPG (UserData* u) { // Parcours en profondeur du graphe (appe
 
 
 void ListeVoisins::PProfG (int i, int* t) { // Parcours en profondeur du graphe (recursif)
-    int j;
+    unsigned int j;
     int pointActuel;
 
     pointActuel = idPosition[i]; // La case où se trouve le nombre i
@@ -203,7 +203,7 @@ void ListeVoisins::PPGD (UserData* u, vector <s_sommet>* V) { // Parcours en pro
 }
 
 void ListeVoisins::PProfGD (int i, int* t) { // Parcours en profondeur du graphe dual (recursif)
-    int j;
+    unsigned int j;
     int pointActuel;
 
     pointActuel = idPosition[i]; // La case où se trouve le nombre i
@@ -236,7 +236,6 @@ Dijkstra
 ===================================*/
 void ListeVoisins::algoDijkstra (int x) { // Calcule les plus courts chemins à partir de l'id x
     int i;
-    int n;
     int nbExplore; // nombre de sommet explore
     vector <int>::iterator it;
 

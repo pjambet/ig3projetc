@@ -16,7 +16,7 @@ TODO :
 #include <stdlib.h>
 #include <iostream>
 #include <string>
-//#include <windows.h>
+#include <ctime>
 
 #include "../h/Generator.h"
 #include "../h/UserData.h"
@@ -29,7 +29,7 @@ using namespace std;
 int main(int argc, char* argv[]) {
     /* Variables */
     int choice; /* Choix de l'utilisateur */
-    float t_ini, t_fin; /* Stockage des temps d'execution */
+    time_t time_ini, time_fin;
 
     string nom_in, nom_out;
     string dir_in, dir_out;
@@ -88,12 +88,12 @@ int main(int argc, char* argv[]) {
                 dir_in = REPERTOIRE + nom_in;
                   /* concaténation du repertoire test avec le nom du fichier d'entree */
 
-                //t_ini = GetTickCount();
+                time_ini = clock();
                 D.openData(dir_in);
-                //t_fin = (GetTickCount() - t_ini) / 1000;
+                time_fin = clock();
 
                  //D.print();
-                cout << "(Temps d'execution : " << t_fin << " sec)" << endl << endl;
+                cout << "(Temps d'execution : " << ((double) time_fin - time_ini) / CLOCKS_PER_SEC << " sec)" << endl << endl;
                 break;
 
             case 2 :
@@ -114,11 +114,11 @@ int main(int argc, char* argv[]) {
                         cout << endl;
                     }
 
-                    //t_ini = GetTickCount();
+                    time_ini = clock();
                     G.resolution(&D);
                     G.saveGraphe(nom_out);
 
-/*                   i = 0;
+                    /*i = 0;
                     while (i/2 < nbQuest) {
                         x = tabQuest[i];
                         i++;
@@ -136,8 +136,8 @@ int main(int argc, char* argv[]) {
                         fprintf(fic_out, "%s", buffer);
                     }*/
 
-                    //t_fin = (GetTickCount() - t_ini) / 1000;
-                    cout << "(Temps d'execution : " << t_fin << " sec)" << endl << endl;
+                    time_fin = clock();
+                    cout << "(Temps d'execution : " << ((double) time_fin - time_ini) / CLOCKS_PER_SEC << " sec)" << endl << endl;
 
                 } else {
                     cerr << "Graphe non enregistre !" << endl;
@@ -159,11 +159,11 @@ int main(int argc, char* argv[]) {
                 cout << "Entrez la densite de question desiree (ratio pour 10 000) : ";
                 cin >> densite_question;
 
-                //t_ini = GetTickCount();
+                time_ini = clock();
                 generateFile("test/noms.dat", "test/gene.txt", nbPerson, densite_relation, densite_question);
-                //t_fin = (GetTickCount() - t_ini) / 1000;
+                time_fin = clock();
 
-                cout << "(Temps d'execution : " << t_fin << " sec)" << endl << endl;
+                cout << "(Temps d'execution : " << ((double) time_fin - time_ini) / CLOCKS_PER_SEC << " sec)" << endl << endl;
                 break;
 /*
             case 5 :

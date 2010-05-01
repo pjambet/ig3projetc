@@ -62,7 +62,7 @@ void Friends::sortFriends() {
 }
 
 void Friends::print() {
-  int i;
+  unsigned int i;
 
   cout << id << " : " << endl;
 

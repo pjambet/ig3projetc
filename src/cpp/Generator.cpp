@@ -21,11 +21,10 @@ void generateFile(string source, string dest, int n, int d_rel, int d_quest) {
   srand(time(NULL));
 
   /* Variables */
-  int i, j, cpt;
+  int i, j;
   int random;
   char nom[50];
   int id;
-  fpos_t position, end_of_file;
 
   FILE* fichier;
 
@@ -47,7 +46,7 @@ void generateFile(string source, string dest, int n, int d_rel, int d_quest) {
   }
 
   fclose(fichier);
-    assert(n < database_nom.size());
+  assert(n < database_nom.size());
       /* On verifie que le nombre de personne est bien inferieur au nombre de personne dans la database */
 
 

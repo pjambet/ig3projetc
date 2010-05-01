@@ -103,7 +103,7 @@ class UserData {
 
     void print();
       /* Procedure d'affichage */
-    void printmatFriends();
+    void printMatFriends();
       /* Affichage de la matrice matFriends */
     void printListFriends();
       /* Affichage de la liste listFriends */

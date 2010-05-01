@@ -198,7 +198,7 @@ vector< s_summit > AdjList::initDist (int x) {
 
 
     while (nbExplore < (int) m_size) { // F != null
-      n = extractMin(); // x = ExtraireMin(F)
+      n = extractMin(x); // x = ExtraireMin(F)
 
       if (m_tabSummit[m_idToRank[n]].status == -1) {
         // Si l'etat n'a pas encore ete explore
@@ -225,12 +225,12 @@ vector< s_summit > AdjList::initDist (int x) {
 }
 
 
-int AdjList::extractMin() {
+int AdjList::extractMin(int x) {
     int i, imin;
     int valmin;
 
     valmin = INT_MAX;
-    imin = 0;
+    imin = x;
     for (i = 0; i < (int) m_size; i++) {
         if ((m_tabSummit[i].beg < valmin) && (m_tabSummit[i].status == -1)) {
             valmin = m_tabSummit[i].beg;

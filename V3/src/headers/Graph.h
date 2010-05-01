@@ -26,7 +26,7 @@ Includes
 #include "AdjList.h"
 #include "AdjMat.h"
 
-#define TEST 'm'
+#define TEST 'l'
 
 using namespace std;
 

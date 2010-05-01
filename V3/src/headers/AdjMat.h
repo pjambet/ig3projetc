@@ -51,7 +51,7 @@ class AdjMat {
 
 
     vector< s_summit > initDist (int x);// Calcule les plus courts chemins à partir de l'id x avec l'algo Dijkstra
-    int extractMin(); // Extrait l'element de m_tabSummit non explore avec beg minimum
+    int extractMin(int x); // Extrait l'element de m_tabSummit non explore avec beg minimum, x valeur a renvoyer si on trouve pas de min
 
 
     void sortDescEnd(); // Trie les ordres finaux en decroissant

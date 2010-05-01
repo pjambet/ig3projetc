@@ -39,12 +39,19 @@ void generateFile(string source, string dest, int n, int d_rel, int d_quest) {
   /* Initialisation du fichier de noms */
   fichier = fopen(source.c_str(), "r");
 
-  while (!feof(fichier)) {
-    fscanf(fichier, "%[^,\n], %d\n", nom, &id);
-    database_nom.push_back(nom);
-    database_id.push_back(id);
-  }
+  if (fichier == NULL) {
+    cerr << endl << "Fichier de donnees introuvable !" << endl;
+    exit (-1);
 
+  } else {
+
+    while (!feof(fichier)) {
+      fscanf(fichier, "%[^,\n], %d\n", nom, &id);
+      database_nom.push_back(nom);
+      database_id.push_back(id);
+    }
+
+  }
   fclose(fichier);
     assert(n < (int) database_nom.size());
       /* On verifie que le nombre de personne est bien inferieur au nombre de personne dans la database */

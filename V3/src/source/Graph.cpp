@@ -249,13 +249,21 @@ void Graph::searchDistances () {
    On regarde les id des points où aller et on stocke le chemin inverse dans path
    On stockera ensuite ce chemin dans le multimap listPath avec le point de depart comme cle */
   for (it = m_listQuestion.begin(); it != m_listQuestion.end(); it++) {
+    /* Pour tous les points de departs distincts */
     for (i = 0; i < (int) it->second.size(); i++) {
-      /* i = l'id ou on veut aller a partir de it->first */
+      /* it->second[i] = l'id ou on veut aller a partir de it->first */
       path.clear();
 
       token = m_idToRank[it->second[i]];
       path.push_back(token);
       /* En meme temps, la distance de it->first a i est donnee par m_tabSummit[path[0]].beg */
+
+
+    if ( (m_listDist[it->first][token].end == -1) && (it->second[i] != it->first)) {
+      /* Si il n'existe pas de chemin entre les 2 points
+         On stocke directement le point de depart (rang) */
+      path.push_back(m_idToRank[it->first]);
+    }
 
     while (token != -1) {
       /* Tant qu'on n'est pas arrive a un pere "NULL", on remonte */
@@ -310,6 +318,8 @@ void Graph::saveGraph (string& fileNameOut) {
     }
     fprintf(f_out, "%d\n", m_listDist[itStart->first][itStart->second[0]].id);
   }
+
+
   fclose(f_out);
 
 }
@@ -348,11 +358,18 @@ void Graph::printGraph () {
   cout << "Distances : " << endl;
 
   for (itStart = m_listPath.begin(); itStart != m_listPath.end(); itStart++) {
-    cout << m_listDist[itStart->first][itStart->second[0]].beg << " : "; /* = La distance */
+    if (m_listDist[itStart->first][itStart->second[0]].beg == INT_MAX) {
+      /* Si la distance entre les 2 est infinie */
+      cout << "Pas de chemin entre " << m_listDist[itStart->first][itStart->second[1]].id;
+      cout << " et " << m_listDist[itStart->first][itStart->second[0]].id << endl;
 
-    for (i = itStart->second.size()-1; i > 0; i--) {
-      cout << m_listDist[itStart->first][itStart->second[i]].id << ", ";
+    } else {
+      cout << m_listDist[itStart->first][itStart->second[0]].beg << " : "; /* = La distance */
+
+      for (i = itStart->second.size()-1; i > 0; i--) {
+        cout << m_listDist[itStart->first][itStart->second[i]].id << ", ";
+      }
+      cout << m_listDist[itStart->first][itStart->second[0]].id << endl;
     }
-    cout << m_listDist[itStart->first][itStart->second[0]].id << endl;
   }
 }

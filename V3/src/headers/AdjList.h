@@ -54,7 +54,7 @@ class AdjList {
 
 
     vector< s_summit > initDist (int x); // Calcule les plus courts chemins à partir de l'id au rang x
-    int extractMin();
+    int extractMin(int x);
 
 
     void sortDescEnd(); // Trie les ordres finaux en decroissant

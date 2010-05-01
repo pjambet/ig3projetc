@@ -202,7 +202,7 @@ vector< s_summit > AdjMat::initDist (int x) {
 
 
     while (nbExplore < (int) m_size) { // F != null
-      n = extractMin(); // x = ExtraireMin(F)
+      n = extractMin(x); // x = ExtraireMin(F)
 
       if (m_tabSummit[n].status == -1) {
         m_tabSummit[n].status = 0;  // F = F - x
@@ -225,12 +225,12 @@ vector< s_summit > AdjMat::initDist (int x) {
     return m_tabSummit;
 }
 
-int AdjMat::extractMin() {
+int AdjMat::extractMin(int x) {
     int i, imin;
     int valmin;
 
     valmin = INT_MAX;
-    imin = 0;
+    imin = x;
     for (i = 0; i < (int) m_size; i++) {
         if ((m_tabSummit[i].beg < valmin) && (m_tabSummit[i].status == -1)) {
             valmin = m_tabSummit[i].beg;

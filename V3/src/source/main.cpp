@@ -180,6 +180,9 @@ int main(int argc, char* argv[]) {
 
         }
 
+      /* Nettoyage du tampon */
+      cin.clear();
+      while (cin.get() != '\n') { };
     }
 
 }

@@ -116,14 +116,6 @@ void Graph::initGraph (string& fileNameIn) {
         /* On ajoute a y quelqu'un qui lui fait confiance */
         m_listDualFriends[y].push_back(x);
       }
-
-        /* Tri de tous les amis
-        for (itFriends = listFriends.begin() ; itFriends != listFriends.end(); itFriends++) {
-          sort( m_listFriends[(*itFriends)].second.begin(), m_listFriends[(*itFriends)].second.end() );
-          sort( m_listDualFriends[(*itFriends)].second.begin(), m_listDualFriends[(*itFriends)].second.end() );
-        }*/
-
-
     }
 
     /* Etape 5 - Lecture du nombre de question */
@@ -134,12 +126,6 @@ void Graph::initGraph (string& fileNameIn) {
       fscanf(f_in, "%d -> %d\n", &x, &y);
       m_listQuestion[x].push_back(y);
     }
-
-      /* Tri des questions
-      for (itQuest = m_listQuestion.begin() ; itQuest != m_listQuestion.end(); itQuest++) {
-          sort( (*itQuest).second.begin(), (*itQuest).second.end() );
-      }*/
-
   }
 
   fclose(f_in);

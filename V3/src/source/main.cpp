@@ -28,14 +28,13 @@ using namespace std;
 int main(int argc, char* argv[]) {
     /* Variables */
     int choice; /* Choix de l'utilisateur */
-    string choice2;
+    string choice2; /* Choix d'affichage du rapport */
     float t_ini, t_open, t_cfc, t_dist, t_create; /* Stockage des temps d'execution */
 
     string nom_in, nom_out;
     string dir_in, dir_out;
 
-      /* Case 2 : */
-      Graph G;
+    Graph G;
 
       /* Case 4 : */
       int nbPerson;

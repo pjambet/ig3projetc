@@ -16,7 +16,7 @@ TODO :
 #include <stdlib.h>
 #include <iostream>
 #include <string>
-#include <windows.h>
+#include <ctime>
 
 #include "../headers/Generator.h"
 #include "../headers/Graph.h"
@@ -29,7 +29,8 @@ int main(int argc, char* argv[]) {
     /* Variables */
     int choice; /* Choix de l'utilisateur */
     string choice2; /* Choix d'affichage du rapport */
-    float t_ini, t_open, t_cfc, t_dist, t_create; /* Stockage des temps d'execution */
+    time_t t_ini, t_open, t_cfc, t_dist, t_create; /* Stockage des temps d'execution */
+    //float t_ini, t_open, t_cfc, t_dist, t_create; /* Stockage des temps d'execution */
 
     string nom_in, nom_out;
     string dir_in, dir_out;
@@ -83,13 +84,13 @@ int main(int argc, char* argv[]) {
                 dir_in = REPERTOIRE + nom_in;
                   /* concaténation du repertoire test avec le nom du fichier d'entree */
 
-                t_ini = GetTickCount();
+                t_ini = clock();
 
                   G.initGraph(dir_in);
 
-                t_open = (GetTickCount() - t_ini) / 1000;
+                t_open = clock();
 
-                cout << "Lecture du fichier... " << t_open << " sec." << endl << endl;
+                cout << "Lecture du fichier... " << ((double) t_open - t_ini) / CLOCKS_PER_SEC << " sec." << endl << endl;
                 break;
 
             case 2 :
@@ -112,17 +113,17 @@ int main(int argc, char* argv[]) {
                     dir_out = REPERTOIRE + nom_out;
                       /* concaténation du repertoire test avec le nom du fichier d'entree */
 
-                    t_ini = GetTickCount();
-                      G.searchCFC();
-                    t_cfc = (GetTickCount() - t_ini) / 1000;
-                    cout << "Recherche des CFC... " << t_cfc << " sec." << endl << endl;
+                    t_ini = clock();
+                    G.searchCFC();
+                    t_cfc = clock();
+                    cout << "Recherche des CFC... " << ((double) t_cfc - t_ini) / CLOCKS_PER_SEC << " sec." << endl << endl;
 
 
-                    t_ini = GetTickCount();
+                    t_ini = clock();
                     G.searchDistances();
-                    t_dist = (GetTickCount() - t_ini) / 1000;
+                    t_dist = clock();
 
-                    cout << "Recherche des plus courts chemins... " << t_dist << " sec." << endl << endl;
+                    cout << "Recherche des plus courts chemins... " << ((double) t_dist - t_ini) / CLOCKS_PER_SEC << " sec." << endl << endl;
                     G.saveGraph(dir_out);
 
                     cout << "Donnees sauvegardees... " << endl;
@@ -154,11 +155,11 @@ int main(int argc, char* argv[]) {
                 cout << "Entrez la densite de question desiree (ratio pour 10 000) : ";
                 cin >> densite_question;
 
-                t_ini = GetTickCount();
+                t_ini = clock();
                 generateFile("test/noms.dat", "test/gene.txt", nbPerson, densite_relation, densite_question);
-                t_create = (GetTickCount() - t_ini) / 1000;
+                t_create = clock();
 
-                cout << "Generation d'un fichier... " << t_create << " sec." << endl << endl;
+                cout << "Generation d'un fichier... " << ((double) t_create - t_ini) / CLOCKS_PER_SEC << " sec." << endl << endl;
                 break;
 /*
             case 5 :

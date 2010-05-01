@@ -45,8 +45,6 @@ class AdjList {
     void initData (vector< s_summit >& v, map< int, vector< int > >& f, map< int, vector< int > >& df, map< int, int >& ItR); // Remplit le la structure avec les donnees
 
 
-
-
     vector< s_summit > initCFC ();
 
     void DFS (); // Parcours en profondeur du graphe (appel sur PProfG)
@@ -62,27 +60,7 @@ class AdjList {
     void sortDescEnd(); // Trie les ordres finaux en decroissant
     void sortAscBeg(); // Trie les ordres de debut en croissant
 
-/*
-    void printListeAdj (); // Affiche la liste adjacente
-    void printListeAdjD ();// Affiche la liste adjacente duale
-    void printSummits(); // Affiche les infos des sommets
-*/
-    /* Accesseurs
-    int getTaille();
-    void setTaille (int t);
-    void setSummitEtat (int i, int e);
-    void setSummitNom (int i, string s);
-    void setSummitNum (int i, int n);
-    void setSummitId (int i, int id);
-    void setSummitFreq (int i, int f);
-    void setSummitSize(int t);
-    int getSummitSize();
 
-    int getIndice (int x); // Renvoie l'indice du tableau correspondant a l'id x
-    int getNbCFC (); // Renvoie le nombre de composantes fortement connexes
-    string getCFC (); // Renvoie les CFC
-    char* getCheminMin(int y);
-*/
 };
 
 #endif

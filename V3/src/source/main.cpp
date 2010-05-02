@@ -26,21 +26,17 @@ TODO :
 using namespace std;
 
 int main(int argc, char* argv[]) {
+
     /* Variables */
     int choice; /* Choix de l'utilisateur */
+    int nbPerson, densite_relation, densite_question;
     string choice2; /* Choix d'affichage du rapport */
     time_t t_ini, t_open, t_cfc, t_dist, t_create; /* Stockage des temps d'execution */
-    //float t_ini, t_open, t_cfc, t_dist, t_create; /* Stockage des temps d'execution */
 
     string nom_in, nom_out;
     string dir_in, dir_out;
 
     Graph G;
-
-      /* Case 4 : */
-      int nbPerson;
-      int densite_relation, densite_question;
-
 
     cout << "                                              " << endl;
     cout << "     ____            _      _                 " << endl;
@@ -68,10 +64,12 @@ int main(int argc, char* argv[]) {
         switch (choice) {
 
             case 0 :
+
                 return 0;
                 break;
 
             case 1 :
+
                 if (argc > 1) {
                   /* S'il y a 1 argument, on l'utilise comme nom de fichier d'entree */
                     nom_in = argv[1];
@@ -86,14 +84,16 @@ int main(int argc, char* argv[]) {
 
                 t_ini = clock();
 
-                  G.initGraph(dir_in);
+                G.initGraph(dir_in);
 
                 t_open = clock();
 
                 cout << "Lecture du fichier... " << ((double) t_open - t_ini) / CLOCKS_PER_SEC << " sec." << endl << endl;
+                choice = -1;
                 break;
 
             case 2 :
+
                 if (G.isAnalysable()) {
                   /* graphe enregistre */
 
@@ -116,7 +116,7 @@ int main(int argc, char* argv[]) {
                     t_ini = clock();
                     G.searchCFC();
                     t_cfc = clock();
-                    cout << "Recherche des CFC... " << ((double) t_cfc - t_ini) / CLOCKS_PER_SEC << " sec." << endl << endl;
+                    cout << "Recherche des CFC... " << ((double) t_cfc - t_ini) / CLOCKS_PER_SEC << " sec." << endl;
 
 
                     t_ini = clock();
@@ -129,19 +129,21 @@ int main(int argc, char* argv[]) {
                     cout << "Donnees sauvegardees... " << endl;
                     cout << "Voulez-vous afficher le rapport ? (o/n) ";
                     cin >> choice2;
-                      if (choice2 == "o" || choice2 == "O" || choice2 == "oui" || choice2 == "Oui") {
+                    if (choice2 == "o" || choice2 == "O" || choice2 == "oui" || choice2 == "Oui") {
                         G.printGraph();
-                      }
+                    }
                     cout << endl;
 
                 } else {
                     cerr << "Graphe non enregistre !" << endl;
                 }
+                choice = -1;
                 break;
 
             case 3 :
 
                 cout << "Recuperation des donnees de Facebook... " << "Indisponible." << endl << endl;
+                choice = -1;
                 break;
 
             case 4 :
@@ -160,6 +162,7 @@ int main(int argc, char* argv[]) {
                 t_create = clock();
 
                 cout << "Generation d'un fichier... " << ((double) t_create - t_ini) / CLOCKS_PER_SEC << " sec." << endl << endl;
+                choice = -1;
                 break;
 /*
             case 5 :
@@ -171,6 +174,7 @@ int main(int argc, char* argv[]) {
                     cin >> typestruct;
                 }
                 cout << endl;
+                choice = -1;
                 break;
 */
             default :

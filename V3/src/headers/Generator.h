@@ -23,10 +23,13 @@ Includes
 ===================================*/
 #include <iostream>
 #include <string>
+#include <cstring>
 #include <vector>
 #include <algorithm>
-
-#include "time.h"
+#include <ctime>
+#include <cstdio>
+#include <cassert>
+//#include "time.h"
 
 using namespace std;
 

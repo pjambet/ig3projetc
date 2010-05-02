@@ -21,6 +21,7 @@ Includes
 #include <vector>
 #include <map>
 #include <numeric>
+#include <cstdio>
 
 #include "Summit.h"
 #include "AdjList.h"

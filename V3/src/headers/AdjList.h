@@ -18,7 +18,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include <map>
 #include <vector>
 #include <algorithm>
-
+#include <climits>
 #include "Summit.h"
 
 using namespace std;

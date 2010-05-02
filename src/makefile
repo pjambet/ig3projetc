@@ -47,4 +47,7 @@ main.o: $(CURDIR)/cpp/main.cpp $(CURDIR)/h/Generator.h $(CURDIR)/h/UserData.h $(
 #
 clean:
 	rm -rf *.o
+#
+mrproper: clean
+	rm -rf CFC
 

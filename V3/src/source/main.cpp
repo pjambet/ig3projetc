@@ -21,7 +21,7 @@ TODO :
 #include "../headers/Generator.h"
 #include "../headers/Graph.h"
 
-#define REPERTOIRE "test/"
+#define REPERTOIRE "../test/"
 
 using namespace std;
 

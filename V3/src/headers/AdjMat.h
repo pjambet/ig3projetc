@@ -40,7 +40,6 @@ class AdjMat {
     ~AdjMat ();
 
     void initData (vector< s_summit >& v, vector < vector < int > >& m); // Remplit la matrice
-    void printMat (); // Affiche la matrice adjacente
 
 
     vector< s_summit > initCFC (); /* Fait 2 parcours en prof pour trouver les CFC */
@@ -56,7 +55,10 @@ class AdjMat {
 
     void sortDescEnd(); // Trie les ordres finaux en decroissant
     void sortAscBeg(); // Trie les ordres de debut en croissant
+    void printMat (); // Affiche la matrice adjacente
 
+
+    bool isImportant(int x); // Renvoie vrai si le point x est important, x le rang d'un sommet dans m_tabSummit
 };
 
 

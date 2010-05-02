@@ -245,3 +245,67 @@ int AdjMat::extractMin(int x) {
         return 0;*/
     return imin;
 }
+
+
+bool isImportant(int x) {
+  bool important;
+  int i;
+  int nbFather, nbChild, nbEqual; /* Respectivement nombre de pere, nombre de fils et nombre de "pere-fils" */
+
+  /* Initialisation, on suppose le point important */
+  important = true;
+  nbFather = 0;
+  nbChild = 0;
+
+
+
+  i = 0;
+  /* On regarde s'il a au moins un père et un fils distinct
+     Si non, il n'est pas important
+     On compte donc le nombre de pere, de fils et de "pere-fils" */
+    while ( ((nbFather < 2) ||(nbChild < 2)) && (i < (int) m_size))) {
+      if (m_graph[x][i] == 1) {
+        nbChild++;
+      }
+
+      if (m_graph[i][x] == 1) {
+        nbFather++;
+      }
+
+      if (m_graph[x][i] == m_graph[i][x]) {
+        nbEqual++;
+      }
+    }
+
+    /* Si, en sortant de la boucle, on trouve
+       - qu'il n'a pas de pere, ou pas de fils
+       - qu'il a un seul pere et un seul fils, mais qu'il s'agit du meme point
+       Alors, le point n'est pas important*/
+
+    if ((nbFather == 0) || (nbChild == 0)) {
+      /* Cas pas de pere ou pas de fils, il s'agit d'un point isole */
+      important = false;
+
+    } else if ((nbFather == 1) && (nbChild == 1) && (nbEqual == 1)) {
+      /* Cas pere et fils unique, mais le meme point, il s'agit d'un point accessible que via son pere
+         L'enlever ne changera donc pas le reste de la composante */
+      important = false;
+
+    }
+
+
+    i = 0;
+    /* A ce point, le point est toujours suppose important s'il n'a pas remplit les conditions ci dessus
+       Il peut conserver ce status d'important si l'enlever implique que
+       - un de ses fils ne se retrouve pas sans pere => le point deviendrait non accessible
+       - un de ses peres ne se retrouve pas sans fils => le point deviendrait non co-accessible
+
+       Il faut cependant comme condition que son fils ou pere a qui on enleve le lien
+       ait lui aussi au moins un pere et un fils
+       Sinon, il est forcement isole dans une CFC */
+
+    /* L'idee est donc de regarder si,
+       - pour tous ses fils qui ont au moins un pere ET un fils, il ne soit pas le seul pere
+       - pour tous ses pere qui ont au moins un pere ET un fils, il ne soit pas le seul fils */
+
+}

@@ -54,6 +54,8 @@ void AdjMat::DFS () {
 
     for (i = 0; i < (int) m_size; i++) {
       /* Pour tous les points */
+      m_tabSummit[i].important = isImportant(i);
+
         if ( m_tabSummit[m_tabSummit[i].num].status == -1 ){
           /* Si l'etat est marque comme non atteint, on fait un appel recursif */
           DFSHidden(m_tabSummit[i].num, temps);
@@ -247,10 +249,10 @@ int AdjMat::extractMin(int x) {
 }
 
 
-bool isImportant(int x) {
+bool AdjMat::isImportant(int x) {
   bool important;
   int i;
-  int nbFather, nbChild, nbEqual; /* Respectivement nombre de pere, nombre de fils et nombre de "pere-fils" */
+  int nbFather, nbChild; /* Respectivement nombre de pere, nombre de fils */
 
   /* Initialisation, on suppose le point important */
   important = true;
@@ -259,42 +261,33 @@ bool isImportant(int x) {
 
 
 
-  i = 0;
   /* On regarde s'il a au moins un père et un fils distinct
      Si non, il n'est pas important
-     On compte donc le nombre de pere, de fils et de "pere-fils" */
-    while ( ((nbFather < 2) ||(nbChild < 2)) && (i < (int) m_size))) {
-      if (m_graph[x][i] == 1) {
-        nbChild++;
-      }
-
-      if (m_graph[i][x] == 1) {
-        nbFather++;
-      }
-
-      if (m_graph[x][i] == m_graph[i][x]) {
-        nbEqual++;
-      }
-    }
+     On compte donc le nombre de pere et de fils de x */
+    nbNeighborhood(x, nbFather, nbChild);
 
     /* Si, en sortant de la boucle, on trouve
        - qu'il n'a pas de pere, ou pas de fils
        - qu'il a un seul pere et un seul fils, mais qu'il s'agit du meme point
-       Alors, le point n'est pas important*/
+       Alors, le point n'est pas important */
 
     if ((nbFather == 0) || (nbChild == 0)) {
       /* Cas pas de pere ou pas de fils, il s'agit d'un point isole */
       important = false;
 
-    } else if ((nbFather == 1) && (nbChild == 1) && (nbEqual == 1)) {
+    } else if ((nbFather == 1) && (nbChild == 1)) {
       /* Cas pere et fils unique, mais le meme point, il s'agit d'un point accessible que via son pere
          L'enlever ne changera donc pas le reste de la composante */
-      important = false;
-
+         i = 0;
+        while ((i < (int) m_size) && important)  {
+          if ((m_graph[x][i] == 1) && (m_graph[i][x] == 1)) {
+            important = false;
+          }
+          i++;
+        }
     }
 
-
-    i = 0;
+    if (important) {
     /* A ce point, le point est toujours suppose important s'il n'a pas remplit les conditions ci dessus
        Il peut conserver ce status d'important si l'enlever implique que
        - un de ses fils ne se retrouve pas sans pere => le point deviendrait non accessible
@@ -306,6 +299,66 @@ bool isImportant(int x) {
 
     /* L'idee est donc de regarder si,
        - pour tous ses fils qui ont au moins un pere ET un fils, il ne soit pas le seul pere
-       - pour tous ses pere qui ont au moins un pere ET un fils, il ne soit pas le seul fils */
+       - pour tous ses peres qui ont au moins un pere ET un fils, il ne soit pas le seul fils */
 
+      important = false;
+        /* On le met a pas important, et il va essayer de regagner ce rang en remplissant une des conditions */
+
+      i = 0;
+      /* Pour tous les fils de x */
+      while ((i < (int) m_size) && !important) {
+        if (m_graph[x][i]) {
+          nbNeighborhood(i, nbFather, nbChild);
+            /* On va compter le nombre de ses peres et fils */
+
+          if ((nbFather > 0 ) && (nbChild > 0 )) {
+            if (nbFather == 1) {
+              /* Si le fils a qu'un pere, alors le pere est important */
+              important = true;
+            }
+          }
+        }
+        i++;
+      }
+
+      i = 0;
+      /* (S'il est toujours pas important) Pour tous les peres de x */
+      while ((i < (int) m_size) && !important) {
+        if (m_graph[i][x]) {
+          nbNeighborhood(i, nbFather, nbChild);
+            /* On va compter le nombre de ses peres et fils */
+
+          if ((nbFather > 0 ) && (nbChild > 0 )) {
+            if (nbChild == 1) {
+              /* Si le pere a fils, alors le pere est important */
+              important = true;
+            }
+          }
+
+        }
+        i++;
+      }
+    }
+
+    return important;
+}
+
+
+void AdjMat::nbNeighborhood(int x, int& nbF, int& nbC) {
+  int i;
+
+  nbF = 0;
+  nbC = 0;
+  i = 0;
+
+
+  while ( (i < (int) m_size) && ((nbF < 2) || (nbC < 2)) ) {
+    if (m_graph[x][i]) {
+      nbC++;
+    }
+    if (m_graph[i][x]) {
+      nbF++;
+    }
+    i++;
+  }
 }

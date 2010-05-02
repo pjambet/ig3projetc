@@ -15,6 +15,7 @@ void printSummit (s_summit s) {
   cout << "Nom : " << s.name << endl;
   cout << "    id( " << s.id << " ) frequence( " << s.freq << " ) " << endl;
   cout << "    debut( " << s.beg << " ) fin( " << s.end << " ) numero( " << s.num << " )" << endl;
+  cout << "    important ( " << s.important << " )" << endl;
 }
 
 bool orderBeg(s_summit a, s_summit b) {

@@ -196,8 +196,12 @@ void Graph::searchCFC () {
     m_listCFC.push_back(v);
     m_listCFC[cpt_CFC-1].push_back(tabSummitTemp[0].id);
 
+    m_tabSummit[m_idToRank[tabSummitTemp[0].id]].important = tabSummitTemp[0].important;
+
     for (i = 1; i < (int) m_sizeGraph; i++) {
       /* On regarde les autres sommets */
+      m_tabSummit[m_idToRank[tabSummitTemp[i].id]].important = tabSummitTemp[i].important;
+
         if ((d < (tabSummitTemp[i].beg)) && (f > (tabSummitTemp[i].end))) {
           m_listCFC[cpt_CFC-1].push_back(tabSummitTemp[i].id);
         } else {
@@ -208,6 +212,7 @@ void Graph::searchCFC () {
             m_listCFC.push_back(v);
             m_listCFC[cpt_CFC-1].push_back(tabSummitTemp[i].id);
         }
+
     }
   } else {
     cerr << "Erreur - Aucun graphe n'est ouvert !" << endl;
@@ -302,6 +307,9 @@ void Graph::saveGraph (string& fileNameOut) {
   /* CFC */
   for (i = 0; i < (int) m_listCFC.size(); i++) {
     for (j = 0; j < (int) m_listCFC[i].size()-1; j++) {
+      if (m_tabSummit[m_idToRank[m_listCFC[i][j]]].important) {
+        fprintf(f_out, "*");
+      }
       fprintf(f_out, "%d, ", m_listCFC[i][j]);
     }
     fprintf(f_out, "%d\n", m_listCFC[i].back());
@@ -347,6 +355,9 @@ void Graph::printGraph () {
   for (i = 0; i < (int) m_listCFC.size(); i++) {
     cout << "{ ";
     for (j = 0; j < (int) m_listCFC[i].size(); j++) {
+      if (m_tabSummit[m_idToRank[m_listCFC[i][j]]].important) {
+        cout << "*";
+      }
       cout << m_listCFC[i][j] << " ";
     }
     cout << "}" << endl;

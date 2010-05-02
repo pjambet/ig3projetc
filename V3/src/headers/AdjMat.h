@@ -59,6 +59,11 @@ class AdjMat {
 
 
     bool isImportant(int x); // Renvoie vrai si le point x est important, x le rang d'un sommet dans m_tabSummit
+
+    void nbNeighborhood(int x, int& nbF, int& nbC); // Trouve le nombre de voisin de x (nombre de pere nbF et nombre de fils nbC)
+                                                  // 0 si il n'y en a pas
+                                                  // 1 si il y en a qu'un
+                                                  // 2 si il y en a deux ou plus
 };
 
 

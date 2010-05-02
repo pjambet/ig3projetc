@@ -54,6 +54,7 @@ void AdjList::DFS () { // Parcours en profondeur du graphe (appel sur PProfG)
 
 
     for (it = m_graph.begin(); it != m_graph.end(); it++) {
+        m_tabSummit[m_idToRank[it->first]].important = isImportant(it->first);
 
         if (m_tabSummit[m_tabSummit[m_idToRank[it->first]].num].status == -1 ) { // ancienne version : s->getStructSommet(s->getStructSommet(i).num).etat
             DFSHidden(it->first, temps);
@@ -243,4 +244,95 @@ int AdjList::extractMin(int x) {
     else
         return 0;*/
     return imin;
+}
+
+bool AdjList::isImportant(int x) {
+  bool important;
+  int i;
+  int nbFather, nbChild; /* Respectivement nombre de pere, nombre de fils */
+
+  /* Initialisation, on suppose le point important */
+  important = true;
+  nbFather = 0;
+  nbChild = 0;
+
+
+
+  /* On regarde s'il a au moins un père et un fils distinct
+     Si non, il n'est pas important
+     On compte donc le nombre de pere et de fils de x */
+    nbChild = m_graph[x].size();
+    nbFather = m_graphDual[x].size();
+
+
+    /* Si, en sortant de la boucle, on trouve
+       - qu'il n'a pas de pere, ou pas de fils
+       - qu'il a un seul pere et un seul fils, mais qu'il s'agit du meme point
+       Alors, le point n'est pas important */
+
+    if ((nbFather == 0) || (nbChild == 0)) {
+      /* Cas pas de pere ou pas de fils, il s'agit d'un point isole */
+      important = false;
+
+    } else if ((nbFather == 1) && (nbChild == 1)) {
+      /* Cas pere et fils unique, mais le meme point, il s'agit d'un point accessible que via son pere
+         L'enlever ne changera donc pas le reste de la composante */
+        if (m_graph[x][0] == m_graphDual[x][0]) {
+          important = false;
+        }
+    }
+
+    if (important) {
+    /* A ce point, le point est toujours suppose important s'il n'a pas remplit les conditions ci dessus
+       Il peut conserver ce status d'important si l'enlever implique que
+       - un de ses fils ne se retrouve pas sans pere => le point deviendrait non accessible
+       - un de ses peres ne se retrouve pas sans fils => le point deviendrait non co-accessible
+
+       Il faut cependant comme condition que son fils ou pere a qui on enleve le lien
+       ait lui aussi au moins un pere et un fils
+       Sinon, il est forcement isole dans une CFC */
+
+    /* L'idee est donc de regarder si,
+       - pour tous ses fils qui ont au moins un pere ET un fils, il ne soit pas le seul pere
+       - pour tous ses peres qui ont au moins un pere ET un fils, il ne soit pas le seul fils */
+
+      important = false;
+        /* On le met a pas important, et il va essayer de regagner ce rang en remplissant une des conditions */
+
+      i = 0;
+      /* Pour tous les fils de x */
+      while ((i < (int) m_graph[x].size()) && !important) {
+        nbChild = m_graph[m_graph[x][i]].size();
+        nbFather = m_graphDual[m_graph[x][i]].size();
+            /* On va compter le nombre de ses peres et fils */
+
+          if ((nbFather > 0 ) && (nbChild > 0 )) {
+            if (nbFather == 1) {
+              /* Si le fils a qu'un pere, alors le pere est important */
+              important = true;
+            }
+          }
+
+        i++;
+      }
+
+      i = 0;
+      /* (S'il est toujours pas important) Pour tous les peres de x */
+      while ((i < (int) m_graphDual[x].size()) && !important) {
+        nbChild = m_graph[m_graphDual[x][i]].size();
+        nbFather = m_graphDual[m_graphDual[x][i]].size();
+            /* On va compter le nombre de ses peres et fils */
+
+          if ((nbFather > 0 ) && (nbChild > 0 )) {
+            if (nbChild == 1) {
+              /* Si le pere a fils, alors le pere est important */
+              important = true;
+            }
+          }
+
+        i++;
+      }
+    }
+
+    return important;
 }

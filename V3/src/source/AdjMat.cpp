@@ -54,7 +54,6 @@ void AdjMat::DFS () {
 
     for (i = 0; i < (int) m_size; i++) {
       /* Pour tous les points */
-      m_tabSummit[i].important = isImportant(i);
 
         if ( m_tabSummit[m_tabSummit[i].num].status == -1 ){
           /* Si l'etat est marque comme non atteint, on fait un appel recursif */
@@ -105,6 +104,11 @@ void AdjMat::DFSD () {
         if (m_tabSummit[m_tabSummit[i].num].status == -1) {
           DFSDHidden(m_tabSummit[i].num, temps);
         }
+    }
+
+    for (i = 0; i < (int) m_size; i++) {
+      /* Determination de l'importance des points */
+      m_tabSummit[i].important = isImportant(i);
     }
 }
 
@@ -251,6 +255,7 @@ int AdjMat::extractMin(int x) {
 
 bool AdjMat::isImportant(int x) {
   bool important;
+  bool sameCFC;
   int i;
   int nbFather, nbChild; /* Respectivement nombre de pere, nombre de fils */
 
@@ -290,8 +295,8 @@ bool AdjMat::isImportant(int x) {
     if (important) {
     /* A ce point, le point est toujours suppose important s'il n'a pas remplit les conditions ci dessus
        Il peut conserver ce status d'important si l'enlever implique que
-       - un de ses fils ne se retrouve pas sans pere => le point deviendrait non accessible
-       - un de ses peres ne se retrouve pas sans fils => le point deviendrait non co-accessible
+       - un de ses fils ne se retrouve pas sans pere dans la meme CFC => le point deviendrait non accessible
+       - un de ses peres ne se retrouve pas sans fils dans la meme CFC => le point deviendrait non co-accessible
 
        Il faut cependant comme condition que son fils ou pere a qui on enleve le lien
        ait lui aussi au moins un pere et un fils
@@ -300,6 +305,9 @@ bool AdjMat::isImportant(int x) {
     /* L'idee est donc de regarder si,
        - pour tous ses fils qui ont au moins un pere ET un fils, il ne soit pas le seul pere
        - pour tous ses peres qui ont au moins un pere ET un fils, il ne soit pas le seul fils */
+
+    /* Seul pere ou fils d'un numero de la MEME CFC soit que son end est inferieur au end actuel */
+
 
       important = false;
         /* On le met a pas important, et il va essayer de regagner ce rang en remplissant une des conditions */
@@ -315,6 +323,28 @@ bool AdjMat::isImportant(int x) {
             if (nbFather == 1) {
               /* Si le fils a qu'un pere, alors le pere est important */
               important = true;
+
+
+            } else {
+              sameCFC = false; /* Indique si on a rencontre un pere de la meme CFC */
+
+              /* S'il y a plusieurs pere, si aucun d'eux n'est dans la CFC, alors le point est important */
+              for (int j = 0; j < (int) m_size; j++) {
+                if (m_graph[j][i] && j != x) {
+                  /* Parcours des peres de i */
+                  if ( (m_tabSummit[j].beg < m_tabSummit[i].beg && m_tabSummit[j].end > m_tabSummit[i].end)
+                        || (m_tabSummit[j].beg > m_tabSummit[i].beg && m_tabSummit[j].end < m_tabSummit[i].end) ) {
+                        /* On regarde si j est dans la meme CFC */
+                    sameCFC = true; /* On dit qu'on a vu un pere dans la meme CFC */
+
+                  }
+                }
+              }
+
+              if (!sameCFC) {
+                /* Si, au final, on a pas rencontre un frere de x de la meme CFC, alors le point est important */
+                important = true;
+              }
             }
           }
         }
@@ -332,6 +362,27 @@ bool AdjMat::isImportant(int x) {
             if (nbChild == 1) {
               /* Si le pere a fils, alors le pere est important */
               important = true;
+
+            } else {
+              sameCFC = false; /* Indique si on a rencontre un fils de la meme CFC */
+
+              /* S'il y a plusieurs fils, si aucun d'eux n'est dans la CFC, alors le point est important */
+              for (int j = 0; j < (int) m_size; j++) {
+                if (m_graph[i][j] && j != x) {
+                  /* Parcours des fils de i */
+                  if ( (m_tabSummit[j].beg < m_tabSummit[i].beg && m_tabSummit[j].end > m_tabSummit[i].end)
+                        || (m_tabSummit[j].beg > m_tabSummit[i].beg && m_tabSummit[j].end < m_tabSummit[i].end) ) {
+                        /* On regarde si j est dans la meme CFC */
+                    sameCFC = true; /* On dit qu'on a vu un fils dans la meme CFC */
+
+                  }
+                }
+              }
+
+              if (!sameCFC) {
+                /* Si, au final, on a pas rencontre un frere de x de la meme CFC, alors le point est important */
+                important = true;
+              }
             }
           }
 

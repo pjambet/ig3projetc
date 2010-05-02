@@ -110,6 +110,11 @@ void AdjList::DFSD () { // Parcours en profondeur du graphe dual (appel sur PPro
             DFSDHidden(m_tabSummit[ m_tabSummit[i].num ].id, temps);
         }
     }
+
+    for (it = m_graph.begin(); it != m_graph.end(); it++) {
+      /* Recherche des importances des points */
+      m_tabSummit[m_idToRank[it->first]].important = isImportant(it->first);
+    }
 }
 
 void AdjList::DFSDHidden (int i, int& t) { // Parcours en profondeur du graphe dual (recursif)
@@ -248,7 +253,8 @@ int AdjList::extractMin(int x) {
 
 bool AdjList::isImportant(int x) {
   bool important;
-  int i;
+  bool sameCFC;
+  int i, y;
   int nbFather, nbChild; /* Respectivement nombre de pere, nombre de fils */
 
   /* Initialisation, on suppose le point important */
@@ -302,14 +308,38 @@ bool AdjList::isImportant(int x) {
       i = 0;
       /* Pour tous les fils de x */
       while ((i < (int) m_graph[x].size()) && !important) {
-        nbChild = m_graph[m_graph[x][i]].size();
-        nbFather = m_graphDual[m_graph[x][i]].size();
+        y = m_graph[x][i]; /* y fils de x */
+
+        nbChild = m_graph[y].size();
+        nbFather = m_graphDual[y].size();
             /* On va compter le nombre de ses peres et fils */
 
           if ((nbFather > 0 ) && (nbChild > 0 )) {
             if (nbFather == 1) {
               /* Si le fils a qu'un pere, alors le pere est important */
               important = true;
+
+            } else {
+              sameCFC = false; /* Indique si on a rencontre un pere de la meme CFC */
+
+              /* S'il y a plusieurs pere, si aucun d'eux n'est dans la CFC, alors le point est important */
+              for (int j = 0; j < (int) m_graphDual[y].size(); j++) {
+                if (m_graph[y][j] != x) {
+
+                  /* Parcours des peres de i */
+                  if ( (m_tabSummit[m_idToRank[m_graphDual[y][j]]].beg < m_tabSummit[m_idToRank[y]].beg && m_tabSummit[m_idToRank[m_graphDual[y][j]]].end > m_tabSummit[m_idToRank[y]].end)
+                        || (m_tabSummit[m_idToRank[m_graphDual[y][j]]].beg > m_tabSummit[m_idToRank[y]].beg && m_tabSummit[m_idToRank[m_graphDual[y][j]]].end < m_tabSummit[m_idToRank[y]].end) ) {
+                        /* On regarde si j est dans la meme CFC */
+                    sameCFC = true; /* On dit qu'on a vu un pere dans la meme CFC */
+
+                  }
+                }
+              }
+
+              if (!sameCFC) {
+                /* Si, au final, on a pas rencontre un frere de x de la meme CFC, alors le point est important */
+                important = true;
+              }
             }
           }
 
@@ -319,14 +349,37 @@ bool AdjList::isImportant(int x) {
       i = 0;
       /* (S'il est toujours pas important) Pour tous les peres de x */
       while ((i < (int) m_graphDual[x].size()) && !important) {
-        nbChild = m_graph[m_graphDual[x][i]].size();
-        nbFather = m_graphDual[m_graphDual[x][i]].size();
+        y = m_graphDual[x][i]; /* y pere de x */
+
+        nbChild = m_graph[y].size();
+        nbFather = m_graphDual[y].size();
             /* On va compter le nombre de ses peres et fils */
 
           if ((nbFather > 0 ) && (nbChild > 0 )) {
             if (nbChild == 1) {
               /* Si le pere a fils, alors le pere est important */
               important = true;
+
+            } else {
+              sameCFC = false; /* Indique si on a rencontre un fils de la meme CFC */
+
+              /* S'il y a plusieurs fils, si aucun d'eux n'est dans la CFC, alors le point est important */
+              for (int j = 0; j < (int) m_graph[y].size(); j++) {
+                if (m_graph[y][j] != x) {
+                  /* Parcours des fils de i != x */
+                  if ( (m_tabSummit[m_idToRank[m_graph[y][j]]].beg < m_tabSummit[m_idToRank[y]].beg && m_tabSummit[m_idToRank[m_graph[y][j]]].end > m_tabSummit[m_idToRank[y]].end)
+                        || (m_tabSummit[m_idToRank[m_graph[y][j]]].beg > m_tabSummit[m_idToRank[y]].beg && m_tabSummit[m_idToRank[m_graph[y][j]]].end < m_tabSummit[m_idToRank[y]].end) ) {
+                        /* On regarde si j est dans la meme CFC */
+                    sameCFC = true; /* On dit qu'on a vu un fils dans la meme CFC */
+
+                  }
+                }
+              }
+
+              if (!sameCFC) {
+                /* Si, au final, on a pas rencontre un frere de x de la meme CFC, alors le point est important */
+                important = true;
+              }
             }
           }
 

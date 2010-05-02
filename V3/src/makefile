@@ -7,7 +7,7 @@ CXXFLAGS ?= -Wall -ansi
 # Definition de l'acces aux repertoir des headers (utiles si l'on ne met pas le chemin dans les <#include ... > mais juste le nom du fichier
 #
 #
-all: GrapheFB
+all: GrapheFB clean
 #
 GrapheFB: AdjList.o AdjMat.o Generator.o Graph.o Summit.o main.o
 	$(CXX) $(CXXFLAGS) -o GrapheFB AdjList.o AdjMat.o Generator.o Graph.o Summit.o main.o

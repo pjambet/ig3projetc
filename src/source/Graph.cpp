@@ -148,7 +148,7 @@ void Graph::clearGraph () {
 
 
   if ((m_structGraph == 'm') && (m_sizeGraph)) {
-    for (i = 0; i < m_sizeGraph; i++) {
+    for (i = 0; i < (int) m_sizeGraph; i++) {
       delete[] m_matFriends[i];
     }
   }
@@ -264,6 +264,7 @@ void Graph::searchDistances () {
 
   } else {
     list.initData(m_tabSummit, m_listFriends, m_listDualFriends, m_idToRank);
+
     for (it = m_listQuestion.begin(); it != m_listQuestion.end(); it++) {
       m_listDist[it->first] = list.initDist(m_idToRank[it->first]);
     }

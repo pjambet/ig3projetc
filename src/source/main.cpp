@@ -23,7 +23,7 @@ TODO :
 
 #define REPERTOIRE "../test/"
 #define TEST_GENE_IN "../test/noms.dat"
-#define TEST_GENE_OUT "../test/gene.txt"
+#define TEST_GENE_OUT "../test/gene"
 
 using namespace std;
 
@@ -86,12 +86,12 @@ int main(int argc, char* argv[]) {
                   /* concaténation du repertoire test avec le nom du fichier d'entree */
 
                 t_ini = clock();
+                cout << "Lecture du fichier... ";
 
                 G.initGraph(dir_in);
 
                 t_open = clock();
-
-                cout << "Lecture du fichier... " << ((double) t_open - t_ini) / CLOCKS_PER_SEC << " sec." << endl << endl;
+                cout << ((double) t_open - t_ini) / CLOCKS_PER_SEC << " sec." << endl << endl;
                 choice = -1;
                 break;
 
@@ -117,16 +117,22 @@ int main(int argc, char* argv[]) {
                       /* concaténation du repertoire test avec le nom du fichier d'entree */
 
                     t_ini = clock();
+                    cout << "Recherche des CFC... ";
+
                     G.searchCFC();
+
                     t_cfc = clock();
-                    cout << "Recherche des CFC... " << ((double) t_cfc - t_ini) / CLOCKS_PER_SEC << " sec." << endl;
+                    cout << ((double) t_cfc - t_ini) / CLOCKS_PER_SEC << " sec." << endl;
 
 
                     t_ini = clock();
-                    G.searchDistances();
-                    t_dist = clock();
+                    cout << "Recherche des plus courts chemins... ";
 
-                    cout << "Recherche des plus courts chemins... " << ((double) t_dist - t_ini) / CLOCKS_PER_SEC << " sec." << endl << endl;
+                    G.searchDistances();
+
+                    t_dist = clock();
+                    cout << ((double) t_dist - t_ini) / CLOCKS_PER_SEC << " sec." << endl << endl;
+
                     G.saveGraph(dir_out);
 
                     cout << "Donnees sauvegardees... " << endl;
@@ -151,9 +157,10 @@ int main(int argc, char* argv[]) {
                 break;
 
             case 4 :
-							nbPerson = 0;
-						  densite_relation = 0;
-							densite_question = 0;
+
+                nbPerson = 0;
+                densite_relation = 0;
+                densite_question = 0;
 
                 cout << "Entrez le nombre de sommets desires : ";
                 cin >> nbPerson;
@@ -165,12 +172,12 @@ int main(int argc, char* argv[]) {
                 cin >> densite_question;
 
                 t_ini = clock();
+                cout << "Generation d'un fichier... ";
 
                 generateFile(TEST_GENE_IN, TEST_GENE_OUT, nbPerson, (int) (densite_relation*100), (int) (densite_question));
 
                 t_create = clock();
-
-                cout << "Generation d'un fichier... " << ((double) t_create - t_ini) / CLOCKS_PER_SEC << " sec." << endl << endl;
+                cout << ((double) t_create - t_ini) / CLOCKS_PER_SEC << " sec." << endl << endl;
                 choice = -1;
                 break;
 /*

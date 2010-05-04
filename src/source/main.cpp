@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
     int nbPerson;
     float densite_relation, densite_question;
     string choice2; /* Choix d'affichage du rapport */
-    time_t t_ini, t_open, t_cfc, t_dist, t_create; /* Stockage des temps d'execution */
+    clock_t t_ini, t_open, t_cfc, t_dist, t_create; /* Stockage des temps d'execution */
 
     string nom_in, nom_out;
     string dir_in, dir_out;
@@ -85,8 +85,9 @@ int main(int argc, char* argv[]) {
                 dir_in = REPERTOIRE + nom_in;
                   /* concaténation du repertoire test avec le nom du fichier d'entree */
 
-                t_ini = clock();
+
                 cout << "Lecture du fichier... ";
+                t_ini = clock();
 
                 G.initGraph(dir_in);
 
@@ -116,8 +117,9 @@ int main(int argc, char* argv[]) {
                     dir_out = REPERTOIRE + nom_out;
                       /* concaténation du repertoire test avec le nom du fichier d'entree */
 
-                    t_ini = clock();
                     cout << "Recherche des CFC... ";
+
+                    t_ini = clock();
 
                     G.searchCFC();
 
@@ -125,8 +127,8 @@ int main(int argc, char* argv[]) {
                     cout << ((double) t_cfc - t_ini) / CLOCKS_PER_SEC << " sec." << endl;
 
 
-                    t_ini = clock();
                     cout << "Recherche des plus courts chemins... ";
+                    t_ini = clock();
 
                     G.searchDistances();
 
@@ -171,12 +173,14 @@ int main(int argc, char* argv[]) {
                 cout << "Entrez la densite de question desiree (ratio pour 100) : ";
                 cin >> densite_question;
 
-                t_ini = clock();
-                cout << "Generation d'un fichier... ";
 
-                generateFile(TEST_GENE_IN, TEST_GENE_OUT, nbPerson, (int) (densite_relation*100), (int) (densite_question));
+                cout << "Generation d'un fichier... ";
+                t_ini = clock();
+
+                generateFile( TEST_GENE_IN, TEST_GENE_OUT, nbPerson, (int) (densite_relation*100), (int) (densite_question*100) );
 
                 t_create = clock();
+
                 cout << ((double) t_create - t_ini) / CLOCKS_PER_SEC << " sec." << endl << endl;
                 choice = -1;
                 break;

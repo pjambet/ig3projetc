@@ -84,7 +84,7 @@ void generateFile(string source, string dest, int n, int d_rel, int d_quest) {
 
 
   /* Initialisation de la matrice */
-	matrice = new int*[n];  
+	matrice = new int*[n];
   for (i = 0; i < n; i++){
     matrice[i] = new int[n];
 
@@ -111,7 +111,7 @@ void generateFile(string source, string dest, int n, int d_rel, int d_quest) {
 
   /* Nombre de question */
   fprintf(fichier, "%d\n", nb_question);
-
+  cout << nb_question;
   for (i = 0; i < n; i++){
     for (j = 0; j < n; j++){
       if (matrice[i][j]) {
@@ -125,8 +125,11 @@ void generateFile(string source, string dest, int n, int d_rel, int d_quest) {
   for (i = 0; i < n; i++){
     delete[] matrice[i];
   }
+
 	delete[] matrice;
   fclose(fichier);
+
+
 }
 
 

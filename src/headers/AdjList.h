@@ -29,10 +29,9 @@ class AdjList {
     private :
     /* Attributs */
     int m_size;
-    map < int, vector <int> > m_graph;
-    map < int, vector <int> > m_graphDual;
+    vector < vector <int> > m_graph;
+    vector < vector <int> > m_graphDual;
 
-    map< int, int > m_idToRank;
     vector < s_summit > m_tabSummit;
 
 
@@ -42,7 +41,7 @@ class AdjList {
     ~AdjList ();
 
     /* Methodes */
-    void initData (vector< s_summit >& v, map< int, vector< int > >& f, map< int, vector< int > >& df, map< int, int >& ItR); // Remplit le la structure avec les donnees
+    void initData (vector< s_summit >& v, vector< vector< int > >& f, vector< vector< int > >& df); // Remplit le la structure avec les donnees
 
 
     vector< s_summit > initCFC ();
@@ -57,7 +56,7 @@ class AdjList {
     int extractMin(int x);
 
     bool isImportant(int x); // Renvoie vrai si x est important, x est l'id
-
+    bool areInTheSameSCC(int x, int y);
 
     void sortDescEnd(); // Trie les ordres finaux en decroissant
     void sortAscBeg(); // Trie les ordres de debut en croissant

@@ -26,8 +26,8 @@ Includes
 #include <cstring>
 #include <vector>
 #include <algorithm>
-//#include <ctime>
-//#include <cstdlib>
+#include <ctime>
+#include <cstdlib>
 #include <cstdio>
 #include <cassert>
 

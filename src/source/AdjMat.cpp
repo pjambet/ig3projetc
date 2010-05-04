@@ -281,7 +281,6 @@ bool AdjMat::isImportant(int x) {
   bool sameCFC;
   int i, j;
   int nbFather, nbChild; /* Respectivement nombre de pere, nombre de fils */
-  string raison = "lol";
 
   /* Initialisation, on suppose le point important */
   important = true;

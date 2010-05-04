@@ -110,9 +110,16 @@ void Graph::initGraph (string& fileNameIn) {
       }
 
     } else {
+
+      m_listFriends.resize(m_sizeGraph);
+      m_listDualFriends.resize(m_sizeGraph);
+
       /* Structure de liste */
       for (i = 0; i < (int) nbConnections; i++){
         fscanf(f_in, "%d, %d\n", &x, &y);
+
+        x = m_idToRank[x];
+        y = m_idToRank[y];
 
         /* On ajoute a x un ami */
         m_listFriends[x].push_back(y);
@@ -197,7 +204,7 @@ void Graph::searchCFC () {
     tabSummitTemp = matrix.initCFC();
 
   } else {
-    list.initData(m_tabSummit, m_listFriends, m_listDualFriends, m_idToRank);
+    list.initData(m_tabSummit, m_listFriends, m_listDualFriends);
     tabSummitTemp = list.initCFC();
 
   }
@@ -264,12 +271,11 @@ void Graph::searchDistances () {
     }
 
   } else {
-    list.initData(m_tabSummit, m_listFriends, m_listDualFriends, m_idToRank);
+    list.initData(m_tabSummit, m_listFriends, m_listDualFriends);
 
     for (it = m_listQuestion.begin(); it != m_listQuestion.end(); it++) {
       m_listDist[it->first] = list.initDist(m_idToRank[it->first]);
     }
-
   }
 
 

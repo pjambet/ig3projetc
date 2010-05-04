@@ -37,7 +37,7 @@ class Graph{
   /* Attributs */
   /* ********* */
   private:
-    int unsigned m_sizeGraph;                                 /* Taille du graphe = nombre de personne */
+    int unsigned m_sizeGraph;                             /* Taille du graphe = nombre de personne */
     vector< s_summit > m_tabSummit;                  /* Tableau de personnes */
 
     map< int, int > m_idToRank;                      /* Trouve le rang dans tabSummit a partir de son id */
@@ -45,8 +45,8 @@ class Graph{
 
     char m_structGraph;                              /* Structure du graphe : 'l' pour liste, 'm' pour matrice */
 
-    map< int, vector< int > > m_listFriends;         /* Pour une id, on associe une liste de gens a qui il fait confiance */
-    map< int, vector< int > > m_listDualFriends;     /* Pour une id, on associe une liste de gens qui lui font confiance */
+    vector< vector< int > > m_listFriends;         /* Pour une id, on associe une liste de gens a qui il fait confiance */
+    vector< vector< int > > m_listDualFriends;     /* Pour une id, on associe une liste de gens qui lui font confiance */
 
     int** m_matFriends;                                 /* Matrice d'adjacence */
 

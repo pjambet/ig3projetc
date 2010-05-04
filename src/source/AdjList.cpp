@@ -24,40 +24,46 @@ AdjList::~AdjList(){
 /*=================================
 Initialisation
 ===================================*/
-void AdjList::initData (vector< s_summit >& v, map< int, vector< int > >& f, map< int, vector< int > >& df, map< int, int >& ItR){
+void AdjList::initData (vector< s_summit >& v, vector< vector< int > >& f, vector< vector< int > >& df){
   m_size = v.size();
   m_graph = f;
   m_graphDual = df;
-  m_idToRank = ItR;
   m_tabSummit = v;
 }
 
+
 vector< s_summit > AdjList::initCFC () {
+  int i;
+
   DFS();
   sortDescEnd();
   DFSD();
+
+      for (i = 0; i < (int) m_size; i++) {
+      // Recherche des importances des points
+      m_tabSummit[i].important = isImportant(i);
+      //printSummit(m_tabSummit[i]);
+    }
+
   sortAscBeg();
 
   return m_tabSummit;
 }
-
-
 
 /*=================================
 Resolution
 ===================================*/
 void AdjList::DFS () { // Parcours en profondeur du graphe (appel sur PProfG)
     int temps;
-    map < int, vector <int> >::iterator it;
+    int i;
 
     temps = 0;
 
 
-    for (it = m_graph.begin(); it != m_graph.end(); it++) {
-        m_tabSummit[m_idToRank[it->first]].important = isImportant(it->first);
+    for (i = 0; i < (int) m_size; i++) {
 
-        if (m_tabSummit[m_tabSummit[m_idToRank[it->first]].num].status == -1 ) { // ancienne version : s->getStructSommet(s->getStructSommet(i).num).etat
-            DFSHidden(it->first, temps);
+        if (m_tabSummit[m_tabSummit[i].num].status == -1 ) {
+            DFSHidden(m_tabSummit[i].num, temps);
         }
     }
 }
@@ -65,28 +71,25 @@ void AdjList::DFS () { // Parcours en profondeur du graphe (appel sur PProfG)
 
 void AdjList::DFSHidden (int i, int& t) { // Parcours en profondeur du graphe (recursif)
     int j;
-    int token;
 
-    token = m_idToRank[i]; // La case de m_tabSummit où se trouve le nombre i
-
-    m_tabSummit[token].status = 0;
+    m_tabSummit[i].status = 0;
       /* On marque l'etat atteint */
     t++;
-    m_tabSummit[token].beg = t;
+    m_tabSummit[i].beg = t;
       /* On le marque comme le t-ieme rencontre */
 
 
     for ( j = 0; j < (int) m_graph[i].size(); j++){
-        if (m_tabSummit[ m_idToRank[ m_graph[i][j] ] ].status == -1) {
+        if (m_tabSummit[ m_graph[i][j] ].status == -1) {
           /* Si le voisin avec l'id m_graph[i][j] n'a pas ete explore */
             DFSHidden(m_graph[i][j], t);
         }
     }
 
-    m_tabSummit[token].status = 1;
+    m_tabSummit[i].status = 1;
       /* Une fois termine, on marque l'etat comme explore */
     t++;
-    m_tabSummit[token].end = t;
+    m_tabSummit[i].end = t;
       /* On marque le temps qu'il a fallu pour l'explorer */
 }
 
@@ -94,7 +97,6 @@ void AdjList::DFSHidden (int i, int& t) { // Parcours en profondeur du graphe (r
 void AdjList::DFSD () { // Parcours en profondeur du graphe dual (appel sur PProfGD)
     int i;
     int temps;
-    map < int, vector <int> >::iterator it;
 
     temps = 0;
 
@@ -107,39 +109,34 @@ void AdjList::DFSD () { // Parcours en profondeur du graphe dual (appel sur PPro
 
     for (i = 0; i < (int) m_size; i++) {
         if (m_tabSummit[ m_tabSummit[i].num ].status == -1) {
-            DFSDHidden(m_tabSummit[ m_tabSummit[i].num ].id, temps);
+            DFSDHidden(m_tabSummit[i].num, temps);
         }
     }
 
-    for (it = m_graph.begin(); it != m_graph.end(); it++) {
-      /* Recherche des importances des points */
-      m_tabSummit[m_idToRank[it->first]].important = isImportant(it->first);
-    }
+
 }
 
 void AdjList::DFSDHidden (int i, int& t) { // Parcours en profondeur du graphe dual (recursif)
     int j;
-    int token;
 
-    token = m_idToRank[i]; // La case de m_tabSummit où se trouve le nombre i
 
-    m_tabSummit[token].status = 0;
+    m_tabSummit[i].status = 0;
       /* On marque l'etat atteint */
     t++;
-    m_tabSummit[token].beg = t;
+    m_tabSummit[i].beg = t;
       /* On le marque comme le t-ieme rencontre */
 
 
     for ( j = 0; j < (int) m_graphDual[i].size(); j++){
-        if (m_tabSummit[ m_idToRank[ m_graphDual[i][j] ] ].status == -1) {
+        if (m_tabSummit[ m_graphDual[i][j] ].status == -1) {
             DFSDHidden(m_graphDual[i][j], t);
         }
     }
 
-    m_tabSummit[token].status = 1;
+    m_tabSummit[i].status = 1;
       /* Une fois termine, on marque l'etat comme explore */
     t++;
-    m_tabSummit[token].end = t;
+    m_tabSummit[i].end = t;
       /* On marque le temps qu'il a fallu pour l'explorer */
 
 }
@@ -179,6 +176,9 @@ void AdjList::sortAscBeg() {
   sort(m_tabSummit.begin(), m_tabSummit.end(), orderBeg);
 }
 
+
+
+
 /*=================================
 Dijkstra
 ===================================*/
@@ -186,8 +186,7 @@ Dijkstra
 vector< s_summit > AdjList::initDist (int x) {
   /* Variables */
     int i;
-    int token;
-    int n; // id temporaire
+    int n; // rang temporaire
     int nbExplore; // nombre de sommet explore
     vector< int >::iterator it;
 
@@ -206,17 +205,16 @@ vector< s_summit > AdjList::initDist (int x) {
     while (nbExplore < (int) m_size) { // F != null
       n = extractMin(x); // x = ExtraireMin(F)
 
-      if (m_tabSummit[m_idToRank[n]].status == -1) {
+      if (m_tabSummit[n].status == -1) {
         // Si l'etat n'a pas encore ete explore
-        m_tabSummit[m_idToRank[n]].status = 0;  // F = F - x
+        m_tabSummit[n].status = 0;  // F = F - x
         nbExplore++;
 
         for ( i = 0; i < (int) m_graph[n].size(); i++){ // Pour tous les amis de n
-          token = m_idToRank[m_graph[n][i]];
-            if (m_tabSummit[token].beg > m_tabSummit[m_idToRank[n]].beg + m_tabSummit[token].freq) { // Relacher
-                m_tabSummit[token].beg = m_tabSummit[m_idToRank[n]].beg + m_tabSummit[token].freq;
+            if (m_tabSummit[m_graph[n][i]].beg > m_tabSummit[n].beg + m_tabSummit[m_graph[n][i]].freq) { // Relacher
+                m_tabSummit[m_graph[n][i]].beg = m_tabSummit[n].beg + m_tabSummit[m_graph[n][i]].freq;
 
-                m_tabSummit[token].end = m_idToRank[n]; // On indique que le pere le plus proche de i est n
+                m_tabSummit[m_graph[n][i]].end = n; // On indique que le pere le plus proche de i est n
             }
 
         }
@@ -240,7 +238,7 @@ int AdjList::extractMin(int x) {
     for (i = 0; i < (int) m_size; i++) {
         if ((m_tabSummit[i].beg < valmin) && (m_tabSummit[i].status == -1)) {
             valmin = m_tabSummit[i].beg;
-            imin = m_tabSummit[i].id;
+            imin = i;
         }
     }
 /*
@@ -251,10 +249,21 @@ int AdjList::extractMin(int x) {
     return imin;
 }
 
+
+
+
+
+
+
+
+
+
+
 bool AdjList::isImportant(int x) {
   bool important;
   bool sameCFC;
-  int i, y;
+  int i, j;
+  int y;
   int nbFather, nbChild; /* Respectivement nombre de pere, nombre de fils */
 
   /* Initialisation, on suppose le point important */
@@ -288,7 +297,6 @@ bool AdjList::isImportant(int x) {
         }
     }
 
-    if (important) {
     /* A ce point, le point est toujours suppose important s'il n'a pas remplit les conditions ci dessus
        Il peut conserver ce status d'important si l'enlever implique que
        - un de ses fils ne se retrouve pas sans pere => le point deviendrait non accessible
@@ -301,13 +309,14 @@ bool AdjList::isImportant(int x) {
     /* L'idee est donc de regarder si,
        - pour tous ses fils qui ont au moins un pere ET un fils, il ne soit pas le seul pere
        - pour tous ses peres qui ont au moins un pere ET un fils, il ne soit pas le seul fils */
+    if (important) {
 
       important = false;
         /* On le met a pas important, et il va essayer de regagner ce rang en remplissant une des conditions */
 
       i = 0;
       /* Pour tous les fils de x */
-      while ((i < (int) m_graph[x].size()) && !important) {
+      while ( (i < (int) m_graph[x].size()) && !important) {
         y = m_graph[x][i]; /* y fils de x */
 
         nbChild = m_graph[y].size();
@@ -316,35 +325,36 @@ bool AdjList::isImportant(int x) {
 
           if ((nbFather > 0 ) && (nbChild > 0 )) {
             if (nbFather == 1) {
-              /* Si le fils a qu'un pere, alors le pere est important */
+              /* Si le fils a qu'un pere, alors x est important */
               important = true;
 
             } else {
               sameCFC = false; /* Indique si on a rencontre un pere de la meme CFC */
+              j = 0;
 
               /* S'il y a plusieurs pere, si aucun d'eux n'est dans la CFC, alors le point est important */
-              for (int j = 0; j < (int) m_graphDual[y].size(); j++) {
-                if (m_graph[y][j] != x) {
-
+              while ( (j < (int) m_graphDual[y].size()) && (!sameCFC) ) {
+                if ( (m_graphDual[y][j] != x) && (areInTheSameSCC(y, m_graphDual[y][j])) ) {
                   /* Parcours des peres de i */
-                  if ( (m_tabSummit[m_idToRank[m_graphDual[y][j]]].beg < m_tabSummit[m_idToRank[y]].beg && m_tabSummit[m_idToRank[m_graphDual[y][j]]].end > m_tabSummit[m_idToRank[y]].end)
-                        || (m_tabSummit[m_idToRank[m_graphDual[y][j]]].beg > m_tabSummit[m_idToRank[y]].beg && m_tabSummit[m_idToRank[m_graphDual[y][j]]].end < m_tabSummit[m_idToRank[y]].end) ) {
                         /* On regarde si j est dans la meme CFC */
                     sameCFC = true; /* On dit qu'on a vu un pere dans la meme CFC */
 
                   }
+                  j++;
                 }
-              }
 
               if (!sameCFC) {
                 /* Si, au final, on a pas rencontre un frere de x de la meme CFC, alors le point est important */
                 important = true;
               }
+
+
             }
           }
 
         i++;
       }
+
 
       i = 0;
       /* (S'il est toujours pas important) Pour tous les peres de x */
@@ -362,18 +372,17 @@ bool AdjList::isImportant(int x) {
 
             } else {
               sameCFC = false; /* Indique si on a rencontre un fils de la meme CFC */
+              j = 0;
 
               /* S'il y a plusieurs fils, si aucun d'eux n'est dans la CFC, alors le point est important */
-              for (int j = 0; j < (int) m_graph[y].size(); j++) {
-                if (m_graph[y][j] != x) {
+              while ((j < (int) m_graph[y].size()) && (!sameCFC)) {
+                if ( (m_graph[y][j] != x) && (areInTheSameSCC(y, m_graph[y][j])) ){
                   /* Parcours des fils de i != x */
-                  if ( (m_tabSummit[m_idToRank[m_graph[y][j]]].beg < m_tabSummit[m_idToRank[y]].beg && m_tabSummit[m_idToRank[m_graph[y][j]]].end > m_tabSummit[m_idToRank[y]].end)
-                        || (m_tabSummit[m_idToRank[m_graph[y][j]]].beg > m_tabSummit[m_idToRank[y]].beg && m_tabSummit[m_idToRank[m_graph[y][j]]].end < m_tabSummit[m_idToRank[y]].end) ) {
-                        /* On regarde si j est dans la meme CFC */
+                      /* On regarde si j est dans la meme CFC */
                     sameCFC = true; /* On dit qu'on a vu un fils dans la meme CFC */
 
                   }
-                }
+                j++;
               }
 
               if (!sameCFC) {
@@ -388,4 +397,39 @@ bool AdjList::isImportant(int x) {
     }
 
     return important;
+}
+
+
+
+
+bool AdjList::areInTheSameSCC(int x, int y) {
+  int i;
+  int xBegin, xEnd;
+  int yBegin, yEnd;
+  int iBegin, iEnd;
+
+  bool sameSCC; // Indique respectivement si x et y sont descendants de i
+
+  xBegin = m_tabSummit[x].beg;
+  xEnd = m_tabSummit[x].end;
+  yBegin = m_tabSummit[y].beg;
+  yEnd = m_tabSummit[y].end;
+
+  sameSCC = false;
+
+
+  i = 0;
+  while ( (i < (int) m_size) && (!sameSCC) ) {
+  iBegin = m_tabSummit[i].beg;
+  iEnd = m_tabSummit[i].end;
+  /* Recherche de l'intervalle le plus gros englobant les 2 points */
+
+  if (iBegin <= xBegin && iBegin <= yBegin && iEnd >= xEnd && iEnd >= yEnd ) {
+    sameSCC = true;
+  }
+
+    i++;
+  }
+
+  return sameSCC;
 }

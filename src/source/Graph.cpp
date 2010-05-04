@@ -15,6 +15,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 Constructeurs et Desctructeurs
 ===================================*/
 Graph::Graph (): m_sizeGraph(0), m_nbCFC(0), m_nbDist(0) {
+  m_matFriends = new int*;
 }
 
 Graph::~Graph () {

@@ -27,7 +27,7 @@ typedef struct struct_summit {
      - les donnees du graphe */
 
     string name;         /* Nom */
-    int id;              /* ID */
+    string id;              /* ID */
     int freq;            /* Frequence */
 
 
@@ -43,6 +43,7 @@ typedef struct struct_summit {
 
 void printSummit (s_summit s);         /* Affiche le sommet s */
 bool orderBeg(s_summit a, s_summit b); /* Ordre sur la structure par rapport a beg */
+bool orderEnd(s_summit a, s_summit b); /* Ordre sur la structure par rapport a beg */
 
 
 #endif // SOMMET_H_INCLUDED

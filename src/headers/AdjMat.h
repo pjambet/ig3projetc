@@ -43,7 +43,7 @@ class AdjMat {
     void initData (vector< s_summit >& v, int** m); // Remplit la matrice
 
 
-    vector< s_summit > initCFC (); /* Fait 2 parcours en prof pour trouver les CFC */
+    vector< s_summit > initSCC (); /* Fait 2 parcours en prof pour trouver les CFC */
     void DFS (); // Parcours en profondeur du graphe (Depth First Search)
     void DFSHidden (int i, int& t); // Parcours en profondeur du graphe (recursif)
     void DFSD (); // Parcours en profondeur du graphe dual (Depth First Search Dual)

@@ -121,7 +121,7 @@ int main(int argc, char* argv[]) {
 
                     t_ini = clock();
 
-                    G.searchCFC();
+                    G.searchSCC();
 
                     t_cfc = clock();
                     cout << ((double) t_cfc - t_ini) / CLOCKS_PER_SEC << " sec." << endl;
@@ -130,7 +130,7 @@ int main(int argc, char* argv[]) {
                     cout << "Recherche des plus courts chemins... ";
                     t_ini = clock();
 
-                    G.searchDistances();
+                     G.searchDistances();
 
                     t_dist = clock();
                     cout << ((double) t_dist - t_ini) / CLOCKS_PER_SEC << " sec." << endl << endl;

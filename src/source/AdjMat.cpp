@@ -49,7 +49,7 @@ void AdjMat::initData (vector< s_summit >& v, int** m) {
 
 }
 
-vector< s_summit > AdjMat::initCFC () {
+vector< s_summit > AdjMat::initSCC () {
   int i;
 
   DFS();
@@ -162,10 +162,24 @@ void AdjMat::sortDescEnd() {
   int i;
   int tmp, continuer;
 
+  vector< string > vTemp;
   tmp = 0;
   continuer = 1;
 
+// Sauvegarde des id
+  for (i = 0 ; i < (int) m_size; i++) {
+    vTemp.push_back(m_tabSummit[i].id);
+  }
 
+// Tri par ordre des indice de fin en decroissant
+  sort(m_tabSummit.rbegin(), m_tabSummit.rend(), orderEnd);
+
+// Restauration des id
+  for (i = 0 ; i < (int) m_size; i++) {
+    m_tabSummit[i].id = vTemp[i];
+  }
+
+  /*
   while (continuer) {
       continuer--;
       for (i = 0; i < (int) m_size-1; i++) {
@@ -185,7 +199,8 @@ void AdjMat::sortDescEnd() {
               continuer++;
           }
       }
-  }
+  }*/
+
 }
 
 void AdjMat::sortAscBeg() {
@@ -217,6 +232,7 @@ vector< s_summit > AdjMat::initDist (int x) {
   /* Variables */
     int i;
     int n, nbExplore; // nombre de sommet explore
+    int cpt_stability; // Indique le nombre de fois où la fonction de recherche de min renvoie x (evite les recherche de min inutiles)
     vector <int>::iterator it;
 
   /* Source Unique Initialisation */
@@ -228,11 +244,14 @@ vector< s_summit > AdjMat::initDist (int x) {
 
     m_tabSummit[x].beg = 0;
     nbExplore = 0;
+    cpt_stability = 0;
 
-
-    while (nbExplore < (int) m_size) { // F != null
+    while ((nbExplore < (int) m_size) && (cpt_stability < 2)) { // F != null
       n = extractMin(x); // x = ExtraireMin(F)
 
+      if (n == x) {
+        cpt_stability++;
+      }
       if (m_tabSummit[n].status == -1) {
         m_tabSummit[n].status = 0;  // F = F - x
         nbExplore++;

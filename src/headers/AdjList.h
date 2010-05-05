@@ -44,7 +44,7 @@ class AdjList {
     void initData (vector< s_summit >& v, vector< vector< int > >& f, vector< vector< int > >& df); // Remplit le la structure avec les donnees
 
 
-    vector< s_summit > initCFC ();
+    vector< s_summit > initSCC ();
 
     void DFS (); // Parcours en profondeur du graphe (appel sur PProfG)
     void DFSHidden (int i, int& t); // Parcours en profondeur du graphe (recursif)

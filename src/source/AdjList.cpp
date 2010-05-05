@@ -32,13 +32,12 @@ void AdjList::initData (vector< s_summit >& v, vector< vector< int > >& f, vecto
 }
 
 
-vector< s_summit > AdjList::initCFC () {
+vector< s_summit > AdjList::initSCC () {
   int i;
 
   DFS();
   sortDescEnd();
   DFSD();
-
       for (i = 0; i < (int) m_size; i++) {
       // Recherche des importances des points
       m_tabSummit[i].important = isImportant(i);
@@ -77,7 +76,6 @@ void AdjList::DFSHidden (int i, int& t) { // Parcours en profondeur du graphe (r
     t++;
     m_tabSummit[i].beg = t;
       /* On le marque comme le t-ieme rencontre */
-
 
     for ( j = 0; j < (int) m_graph[i].size(); j++){
         if (m_tabSummit[ m_graph[i][j] ].status == -1) {

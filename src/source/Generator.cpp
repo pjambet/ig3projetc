@@ -111,7 +111,6 @@ void generateFile(string source, string dest, int n, int d_rel, int d_quest) {
 
   /* Nombre de question */
   fprintf(fichier, "%d\n", nb_question);
-  cout << nb_question;
   for (i = 0; i < n; i++){
     for (j = 0; j < n; j++){
       if (matrice[i][j]) {

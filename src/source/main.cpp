@@ -130,12 +130,12 @@ int main(int argc, char* argv[]) {
                     cout << "Recherche des plus courts chemins... ";
                     t_ini = clock();
 
-                     G.searchDistances();
+                    G.searchDistances();
 
                     t_dist = clock();
                     cout << ((double) t_dist - t_ini) / CLOCKS_PER_SEC << " sec." << endl << endl;
 
-                    G.saveGraph(dir_out);
+                    //G.saveGraph(dir_out);
 
                     cout << "Donnees sauvegardees... " << endl;
                     cout << "Voulez-vous afficher le rapport ? (o/n) ";

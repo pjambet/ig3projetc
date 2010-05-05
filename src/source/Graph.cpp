@@ -209,7 +209,7 @@ void Graph::searchSCC () {
 
   vector< s_summit > tabSummitTemp;
   AdjMat matrix;
-//  AdjList list;
+  AdjList list;
 
 
 
@@ -217,10 +217,10 @@ void Graph::searchSCC () {
     matrix.initData(m_tabSummit, m_matFriends);
     tabSummitTemp = matrix.initSCC();
 
-  } /*else {
+  } else {
     list.initData(m_tabSummit, m_listFriends, m_listDualFriends);
     tabSummitTemp = list.initSCC();
-  }*/
+  }
 
 
   d = tabSummitTemp[0].beg;
@@ -287,13 +287,13 @@ void Graph::searchDistances () {
       m_listDist[it->first] = matrix.initDist(it->first);
     }
 
-  } /*else {
+  } else {
     list.initData(m_tabSummit, m_listFriends, m_listDualFriends);
 
     for (it = m_listQuestion.begin(); it != m_listQuestion.end(); it++) {
-      m_listDist[it->first] = list.initDist(m_idToRank[it->first]);
+      m_listDist[it->first] = list.initDist(it->first);
     }
-  }*/
+  }
 
 
 /* Etape 2 : A partir de la liste de question, pour chaque point de depart,
@@ -392,6 +392,7 @@ void Graph::printGraph () {
   cout << "Nombre de personnes : " << m_sizeGraph << endl;
   cout << "Personnes : " << endl;
 
+if (m_structGraph == 'm') {
   for (i = 0; i < (int) m_sizeGraph; i++) {
     printSummit(m_tabSummit[i]);
 
@@ -410,6 +411,22 @@ void Graph::printGraph () {
     }
     cout << "]" << endl;
   }
+} else {
+    for (i = 0; i < (int) m_sizeGraph; i++) {
+    printSummit(m_tabSummit[i]);
+
+    cout << "   Amis : [ ";
+    for (j = 0; j < (int) m_listFriends[i].size(); j++) {
+        cout << m_tabSummit[m_listFriends[i][j]].id << " ";
+    }
+
+    cout << "]" << endl << "   Amis (Dual) : [ ";
+    for (j = 0; j < (int) m_listDualFriends[i].size(); j++) {
+        cout << m_tabSummit[m_listDualFriends[i][j]].id << " ";
+    }
+    cout << "]" << endl;
+    }
+}
 
   cout << endl;
 

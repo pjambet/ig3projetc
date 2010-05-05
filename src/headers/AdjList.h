@@ -19,6 +19,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include <vector>
 #include <algorithm>
 #include <climits>
+
 #include "Summit.h"
 
 using namespace std;

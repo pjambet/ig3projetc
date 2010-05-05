@@ -36,9 +36,11 @@ vector< s_summit > AdjList::initSCC () {
   int i;
 
   DFS();
+
   sortDescEnd();
   DFSD();
-      for (i = 0; i < (int) m_size; i++) {
+
+    for (i = 0; i < (int) m_size; i++) {
       // Recherche des importances des points
       m_tabSummit[i].important = isImportant(i);
       //printSummit(m_tabSummit[i]);
@@ -61,8 +63,8 @@ void AdjList::DFS () { // Parcours en profondeur du graphe (appel sur PProfG)
 
     for (i = 0; i < (int) m_size; i++) {
 
-        if (m_tabSummit[m_tabSummit[i].num].status == -1 ) {
-            DFSHidden(m_tabSummit[i].num, temps);
+        if (m_tabSummit[i].status == -1 ) {
+            DFSHidden(i, temps);
         }
     }
 }
@@ -110,8 +112,6 @@ void AdjList::DFSD () { // Parcours en profondeur du graphe dual (appel sur PPro
             DFSDHidden(m_tabSummit[i].num, temps);
         }
     }
-
-
 }
 
 void AdjList::DFSDHidden (int i, int& t) { // Parcours en profondeur du graphe dual (recursif)
@@ -142,7 +142,7 @@ void AdjList::DFSDHidden (int i, int& t) { // Parcours en profondeur du graphe d
 
 void AdjList::sortDescEnd() {
   int i;
-  int tmp, continuer;
+/*  int tmp, continuer;
 
   tmp = 0;
   continuer = 1;
@@ -167,6 +167,23 @@ void AdjList::sortDescEnd() {
               continuer++;
           }
       }
+  }*/
+
+    vector< string > vTemp;
+  /*tmp = 0;
+  continuer = 1;*/
+
+// Sauvegarde des id
+  for (i = 0 ; i < (int) m_size; i++) {
+    vTemp.push_back(m_tabSummit[i].id);
+  }
+
+// Tri par ordre des indice de fin en decroissant
+  sort(m_tabSummit.rbegin(), m_tabSummit.rend(), orderEnd);
+
+// Restauration des id
+  for (i = 0 ; i < (int) m_size; i++) {
+    m_tabSummit[i].id = vTemp[i];
   }
 }
 
@@ -186,6 +203,8 @@ vector< s_summit > AdjList::initDist (int x) {
     int i;
     int n; // rang temporaire
     int nbExplore; // nombre de sommet explore
+    int cpt_stability; // Indique le nombre de fois où la fonction de recherche de min renvoie x (evite les recherche de min inutiles)
+
     vector< int >::iterator it;
 
 
@@ -198,17 +217,23 @@ vector< s_summit > AdjList::initDist (int x) {
 
     m_tabSummit[x].beg = 0;
     nbExplore = 0;
+    cpt_stability = 0;
 
 
-    while (nbExplore < (int) m_size) { // F != null
+    while ((nbExplore < (int) m_size) && (cpt_stability < 2)) { // F != null
       n = extractMin(x); // x = ExtraireMin(F)
+
+
+      if (n == x) {
+        cpt_stability++;
+      }
 
       if (m_tabSummit[n].status == -1) {
         // Si l'etat n'a pas encore ete explore
         m_tabSummit[n].status = 0;  // F = F - x
         nbExplore++;
 
-        for ( i = 0; i < (int) m_graph[n].size(); i++){ // Pour tous les amis de n
+        for ( i = 0; i < (int) m_graph[n].size(); i++){ // Pour tous les fils de n
             if (m_tabSummit[m_graph[n][i]].beg > m_tabSummit[n].beg + m_tabSummit[m_graph[n][i]].freq) { // Relacher
                 m_tabSummit[m_graph[n][i]].beg = m_tabSummit[n].beg + m_tabSummit[m_graph[n][i]].freq;
 

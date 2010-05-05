@@ -160,11 +160,11 @@ void AdjMat::DFSDHidden (int i, int& t) { // Parcours en profondeur du graphe du
 
 void AdjMat::sortDescEnd() {
   int i;
-  int tmp, continuer;
+  //int tmp, continuer;
 
   vector< string > vTemp;
-  tmp = 0;
-  continuer = 1;
+  /*tmp = 0;
+  continuer = 1;*/
 
 // Sauvegarde des id
   for (i = 0 ; i < (int) m_size; i++) {
@@ -246,12 +246,14 @@ vector< s_summit > AdjMat::initDist (int x) {
     nbExplore = 0;
     cpt_stability = 0;
 
+
     while ((nbExplore < (int) m_size) && (cpt_stability < 2)) { // F != null
       n = extractMin(x); // x = ExtraireMin(F)
 
       if (n == x) {
         cpt_stability++;
       }
+
       if (m_tabSummit[n].status == -1) {
         m_tabSummit[n].status = 0;  // F = F - x
         nbExplore++;
@@ -265,13 +267,14 @@ vector< s_summit > AdjMat::initDist (int x) {
             }
           }
         }
-      } else {
-        nbExplore++;
+
       }
     }
 
     return m_tabSummit;
 }
+
+
 
 int AdjMat::extractMin(int x) {
     int i, imin;
@@ -280,19 +283,21 @@ int AdjMat::extractMin(int x) {
     valmin = INT_MAX;
     imin = x;
     for (i = 0; i < (int) m_size; i++) {
-        if ((m_tabSummit[i].beg < valmin) && (m_tabSummit[i].status == -1)) {
+        if ((m_tabSummit[i].status == -1) && (m_tabSummit[i].beg < valmin)) {
             valmin = m_tabSummit[i].beg;
             imin = i;
         }
     }
 
-/*
-    if (valmin != INT_MAX)
-        return imin;
-    else
-        return 0;*/
+
+//    if (valmin != INT_MAX)
+//        return imin;
+//    else
+//        return 0;
     return imin;
 }
+
+
 
 
 bool AdjMat::isImportant(int x) {

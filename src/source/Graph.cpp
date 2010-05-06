@@ -149,9 +149,10 @@ void Graph::initGraph (string& fileNameIn) {
 
       m_listQuestion[xRank].push_back(yRank);
     }
+  fclose(f_in);
   }
 
-  fclose(f_in);
+  m_analyzed = false;
 }
 
 void Graph::clearGraph () {
@@ -189,7 +190,7 @@ void Graph::clearGraph () {
 
 
 char Graph::chooseStruct () {
-  return TEST_STRUCT;
+    return TEST_STRUCT;
 }
 
 
@@ -197,9 +198,12 @@ char Graph::chooseStruct () {
 Recherche
 ===================================*/
 bool Graph::isAnalysable() {
-  return (m_sizeGraph != 0);
+    return (m_sizeGraph != 0);
 }
 
+bool Graph::isAnalyzed() {
+    return m_analyzed;
+}
 
 void Graph::searchSCC () {
   int d, f; /* Reperes de debut et fin d'intervalle */
@@ -212,7 +216,8 @@ void Graph::searchSCC () {
   AdjList list;
 
 
-
+if (!m_analyzed) {
+    // Si le fichier n'a pas ete analyse
   if (m_structGraph == 'm') {
     matrix.initData(m_tabSummit, m_matFriends);
     tabSummitTemp = matrix.initSCC();
@@ -263,6 +268,7 @@ void Graph::searchSCC () {
 		sort(m_listSCC[i].begin(), m_listSCC[i].end());
 	}
 }
+}
 
 
 /*=================================
@@ -278,6 +284,7 @@ void Graph::searchDistances () {
   AdjMat matrix;
   AdjList list;
 
+if (!m_analyzed) {
   /* Attention ! Delicat a comprendre */
   /* Etape 1 : Pour tous les points de depart distincts,
      on cherche et on stocke les plus courts chemins */
@@ -330,8 +337,8 @@ void Graph::searchDistances () {
 
     }
   }
-
-
+    m_analyzed = true;
+}
 }
 
 

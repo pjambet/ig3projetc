@@ -66,56 +66,57 @@ int main(int argc, char* argv[]) {
 
         switch (choice) {
 
-            case 0 :
+        case 0 :
 
-                return 0;
-                break;
+            return 0;
+            break;
 
-            case 1 :
+        case 1 :
 
-                if (argc > 1) {
-                  /* S'il y a 1 argument, on l'utilise comme nom de fichier d'entree */
-                    nom_in = argv[1];
-                } else {
-                  /* S'il n'y a pas d'argument, on demande à l'utilisateur d'entrer les noms des fichiers d'entree et de sortie */
-                    cout << "Entrez le nom du graphe : ";
-                    cin >> nom_in;
-                    cout << endl;
-                }
-                dir_in = REPERTOIRE + nom_in;
-                  /* concaténation du repertoire test avec le nom du fichier d'entree */
+            if (argc > 1) {
+                /* S'il y a 1 argument, on l'utilise comme nom de fichier d'entree */
+                nom_in = argv[1];
+            } else {
+                /* S'il n'y a pas d'argument, on demande à l'utilisateur d'entrer les noms des fichiers d'entree et de sortie */
+                cout << "Entrez le nom du graphe : ";
+                cin >> nom_in;
+                cout << endl;
+            }
+            dir_in = REPERTOIRE + nom_in;
+            /* concaténation du repertoire test avec le nom du fichier d'entree */
 
 
-                cout << "Lecture du fichier... ";
-                t_ini = clock();
+            cout << "Lecture du fichier... ";
+            t_ini = clock();
 
-                G.initGraph(dir_in);
+            G.initGraph(dir_in);
 
-                t_open = clock();
-                cout << ((double) t_open - t_ini) / CLOCKS_PER_SEC << " sec." << endl << endl;
-                choice = -1;
-                break;
+            t_open = clock();
+            cout << ((double) t_open - t_ini) / CLOCKS_PER_SEC << " sec." << endl << endl;
+            choice = -1;
+            break;
 
-            case 2 :
+        case 2 :
 
-                if (G.isAnalysable()) {
-                  /* graphe enregistre */
-
+            if (G.isAnalysable()) {
+                /* graphe enregistre */
+                if (!G.isAnalyzed()) {
                     if (argc > 2) {
-                      /* s'il y a 2 arguments, on utilise le 2eme argument comme nom de fichier de sortie */
+                        /* s'il y a 2 arguments, on utilise le 2eme argument comme nom de fichier de sortie */
                         nom_out = argv[2];
                     } else if (argc > 1) {
-                      /* s'il n'y a qu'un seul argument, le fichier de sortie sera argv[1].res */
+                        /* s'il n'y a qu'un seul argument, le fichier de sortie sera argv[1].res */
                         nom_out = nom_in;
                         nom_out += ".res";
                     } else {
-                      /* s'il n'y a pas d'argument, on demande à l'utilisateur d'entrer le nom du fichier de sortie */
+                        /* s'il n'y a pas d'argument, on demande à l'utilisateur d'entrer le nom du fichier de sortie */
                         cout << "Entrez le nom du fichier resultat : ";
                         cin >> nom_out;
                         cout << endl;
                     }
+
                     dir_out = REPERTOIRE + nom_out;
-                      /* concaténation du repertoire test avec le nom du fichier d'entree */
+                    /* concaténation du repertoire test avec le nom du fichier d'entree */
 
                     cout << "Recherche des CFC... ";
 
@@ -135,78 +136,82 @@ int main(int argc, char* argv[]) {
                     t_dist = clock();
                     cout << ((double) t_dist - t_ini) / CLOCKS_PER_SEC << " sec." << endl << endl;
 
-                    //G.saveGraph(dir_out);
+                    G.saveGraph(dir_out);
 
                     cout << "Donnees sauvegardees... " << endl;
-                    cout << "Voulez-vous afficher le rapport ? (o/n) ";
-                    cin >> choice2;
-                    if (choice2 == "o" || choice2 == "O" || choice2 == "oui" || choice2 == "Oui") {
-                        G.printGraph();
-                    }
-                    cout << endl;
-
                 } else {
-                    cerr << "Graphe non enregistre !" << endl;
+                    cout << "Graphe deja analyse !" << endl << endl;
                 }
-                choice = -1;
-                break;
 
-            case 3 :
-
-                cout << "Recuperation des donnees de Facebook... " << "Indisponible." << endl << endl;
-                choice = -1;
-
-                break;
-
-            case 4 :
-
-                nbPerson = 0;
-                densite_relation = 0;
-                densite_question = 0;
-
-                cout << "Entrez le nombre de sommets desires : ";
-                cin >> nbPerson;
-
-                cout << "Entrez la densite de relation desiree (ratio pour 100) : ";
-                cin >> densite_relation;
-
-                cout << "Entrez la densite de question desiree (ratio pour 100) : ";
-                cin >> densite_question;
-
-
-                cout << "Generation d'un fichier... ";
-                t_ini = clock();
-
-                generateFile( TEST_GENE_IN, TEST_GENE_OUT, nbPerson, (int) (densite_relation*100), (int) (densite_question*100) );
-
-                t_create = clock();
-
-                cout << ((double) t_create - t_ini) / CLOCKS_PER_SEC << " sec." << endl << endl;
-                choice = -1;
-                break;
-/*
-            case 5 :
-
-                cout << "Structure actuellement utilisee : " << typestruct << endl;
-                cout << "Veuillez choisir la nouvelle structure (m pour matrice ou l pour liste)" << endl;
-                typestruct = 'x';
-                while ((typestruct != 'm') && (typestruct != 'l')) {
-                    cin >> typestruct;
+                cout << "Voulez-vous afficher le rapport ? (o/n) ";
+                cin >> choice2;
+                if (choice2 == "o" || choice2 == "O" || choice2 == "oui" || choice2 == "Oui") {
+                    G.printGraph();
                 }
                 cout << endl;
-                choice = -1;
-                break;
-*/
-            default :
 
-                cout << "Veuillez entrer un chiffre correct." << endl << endl;
-                break;
+            } else {
+                cerr << "Graphe non enregistre !" << endl;
+            }
+            choice = -1;
+            break;
+
+        case 3 :
+
+            cout << "Recuperation des donnees de Facebook... " << "Indisponible." << endl << endl;
+            choice = -1;
+
+            break;
+
+        case 4 :
+
+            nbPerson = 0;
+            densite_relation = 0;
+            densite_question = 0;
+
+            cout << "Entrez le nombre de sommets desires : ";
+            cin >> nbPerson;
+
+            cout << "Entrez la densite de relation desiree (ratio pour 100) : ";
+            cin >> densite_relation;
+
+            cout << "Entrez la densite de question desiree (ratio pour 100) : ";
+            cin >> densite_question;
+
+
+            cout << "Generation d'un fichier... ";
+            t_ini = clock();
+
+            generateFile( TEST_GENE_IN, TEST_GENE_OUT, nbPerson, (int) (densite_relation*100), (int) (densite_question*100) );
+
+            t_create = clock();
+
+            cout << ((double) t_create - t_ini) / CLOCKS_PER_SEC << " sec." << endl << endl;
+            choice = -1;
+            break;
+            /*
+                        case 5 :
+
+                            cout << "Structure actuellement utilisee : " << typestruct << endl;
+                            cout << "Veuillez choisir la nouvelle structure (m pour matrice ou l pour liste)" << endl;
+                            typestruct = 'x';
+                            while ((typestruct != 'm') && (typestruct != 'l')) {
+                                cin >> typestruct;
+                            }
+                            cout << endl;
+                            choice = -1;
+                            break;
+            */
+        default :
+
+            cout << "Veuillez entrer un chiffre correct." << endl << endl;
+            break;
 
         }
 
-      /* Nettoyage du tampon */
-      cin.clear();
-      while (cin.get() != '\n') { };
+        /* Nettoyage du tampon */
+        cin.clear();
+        while (cin.get() != '\n') { };
     }
 
 }

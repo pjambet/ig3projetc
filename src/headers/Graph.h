@@ -64,6 +64,7 @@ class Graph{
                                                         A chaque id est associe le tableau de sommet trouve avec Disjktra */
     multimap< int, vector< int > > m_listPath;          /* Stocke les chemins = chemin a suivre dans m_tabSummit pour arriver */
 
+    bool m_analyzed;
   /* Methodes */
   /* ******** */
   public:
@@ -80,6 +81,7 @@ class Graph{
 
     /* Accesseurs */
     bool isAnalysable();                            /* Renvoie vrai si on peu analyser = ( taille du graffe != 0 )*/
+    bool isAnalyzed();
 
 
     /* Recherche */

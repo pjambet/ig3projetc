@@ -2,7 +2,7 @@
 CXX ?= g++
 #
 # Options du compilateur
-CXXFLAGS ?= -Wall -ansi -O3
+CXXFLAGS ?= -Wall -ansi -g
 #
 # Definition de l'acces aux repertoir des headers (utiles si l'on ne met pas le chemin dans les <#include ... > mais juste le nom du fichier
 #

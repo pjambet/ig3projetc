@@ -41,15 +41,13 @@ int main(int argc, char* argv[]) {
 
     Graph G;
 
-    cout << "                                              " << endl;
-    cout << "     ____            _      _                 " << endl;
-    cout << "    |  _ \\ _ __ ___ (_) ___| |_    ___        " << endl;
-    cout << "    | |_) | '__/ _ \\| |/ _ \\ __|  / __|       " << endl;
-    cout << "    |  __/| | | (_) | |  __/ |_  | (__        " << endl;
-    cout << "    |_|   |_|  \\___// |\\___|\\__|  \\___|      " << endl;
-    cout << "                   |__/                       " << endl;
-    cout << "                                              " << endl;
-    cout << "                                              " << endl;
+    cout << "	 _                          " << endl;
+    cout << "	| |    __ _  __ _  ___ _ __ " << endl;
+    cout << "	| |   / _` |/ _` |/ _ \\ '__|" << endl;
+    cout << "	| |__| (_| | (_| |  __/ |   " << endl;
+    cout << "	|_____\\__,_|\\__, |\\___|_|   " << endl;
+    cout << "	            |___/        " << endl << endl;
+	cout << "Lager Ain't a Graph Explorer for Rookies !" << endl;
     cout << "- Appuyez sur 1 pour charger un graphe" << endl;
     cout << "- Appuyez sur 2 pour analyser un graphe" << endl;
     cout << "- Appuyez sur 3 pour recuperer les donnees de Facebook" << endl;

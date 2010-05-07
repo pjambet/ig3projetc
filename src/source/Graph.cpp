@@ -205,6 +205,10 @@ bool Graph::isAnalyzed() {
     return m_analyzed;
 }
 
+unsigned int Graph::getSizeGraph() {
+	return m_sizeGraph;
+}
+
 void Graph::searchSCC () {
     int d, f; /* Reperes de debut et fin d'intervalle */
     int i;
@@ -348,6 +352,7 @@ Autres et optionnels
 void Graph::saveGraph (string& fileNameOut) {
     FILE* f_out;
     int i, j;
+    int start, finish;
     multimap<int, vector< int > >::iterator itStart;
 
 
@@ -375,12 +380,22 @@ void Graph::saveGraph (string& fileNameOut) {
     fprintf(f_out, "%d\n", m_nbDist);
 
     for (itStart = m_listPath.begin(); itStart != m_listPath.end(); itStart++) {
+    
+        start = itStart->first;
+        finish = itStart->second.front();
+
+    	if (m_listDist[start][finish].beg == INT_MAX) {
+            /* Si la distance entre les 2 est infinie */
+            fprintf(f_out, "Pas de chemin entre %s et %s\n",  m_listDist[start][itStart->second.back()].id.c_str(), m_listDist[start][finish].id.c_str());
+
+        } else {
         fprintf(f_out, "%d : ", m_listDist[itStart->first][itStart->second.front()].beg); // = La distance
 
         for (i = itStart->second.size()-1; i > 0; i--) {
             fprintf(f_out, "%s, ", m_listDist[itStart->first][itStart->second[i]].id.c_str());
         }
         fprintf(f_out, "%s\n", m_listDist[itStart->first][itStart->second[0]].id.c_str());
+        }
     }
 
     fclose(f_out);

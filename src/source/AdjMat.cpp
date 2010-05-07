@@ -159,25 +159,25 @@ void AdjMat::DFSDHidden (int i, int& t) { // Parcours en profondeur du graphe du
 
 
 void AdjMat::sortDescEnd() {
-  int i;
-  //int tmp, continuer;
+ 	int i;
+ 	//int tmp, continuer;
 
-  vector< string > vTemp;
-  /*tmp = 0;
-  continuer = 1;*/
+ 	vector< string > vTemp;
+ 	/*tmp = 0;
+ 	continuer = 1;*/
 
-// Sauvegarde des id
-  for (i = 0 ; i < (int) m_size; i++) {
-    vTemp.push_back(m_tabSummit[i].id);
-  }
+	// Sauvegarde des id
+ 	for (i = 0 ; i < (int) m_size; i++) {
+   		vTemp.push_back(m_tabSummit[i].id);
+	}
 
-// Tri par ordre des indice de fin en decroissant
-  sort(m_tabSummit.rbegin(), m_tabSummit.rend(), orderEnd);
+	// Tri par ordre des indice de fin en decroissant
+ 	sort(m_tabSummit.rbegin(), m_tabSummit.rend(), orderEnd);
 
-// Restauration des id
-  for (i = 0 ; i < (int) m_size; i++) {
-    m_tabSummit[i].id = vTemp[i];
-  }
+	// Restauration des id
+	for (i = 0 ; i < (int) m_size; i++) {
+		m_tabSummit[i].id = vTemp[i];
+  	}
 
   /*
   while (continuer) {
@@ -203,8 +203,9 @@ void AdjMat::sortDescEnd() {
 
 }
 
+
 void AdjMat::sortAscBeg() {
-  sort(m_tabSummit.begin(), m_tabSummit.end(), orderBeg);
+	sort(m_tabSummit.begin(), m_tabSummit.end(), orderBeg);
 }
 
 
@@ -221,11 +222,6 @@ void AdjMat::printMat () { // Affiche la matrice adjacente
     }
     cout << endl;
 }
-
-
-
-
-
 
 
 vector< s_summit > AdjMat::initDist (int x) {
@@ -275,7 +271,6 @@ vector< s_summit > AdjMat::initDist (int x) {
 }
 
 
-
 int AdjMat::extractMin(int x) {
     int i, imin;
     int valmin;
@@ -296,8 +291,6 @@ int AdjMat::extractMin(int x) {
 //        return 0;
     return imin;
 }
-
-
 
 
 bool AdjMat::isImportant(int x) {
@@ -365,7 +358,7 @@ bool AdjMat::isImportant(int x) {
       i = 0;
       /* Pour tous les fils de x */
       while ((i < (int) m_size) && (!important)) {
-        if (m_graph[x][i]) {
+        if ( m_graph[x][i] && (areInTheSameSCC(x,i)) ) {
           nbNeighborhood(i, nbFather, nbChild);
             /* On va compter le nombre de ses peres et fils */
 
@@ -412,7 +405,7 @@ bool AdjMat::isImportant(int x) {
       /* (S'il est toujours pas important, on lui donne une 2e chance de regagner son rang) */
       /* Pour tous les peres de x */
       while ((i < (int) m_size) && !important) {
-        if ((m_graph[i][x])){
+        if ( (m_graph[i][x]) && (areInTheSameSCC(x,i)) ){
           /* Pour tous les peres i de x */
           nbNeighborhood(i, nbFather, nbChild);
             /* On va compter le nombre de ses peres et fils */

@@ -7,6 +7,7 @@ DATE DE CREATION : 30/04/2010
 AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 --------------------------------------------------------------------------------
 DETAILS 		 : SCC (Strongly Connected Component) = CFC (Composante Fortement Connexe)
+				   
 ============================================================================= */
 
 #ifndef GRAPHE_H_INCLUDED
@@ -83,6 +84,7 @@ class Graph{
     /* Accesseurs */
     bool isAnalysable(); /* Renvoie vrai si on peu analyser = ( taille du graffe != 0 )*/
     bool isAnalyzed(); /* Renvoie vrai si le graphe a déja été analysé, faux sinon */
+    unsigned int getSizeGraph();
 
 
     /* Recherche */

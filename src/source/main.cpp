@@ -7,7 +7,6 @@ DATE DE CREATION : 12/04/2010
 AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 --------------------------------------------------------------------------------
 TODO :
-- Gerer quand l'utilisateur entre autre chose qu'un entier au menu
 - TODO statistiques pour determiner quelle structure choisir
 
 ============================================================================= */
@@ -38,16 +37,50 @@ int main(int argc, char* argv[]) {
 
     string nom_in, nom_out;
     string dir_in, dir_out;
+    string opt;
+    string repertory;
 
     Graph G;
+    if (argc == 5)
+    	opt = argv[1];
+    
+	if ((argc == 5) && (opt == "-log")) {
+		/* 1er argument : nom de l'execution
+		   2eme argument : option (-log)
+		   3eme argument : nombre de sommets
+		   4eme argument : densite de relation
+		   5eme argument : nombre (ou densite, on verra) de questions */
+		generateFile( TEST_GENE_IN, TEST_GENE_OUT, atoi(argv[2]), (int) (atoi(argv[3])*100), convertNumToRatio(atoi(argv[4]), atoi(argv[2]) ) );
+		repertory = TEST_GENE_OUT;
+		G.initGraph(repertory);
+		
+		/* Calcul des CFC */
+		t_ini = clock();
+		cout << G.getSizeGraph() << " " << atoi(argv[3]) << " " << atoi(argv[4]) << " ";
+        G.searchSCC();
 
-    cout << "	 _                          " << endl;
+        t_cfc = clock();
+        
+        cout << ((double) t_cfc - t_ini) / CLOCKS_PER_SEC << " ";
+        
+        /*Calcul des chemins */
+        t_ini = clock();
+
+        G.searchDistances();
+
+        t_dist = clock();
+        
+        cout << ((double) t_dist - t_ini) / CLOCKS_PER_SEC << endl;
+        
+	} else {
+
+	cout << "	 _                          " << endl;
     cout << "	| |    __ _  __ _  ___ _ __ " << endl;
     cout << "	| |   / _` |/ _` |/ _ \\ '__|" << endl;
     cout << "	| |__| (_| | (_| |  __/ |   " << endl;
     cout << "	|_____\\__,_|\\__, |\\___|_|   " << endl;
     cout << "	            |___/        " << endl << endl;
-	cout << "Lager Ain't a Graph Explorer for Rookies !" << endl;
+	cout << "Lager Ain't a Graph Explorer for Rookies !" << endl << endl;
     cout << "- Appuyez sur 1 pour charger un graphe" << endl;
     cout << "- Appuyez sur 2 pour analyser un graphe" << endl;
     cout << "- Appuyez sur 3 pour recuperer les donnees de Facebook" << endl;
@@ -55,10 +88,10 @@ int main(int argc, char* argv[]) {
     // cout << "- Appuyez sur 5 pour changer de structure de donnee" << endl;
     cout << "- Appuyez sur 0 pour fermer le programme" << endl << endl;
 
-
-
     while (1) {
 
+	
+		
         cout << "Entrez votre choix : ";
         cin >> choice;
 
@@ -210,6 +243,7 @@ int main(int argc, char* argv[]) {
         /* Nettoyage du tampon */
         cin.clear();
         while (cin.get() != '\n') { };
+    }
     }
 
 }

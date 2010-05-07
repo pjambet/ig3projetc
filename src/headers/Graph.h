@@ -61,11 +61,11 @@ class Graph{
     int unsigned m_nbDist; /* Nombre de distance a determiner */
     map< int, vector< int > > m_listQuestion; /* Stocke les questions dans un map */
     map< int, vector< s_summit > > m_listDist; /* Structure de stockage des distances
-                                                 A chaque id est associe le tableau de sommet trouve avec Disjktra */
+                                                  A chaque id est associe le tableau de sommet trouve avec Disjktra */
     multimap< int, vector< int > > m_listPath; /* Stocke les chemins = chemin a suivre dans m_tabSummit pour arriver */
 
     bool m_analyzed;
-    
+
   /* Methodes */
   /* ******** */
   public:

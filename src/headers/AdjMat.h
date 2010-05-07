@@ -47,12 +47,13 @@ class AdjMat {
     vector< s_summit > initSCC (); /* Fait 2 parcours en prof pour trouver les CFC */
     void DFS (); /* Parcours en profondeur du graphe (Depth First Search) */
     void DFSHidden (int i, int& t); /* Parcours en profondeur du graphe (recursif) */
-    void DFSD (); /* Parcours en profondeur du graphe dual (Depth First Search Dual) */ 
+    void DFSD (); /* Parcours en profondeur du graphe dual (Depth First Search Dual) */
     void DFSDHidden (int i, int& t); /* Parcours en profondeur du graphe dual (recursif) */
 
 
     vector< s_summit > initDist (int x);/* Calcule les plus courts chemins à partir du point x avec l'algo Dijkstra */
     int extractMin(int x); /* Extrait l'element de m_tabSummit non explore avec beg minimum, x valeur a renvoyer si on trouve pas de min */
+                           /* Complexite : O(n)
 
 
     void sortDescEnd(); /* Trie les ordres finaux en decroissant */

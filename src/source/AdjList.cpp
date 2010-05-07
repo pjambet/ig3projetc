@@ -17,6 +17,7 @@ Constructeurs et Desctructeurs
 AdjList::AdjList () : m_size(0){
 }
 
+
 AdjList::~AdjList(){
 }
 
@@ -50,6 +51,7 @@ vector< s_summit > AdjList::initSCC () {
 
   return m_tabSummit;
 }
+
 
 /*=================================
 Resolution
@@ -113,6 +115,7 @@ void AdjList::DFSD () { // Parcours en profondeur du graphe dual (appel sur PPro
         }
     }
 }
+
 
 void AdjList::DFSDHidden (int i, int& t) { // Parcours en profondeur du graphe dual (recursif)
     int j;
@@ -192,11 +195,10 @@ void AdjList::sortAscBeg() {
 }
 
 
-
-
 /*=================================
 Dijkstra
 ===================================*/
+
 
 vector< s_summit > AdjList::initDist (int x) {
   /* Variables */
@@ -271,15 +273,6 @@ int AdjList::extractMin(int x) {
         return 0;*/
     return imin;
 }
-
-
-
-
-
-
-
-
-
 
 
 bool AdjList::isImportant(int x) {
@@ -421,8 +414,6 @@ bool AdjList::isImportant(int x) {
 
     return important;
 }
-
-
 
 
 bool AdjList::areInTheSameSCC(int x, int y) {

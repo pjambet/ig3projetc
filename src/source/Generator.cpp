@@ -24,16 +24,17 @@ void generateFile(string source, string dest, int n, int d_rel, int d_quest) {
     int i, j;
     int random;
     char nom[50];
-    int id;
+    char id[50];
+
 
     FILE* fichier;
 
     int** matrice;
     vector< string > database_nom;
-    vector< int > database_id;
+    vector< string	> database_id;
 
     int nb_link, nb_question;
-    vector< int > liste_id;
+    vector< string > liste_id;
 
 
     /* Initialisation du fichier de noms */
@@ -46,7 +47,7 @@ void generateFile(string source, string dest, int n, int d_rel, int d_quest) {
     } else {
 
         while (!feof(fichier)) {
-            fscanf(fichier, "%[^,\n], %d\n", nom, &id);
+            fscanf(fichier, "%[^,\n], %[^\n]\n", nom, id);
             database_nom.push_back(nom);
             database_id.push_back(id);
         }
@@ -67,14 +68,14 @@ void generateFile(string source, string dest, int n, int d_rel, int d_quest) {
     while (i < n) {
         random = rand()%database_nom.size();
         strcpy(nom, database_nom[random].c_str());
-        id = database_id[random];
+        strcpy(id, database_id[random].c_str());
 
         if (find(liste_id.begin(), liste_id.end(), id) == liste_id.end()) {
             /* Si la personne n'est pas encore dans la liste */
 
             random = rand()%FREQ_MAX;
             /* Determination de la frequence au hasard */
-            fprintf(fichier, "%s, %d, %d\n", nom, id, random);
+            fprintf(fichier, "%s, %s, %d\n", nom, id, random);
             liste_id.push_back(id);
             /* Stockage des id choisies */
             i++;
@@ -100,7 +101,7 @@ void generateFile(string source, string dest, int n, int d_rel, int d_quest) {
     for (i = 0; i < n; i++) {
         for (j = 0; j < n; j++) {
             if ((matrice[i][j])) {
-                fprintf(fichier, "%d, %d\n", liste_id[i], liste_id[j]);
+                fprintf(fichier, "%s, %s\n", liste_id[i].c_str(), liste_id[j].c_str());
             }
         }
     }
@@ -114,7 +115,7 @@ void generateFile(string source, string dest, int n, int d_rel, int d_quest) {
     for (i = 0; i < n; i++) {
         for (j = 0; j < n; j++) {
             if (matrice[i][j]) {
-                fprintf(fichier, "%d -> %d\n", liste_id[i], liste_id[j]);
+                fprintf(fichier, "%s -> %s\n", liste_id[i].c_str(), liste_id[j].c_str());
             }
         }
     }

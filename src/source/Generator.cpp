@@ -156,7 +156,7 @@ int generateMatrix(int n, int** m, int r) {
 }
 
 float convertNumToRatio(int n, int nbSum) {
-	int nbTot = nbSum * nbSum;
-	return (n * RATIO) /nbTot;
+    int nbTot = nbSum * nbSum;
+    return (n * RATIO) /nbTot;
 }
 

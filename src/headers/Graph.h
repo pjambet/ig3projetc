@@ -7,7 +7,7 @@ DATE DE CREATION : 30/04/2010
 AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 --------------------------------------------------------------------------------
 DETAILS 		 : SCC (Strongly Connected Component) = CFC (Composante Fortement Connexe)
-				   
+
 ============================================================================= */
 
 #ifndef GRAPHE_H_INCLUDED
@@ -33,13 +33,13 @@ Includes
 using namespace std;
 
 
-class Graph{
+class Graph {
 
-  /* Attributs */
-  /* ********* */
-  /* Dans tout ce qui est vecteur et map (sauf m_idToRank, on ne stocke que le rang de l'id
-     Le rang est sa place dans m_tabSummit */
-  private:
+    /* Attributs */
+    /* ********* */
+    /* Dans tout ce qui est vecteur et map (sauf m_idToRank, on ne stocke que le rang de l'id
+       Le rang est sa place dans m_tabSummit */
+private:
     int unsigned m_sizeGraph; /* Taille du graphe = nombre de personne */
     vector< s_summit > m_tabSummit; /* Tableau de personnes */
 
@@ -67,9 +67,9 @@ class Graph{
 
     bool m_analyzed;
 
-  /* Methodes */
-  /* ******** */
-  public:
+    /* Methodes */
+    /* ******** */
+public:
 
     /* Constructeurs et Destructeurs */
     Graph ();

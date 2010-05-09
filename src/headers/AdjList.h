@@ -28,7 +28,7 @@ using namespace std;
 
 class AdjList {
 
-    private :
+private :
     /* Attributs */
     int m_size;
     vector < vector <int> > m_graph;
@@ -36,21 +36,21 @@ class AdjList {
 
     vector < s_summit > m_tabSummit;
 
-	/* EXPLICATIONS DES ATTRIBUTS :
-	
-		Structure de representation d'une liste d'adjacence.
+    /* EXPLICATIONS DES ATTRIBUTS :
+
+    	Structure de representation d'une liste d'adjacence.
     	Les donnees conservees sont :
     	- m_size : La taille du tableau de listes
-	    - m_graph : Un vecteur de vecteur d'entiers,
+        - m_graph : Un vecteur de vecteur d'entiers,
         	        m_graph[i][j] = x si x est voisin, de i (x est le "j-ieme" voisin de i)
         - m_graphDual : Le graphe dual associe a m_graph
      	- m_tabSummit : Tableau contenant les donnees des sommets, pour i quelconque,
-	                    si (i < m_size), alors m_tabSummit[i] correspond a i-eme ligne et colonne de m_graph */
+                        si (i < m_size), alors m_tabSummit[i] correspond a i-eme ligne et colonne de m_graph */
 
-/* ****************************************************** */
-/* ****************************************************** */
+    /* ****************************************************** */
+    /* ****************************************************** */
 
-    public:
+public:
     /* CONSTRUCTEURS ET DESCTRUCTEURS */
     AdjList ();
     ~AdjList ();
@@ -58,26 +58,26 @@ class AdjList {
     /* Methode d'initialisation de la classe */
     void initData (vector< s_summit >& v, vector< vector< int > >& f, vector< vector< int > >& df); /* Remplit le la structure avec les donnees */
 
-  /* Methodes de recherche de Composantes Fortement Connexes (Strongly Connected Component) */
-  
-  /* FONCTION : initSCC - Initialise les donnees pour trouver plus facilement les CFC (SCC) */
+    /* Methodes de recherche de Composantes Fortement Connexes (Strongly Connected Component) */
+
+    /* FONCTION : initSCC - Initialise les donnees pour trouver plus facilement les CFC (SCC) */
     vector< s_summit > initSCC ();
-  /* COMPLEXITE : Premier parcours en profondeur ->
-                  Tri decroissant ->
-                  Second parcours en profondeur ->
-                  Determination des importances ->
-                  Tri croissant ->
-     ENTREE : -
-     ALGORITHME :
-       Executer un premier parcours en profondeur du graphe
-         Pour chaque sommet, on note le temps de rencontre et le temps de fin d'exploration
-       Determiner le nouvel ordre d'exploration en fonction des temps de fin
+    /* COMPLEXITE : Premier parcours en profondeur ->
+                    Tri decroissant ->
+                    Second parcours en profondeur ->
+                    Determination des importances ->
+                    Tri croissant ->
+       ENTREE : -
+       ALGORITHME :
+         Executer un premier parcours en profondeur du graphe
+           Pour chaque sommet, on note le temps de rencontre et le temps de fin d'exploration
+         Determiner le nouvel ordre d'exploration en fonction des temps de fin
 
-       Executer le second parcours en profondeur du graphe
-         Obtenir de nouveaux temps de rencontre et de fin d'exploration de chaque point
-       Pour chaque sommet, on determine si ce point est important
+         Executer le second parcours en profondeur du graphe
+           Obtenir de nouveaux temps de rencontre et de fin d'exploration de chaque point
+         Pour chaque sommet, on determine si ce point est important
 
-       Trier les sommets par temps de rencontre */
+         Trier les sommets par temps de rencontre */
 
     void DFS (); /* Parcours en profondeur du graphe (appel sur PProfG) */
     void DFSHidden (int i, int& t); /* Parcours en profondeur du graphe (recursif) */

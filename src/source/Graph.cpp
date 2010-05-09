@@ -25,9 +25,9 @@ Graph::~Graph () {
         for (i = 0; i < (int) m_sizeGraph; i++) {
             delete[] m_matFriends[i];
         }
+        delete[] m_matFriends;
     }
-
-    delete[] m_matFriends;
+    
 }
 
 
@@ -172,8 +172,8 @@ void Graph::clearGraph () {
         for (i = 0; i < (int) m_sizeGraph; i++) {
             delete[] m_matFriends[i];
         }
+        delete[] m_matFriends;
     }
-    delete[] m_matFriends;
 
 
     m_nbSCC = 0;

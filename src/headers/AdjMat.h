@@ -74,7 +74,6 @@ class AdjMat {
 
 
   /* Methodes de recherche de Composantes Fortement Connexes (Strongly Connected Component) */
-                           /* Complexite : O(n)
 
   /* FONCTION : initSCC - Initialise les donnees pour trouver plus facilement les CFC */
     vector< s_summit > initSCC ();

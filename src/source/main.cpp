@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
            4eme argument : densite de relation
            5eme argument : nombre (ou densite, on verra) de questions */
         generateFile( TEST_GENE_IN, TEST_GENE_OUT, atoi(argv[2]),
-                      (int) (atoi(argv[3])*100), convertNumToRatio(atoi(argv[4]), atoi(argv[2]) ) );
+            (int) (atoi(argv[3])*100), (int) convertNumToRatio(atoi(argv[4]), atoi(argv[2]) ) );
         repertory = TEST_GENE_OUT;
         G.initGraph(repertory);
 

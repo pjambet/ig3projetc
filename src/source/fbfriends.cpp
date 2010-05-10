@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../headers/tre/regex.h"
+#include <regex.h>
 #include "../headers/fbfriends.h"
 #include "../headers/os_dependent.h"
 
@@ -150,6 +150,7 @@ int get_friends_list(char* email, char* password, char* id, fb_account** friends
 	*friends = accounts;
 	return n_accounts;
 }
+
 /*
 // Start here
 int main(int argc, char** argv)

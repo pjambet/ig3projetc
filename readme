@@ -11,3 +11,6 @@ Lager Ain't a Graph Explorer for Rookies !
 
 http://code.google.com/p/ig3projetc/
 
+Libs :
+- OpenSSL (for CURL) : http://www.shininglightpro.com/download/Win32OpenSSL_Light-1_0_0.exe
+- Visual C++ Red (error fix) : http://www.microsoft.com/downloads/details.aspx?familyid=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF

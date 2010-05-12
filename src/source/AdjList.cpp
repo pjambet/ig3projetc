@@ -74,14 +74,15 @@ void AdjList::DFS () { // Parcours en profondeur du graphe (appel sur PProfG)
 
 void AdjList::DFSHidden (int i, int& t) { // Parcours en profondeur du graphe (recursif)
     int j;
-
+    int sizeTemp;
     m_tabSummit[i].status = 0;
     /* On marque l'etat atteint */
     t++;
     m_tabSummit[i].beg = t;
     /* On le marque comme le t-ieme rencontre */
 
-    for ( j = 0; j < (int) m_graph[i].size(); j++) {
+    sizeTemp = (int) m_graph[i].size();
+    for ( j = 0; j < sizeTemp; j++) {
         if (m_tabSummit[ m_graph[i][j] ].status == -1) {
             /* Si le voisin avec l'id m_graph[i][j] n'a pas ete explore */
             DFSHidden(m_graph[i][j], t);
@@ -119,6 +120,7 @@ void AdjList::DFSD () { // Parcours en profondeur du graphe dual (appel sur PPro
 
 void AdjList::DFSDHidden (int i, int& t) { // Parcours en profondeur du graphe dual (recursif)
     int j;
+    int sizeTemp;
 
 
     m_tabSummit[i].status = 0;
@@ -127,8 +129,8 @@ void AdjList::DFSDHidden (int i, int& t) { // Parcours en profondeur du graphe d
     m_tabSummit[i].beg = t;
     /* On le marque comme le t-ieme rencontre */
 
-
-    for ( j = 0; j < (int) m_graphDual[i].size(); j++) {
+    sizeTemp = (int) m_graphDual[i].size();
+    for ( j = 0; j < sizeTemp; j++) {
         if (m_tabSummit[ m_graphDual[i][j] ].status == -1) {
             DFSDHidden(m_graphDual[i][j], t);
         }
@@ -145,36 +147,9 @@ void AdjList::DFSDHidden (int i, int& t) { // Parcours en profondeur du graphe d
 
 void AdjList::sortDescEnd() {
     int i;
-    /*  int tmp, continuer;
-
-      tmp = 0;
-      continuer = 1;
-
-
-      while (continuer) {
-          continuer--;
-          for (i = 0; i < (int) m_size-1; i++) {
-              if (m_tabSummit[i].end < m_tabSummit[i+1].end) {
-                  tmp = m_tabSummit[i+1].end;
-                  m_tabSummit[i+1].end = m_tabSummit[i].end;
-                  m_tabSummit[i].end = tmp;
-
-                  tmp = m_tabSummit[i+1].beg;
-                  m_tabSummit[i+1].beg = m_tabSummit[i].beg;
-                  m_tabSummit[i].beg = tmp;
-
-                  tmp = m_tabSummit[i+1].num;
-                  m_tabSummit[i+1].num = m_tabSummit[i].num;
-                  m_tabSummit[i].num = tmp;
-
-                  continuer++;
-              }
-          }
-      }*/
 
     vector< string > vTemp;
-    /*tmp = 0;
-    continuer = 1;*/
+
 
 // Sauvegarde des id
     for (i = 0 ; i < (int) m_size; i++) {
@@ -204,10 +179,9 @@ vector< s_summit > AdjList::initDist (int x) {
     /* Variables */
     int i;
     int n; // rang temporaire
+    int nSize, nCurrent; // voisin courant
     int nbExplore; // nombre de sommet explore
     int cpt_stability; // Indique le nombre de fois où la fonction de recherche de min renvoie x (evite les recherche de min inutiles)
-
-    vector< int >::iterator it;
 
 
     /* Source Unique Initialisation */
@@ -222,9 +196,9 @@ vector< s_summit > AdjList::initDist (int x) {
     cpt_stability = 0;
 
 
+
     while ((nbExplore < (int) m_size) && (cpt_stability < 2)) { // F != null
         n = extractMin(x); // x = ExtraireMin(F)
-
 
         if (n == x) {
             cpt_stability++;
@@ -235,11 +209,13 @@ vector< s_summit > AdjList::initDist (int x) {
             m_tabSummit[n].status = 0;  // F = F - x
             nbExplore++;
 
-            for ( i = 0; i < (int) m_graph[n].size(); i++) { // Pour tous les fils de n
-                if (m_tabSummit[m_graph[n][i]].beg > m_tabSummit[n].beg + m_tabSummit[m_graph[n][i]].freq) { // Relacher
-                    m_tabSummit[m_graph[n][i]].beg = m_tabSummit[n].beg + m_tabSummit[m_graph[n][i]].freq;
+            nSize = (int) m_graph[n].size();
+            for ( i = 0; i < nSize; i++) { // Pour tous les fils de n
+              nCurrent = m_graph[n][i];
+                if (m_tabSummit[nCurrent].beg > (m_tabSummit[n].beg + m_tabSummit[nCurrent].freq) ) { // Relacher
+                    m_tabSummit[nCurrent].beg = m_tabSummit[n].beg + m_tabSummit[nCurrent].freq;
 
-                    m_tabSummit[m_graph[n][i]].end = n; // On indique que le pere le plus proche de i est n
+                    m_tabSummit[nCurrent].end = n; // On indique que le pere le plus proche de i est n
                 }
 
             }
@@ -261,16 +237,12 @@ int AdjList::extractMin(int x) {
     valmin = INT_MAX;
     imin = x;
     for (i = 0; i < (int) m_size; i++) {
-        if ((m_tabSummit[i].beg < valmin) && (m_tabSummit[i].status == -1)) {
+        if ((m_tabSummit[i].status == -1) && (m_tabSummit[i].beg < valmin)) {
             valmin = m_tabSummit[i].beg;
             imin = i;
         }
     }
-    /*
-        if (valmin != INT_MAX)
-            return imin;
-        else
-            return 0;*/
+
     return imin;
 }
 
@@ -335,6 +307,7 @@ bool AdjList::isImportant(int x) {
         while ( (i < (int) m_graph[x].size()) && !important) {
             y = m_graph[x][i]; /* y fils de x */
 
+            if (areInTheSameSCC(x, y)) {
             nbChild = m_graph[y].size();
             nbFather = m_graphDual[y].size();
             /* On va compter le nombre de ses peres et fils */
@@ -367,7 +340,7 @@ bool AdjList::isImportant(int x) {
 
                 }
             }
-
+            }
             i++;
         }
 
@@ -376,6 +349,7 @@ bool AdjList::isImportant(int x) {
         /* (S'il est toujours pas important) Pour tous les peres de x */
         while ((i < (int) m_graphDual[x].size()) && !important) {
             y = m_graphDual[x][i]; /* y pere de x */
+            if (areInTheSameSCC(x, y)) {
 
             nbChild = m_graph[y].size();
             nbFather = m_graphDual[y].size();
@@ -406,6 +380,7 @@ bool AdjList::isImportant(int x) {
                         important = true;
                     }
                 }
+            }
             }
 
             i++;

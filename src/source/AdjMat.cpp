@@ -229,7 +229,6 @@ vector< s_summit > AdjMat::initDist (int x) {
     int i;
     int n, nbExplore; // nombre de sommet explore
     int cpt_stability; // Indique le nombre de fois où la fonction de recherche de min renvoie x (evite les recherche de min inutiles)
-    vector <int>::iterator it;
 
     /* Source Unique Initialisation */
     for (i = 0; i < (int) m_size; i++) {

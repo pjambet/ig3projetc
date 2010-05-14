@@ -107,6 +107,10 @@ float convertNumToRatio(int n, int nbSum);
    ALGORITHME :
 
 */
+
+/* ACCESSEURS */
+string getDestination();
+
 };
 
 

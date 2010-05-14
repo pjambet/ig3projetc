@@ -84,6 +84,7 @@ public:
     /* Accesseurs */
     bool isAnalysable(); /* Renvoie vrai si on peu analyser = ( taille du graffe != 0 )*/
     bool isAnalyzed(); /* Renvoie vrai si le graphe a déja été analysé, faux sinon */
+    void setAnalyzed(bool b); /* Change l'etat d'analyse du graphe */
     unsigned int getSizeGraph();
 
 

@@ -22,12 +22,13 @@ AdjMat::~AdjMat () {
     int i;
 
     if (m_size) {
-        for (i = 0; i < (int) m_size; i++) {
+        for (i = 0; i < m_size; i++) {
             delete[] m_graph[i];
         }
+    delete[] m_graph;
+
     }
 
-    delete[] m_graph;
 }
 
 
@@ -35,14 +36,14 @@ AdjMat::~AdjMat () {
 Initialisation
 ===================================*/
 void AdjMat::initData (vector< s_summit >& v, int** m) {
-    m_size = v.size();
+    m_size = (int) v.size();
     m_tabSummit = v;
 
 
     m_graph = new int*[m_size];
-    for (int i = 0; i < (int) m_size; i++) {
+    for (int i = 0; i < m_size; i++) {
         m_graph[i] = new int[m_size];
-        for (int j = 0; j < (int) m_size; j++) {
+        for (int j = 0; j < m_size; j++) {
             m_graph[i][j] = m[i][j];
         }
     }
@@ -56,7 +57,7 @@ vector< s_summit > AdjMat::initSCC () {
     sortDescEnd();
     DFSD();
 
-    for (i = 0; i < (int) m_size; i++) {
+    for (i = 0; i < m_size; i++) {
         /* Determination de l'importance des points */
         m_tabSummit[i].important = isImportant(i);
     }
@@ -78,12 +79,12 @@ void AdjMat::DFS () {
     temps = 0;
 
 
-    for (i = 0; i < (int) m_size; i++) {
+    for (i = 0; i < m_size; i++) {
         /* Pour tous les points */
 
-        if ( m_tabSummit[m_tabSummit[i].num].status == -1 ) {
+        if ( m_tabSummit[i].status == -1 ) {
             /* Si l'etat est marque comme non atteint, on fait un appel recursif */
-            DFSHidden(m_tabSummit[i].num, temps);
+            DFSHidden(i, temps);
         }
     }
 }
@@ -98,8 +99,8 @@ void AdjMat::DFSHidden (int i, int& t) { // Parcours en profondeur du graphe (re
     m_tabSummit[i].beg = t;
     /* On le marque comme le t-ieme rencontre */
 
-    for (j = 0; j < (int) m_size; j++) {
-        if ((m_graph[i][j]) && (m_tabSummit[j].status == -1)) {
+    for (j = 0; j < m_size; j++) {
+        if ( (m_tabSummit[j].status == -1) && (m_graph[i][j]) ) {
             /* Si on trouve un successeur non atteint, on fait un appel recursif */
             DFSHidden(j, t);
         }
@@ -118,14 +119,14 @@ void AdjMat::DFSD () {
 
     temps = 0;
 
-    for (i = 0; i < (int) m_size; i++) {
+    for (i = 0; i < m_size; i++) {
         /* Reinitialisation des donnees */
         m_tabSummit[i].status = -1;
         m_tabSummit[i].beg = 0;
         m_tabSummit[i].end = 0;
     }
 
-    for (i = 0; i < (int) m_size; i++) {
+    for (i = 0; i < m_size; i++) {
         /* Parcours dans le nouvel ordre */
         if (m_tabSummit[m_tabSummit[i].num].status == -1) {
             DFSDHidden(m_tabSummit[i].num, temps);
@@ -144,8 +145,8 @@ void AdjMat::DFSDHidden (int i, int& t) { // Parcours en profondeur du graphe du
     m_tabSummit[i].beg = t;
     /* On le marque comme le t-ieme rencontre */
 
-    for (j = 0; j < (int) m_size; j++) {
-        if ((m_graph[j][i]) && (m_tabSummit[j].status == -1)) { // Successeur non atteint
+    for (j = 0; j < m_size; j++) {
+        if ( (m_tabSummit[j].status == -1) && (m_graph[j][i]) ) { // Successeur non atteint
             DFSDHidden(j, t);
         }
     }
@@ -167,7 +168,7 @@ void AdjMat::sortDescEnd() {
     continuer = 1;*/
 
     // Sauvegarde des id
-    for (i = 0 ; i < (int) m_size; i++) {
+    for (i = 0 ; i < m_size; i++) {
         vTemp.push_back(m_tabSummit[i].id);
     }
 
@@ -175,14 +176,14 @@ void AdjMat::sortDescEnd() {
     sort(m_tabSummit.rbegin(), m_tabSummit.rend(), orderEnd);
 
     // Restauration des id
-    for (i = 0 ; i < (int) m_size; i++) {
+    for (i = 0 ; i < m_size; i++) {
         m_tabSummit[i].id = vTemp[i];
     }
 
     /*
     while (continuer) {
         continuer--;
-        for (i = 0; i < (int) m_size-1; i++) {
+        for (i = 0; i < m_size-1; i++) {
             if (m_tabSummit[i].end < m_tabSummit[i+1].end) {
                 tmp = m_tabSummit[i+1].end;
                 m_tabSummit[i+1].end = m_tabSummit[i].end;
@@ -214,8 +215,8 @@ void AdjMat::printMat () { // Affiche la matrice adjacente
 
 
     cout << endl;
-    for (i = 0; i < (int) m_size; i++) {
-        for (j = 0; j < (int) m_size; j++) {
+    for (i = 0; i < m_size; i++) {
+        for (j = 0; j < m_size; j++) {
             cout << m_graph[i][j] << " ";
         }
         cout << endl;
@@ -231,7 +232,7 @@ vector< s_summit > AdjMat::initDist (int x) {
     int cpt_stability; // Indique le nombre de fois où la fonction de recherche de min renvoie x (evite les recherche de min inutiles)
 
     /* Source Unique Initialisation */
-    for (i = 0; i < (int) m_size; i++) {
+    for (i = 0; i < m_size; i++) {
         m_tabSummit[i].status = -1;
         m_tabSummit[i].beg = INT_MAX;
         m_tabSummit[i].end = -1;
@@ -242,7 +243,7 @@ vector< s_summit > AdjMat::initDist (int x) {
     cpt_stability = 0;
 
 
-    while ((nbExplore < (int) m_size) && (cpt_stability < 2)) { // F != null
+    while ( (cpt_stability < 2) && (nbExplore < m_size) ) { // F != null
         n = extractMin(x); // x = ExtraireMin(F)
 
         if (n == x) {
@@ -253,11 +254,11 @@ vector< s_summit > AdjMat::initDist (int x) {
             m_tabSummit[n].status = 0;  // F = F - x
             nbExplore++;
 
-            for ( i = 0; i < (int) m_size; i++) {
+            for ( i = 0; i < m_size; i++) {
                 if (m_graph[n][i]) {
                     if (m_tabSummit[i].beg > m_tabSummit[n].beg + m_tabSummit[i].freq) { // Relacher
-                        m_tabSummit[i].beg = m_tabSummit[n].beg + m_tabSummit[i].freq;
 
+                        m_tabSummit[i].beg = m_tabSummit[n].beg + m_tabSummit[i].freq;
                         m_tabSummit[i].end = n; // On indique que le pere le plus proche de i est n
                     }
                 }
@@ -276,7 +277,7 @@ int AdjMat::extractMin(int x) {
 
     valmin = INT_MAX;
     imin = x;
-    for (i = 0; i < (int) m_size; i++) {
+    for (i = 0; i < m_size; i++) {
         if ((m_tabSummit[i].status == -1) && (m_tabSummit[i].beg < valmin)) {
             valmin = m_tabSummit[i].beg;
             imin = i;
@@ -323,7 +324,7 @@ bool AdjMat::isImportant(int x) {
         /* Cas pere et fils unique, mais le meme point, il s'agit d'un point accessible que via son pere
            L'enlever ne changera donc pas le reste de la composante */
         i = 0;
-        while ((i < (int) m_size) && important)  {
+        while (important && (i < m_size) )  {
             if ((m_graph[x][i] == 1) && (m_graph[i][x] == 1)) {
                 important = false;
 
@@ -356,7 +357,7 @@ bool AdjMat::isImportant(int x) {
 
         i = 0;
         /* Pour tous les fils de x */
-        while ((i < (int) m_size) && (!important)) {
+        while ( (!important) && (i < m_size) ) {
             if ( m_graph[x][i] && (areInTheSameSCC(x,i)) ) {
                 nbNeighborhood(i, nbFather, nbChild);
                 /* On va compter le nombre de ses peres et fils */
@@ -371,7 +372,7 @@ bool AdjMat::isImportant(int x) {
                         sameCFC = false; /* Indique si on a rencontre un pere de la meme CFC */
                         j = 0;
                         /* S'il y a plusieurs pere, si aucun d'eux n'est dans la CFC, alors le point est important */
-                        while ((j < (int) m_size) && (!sameCFC)) {
+                        while ( (!sameCFC) && (j < m_size) ) {
 
                             if ( (m_graph[j][i]) && (j != x) && (areInTheSameSCC(i, j)) ) {
                                 /* Parcours des peres de i */
@@ -403,7 +404,7 @@ bool AdjMat::isImportant(int x) {
         i = 0;
         /* (S'il est toujours pas important, on lui donne une 2e chance de regagner son rang) */
         /* Pour tous les peres de x */
-        while ((i < (int) m_size) && !important) {
+        while (!important && (i < m_size) ) {
             if ( (m_graph[i][x]) && (areInTheSameSCC(x,i)) ) {
                 /* Pour tous les peres i de x */
                 nbNeighborhood(i, nbFather, nbChild);
@@ -420,7 +421,7 @@ bool AdjMat::isImportant(int x) {
                         j = 0;
 
                         /* S'il y a plusieurs fils, si aucun d'eux n'est dans la CFC, alors le point est important */
-                        while ((j < (int) m_size) && (!sameCFC)) {
+                        while ( (!sameCFC) && (j < m_size) ) {
 
                             if ( ((m_graph[i][j]) &&  (j != x)) && (areInTheSameSCC(i, j)) ) {
                                 /* Parcours des fils de i */
@@ -457,7 +458,7 @@ void AdjMat::nbNeighborhood(int x, int& nbF, int& nbC) {
     i = 0;
 
 
-    while ( (i < (int) m_size) && ((nbF < 2) || (nbC < 2)) ) {
+    while ( ((nbF < 2) || (nbC < 2)) && (i < m_size) ) {
         if (m_graph[x][i]) {
             nbC++;
         }
@@ -487,12 +488,12 @@ bool AdjMat::areInTheSameSCC(int x, int y) {
 
 
     i = 0;
-    while ( (i < (int) m_size) && (!sameSCC) ) {
+    while ( (!sameSCC) && (i < m_size) ) {
         iBegin = m_tabSummit[i].beg;
         iEnd = m_tabSummit[i].end;
-        /* Recherche de l'intervalle le plus gros englobant les 2 points */
+        /* Recherche d'un intervalle englobant les 2 points */
 
-        if (iBegin <= xBegin && iBegin <= yBegin && iEnd >= xEnd && iEnd >= yEnd ) {
+        if ( iBegin <= xBegin && iEnd >= xEnd && iBegin <= yBegin && iEnd >= yEnd ) {
             sameSCC = true;
         }
 

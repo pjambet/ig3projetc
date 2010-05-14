@@ -62,7 +62,7 @@ typedef struct struct_summit {
 
 /* PROCEDURE : printSummit - Affichage d'un element de type s_summit */
 void printSummit (s_summit s);
-/* COMPLEXITE : Constant O(1)
+/* COMPLEXITE : Constant o(1)
    ENTREE : s, un element de type s_summit a afficher
    ALGORITHME :
      Affiche les attributs name, id et freq de l'element s
@@ -70,7 +70,7 @@ void printSummit (s_summit s);
 
 /* FONCTION : orderBeg - Donne une notion d'ordre entre deux elements de type s_summit, le critere est l'attribut beg */
 bool orderBeg(s_summit a, s_summit b);
-/* COMPLEXITE : Constant O(1)
+/* COMPLEXITE : Constant o(1)
    ENTREE : a et b, deux elements de type s_summit a comparer
    ALGORITHME :
      Renvoie le resultat de l'evalutation (a.beg < b.beg)
@@ -78,7 +78,7 @@ bool orderBeg(s_summit a, s_summit b);
 
 /* FONCTION : orderEnd - Donne une notion d'ordre entre deux elements de type s_summit, le critere est l'attribut end */
 bool orderEnd(s_summit a, s_summit b);
-/* COMPLEXITE : Constant
+/* COMPLEXITE : Constant o(1)
    ENTREE : a et b, deux elements de type s_summit a comparer
    ALGORITHME :
      Renvoie le resultat de l'evalutation (a.end < b.end)

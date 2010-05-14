@@ -26,11 +26,31 @@ Includes
 #include <cstdio>
 #include <cassert>
 
+/*=================================
+Constantes
+===================================*/
+#define FREQ_MAX 100
+#define RATIO 10000
+
 using namespace std;
 
+class Generator {
+  private :
+  string database;
+  string destination;
+  int nbPerson;
+  int nbRelation;
+  int nbQuestion;
+
+  public :
+  Generator();
+  ~Generator();
+
+  void changeOptionAutomatic(string db, string dest, int nP, int nR, int nQ);
+  void changeOptionManual();
 
 /* PROCEDURE : generateFile - Generation d'un fichier d'entree */
-void generateFile(string source, string dest, int n, int d_rel, int d_quest);
+void generateFile();
 /* COMPLEXITE : Lecture du fichier source -> Lineaire
                 Choix des noms et id -> Quadratique
                 Determination des relations -> Quadratique
@@ -63,9 +83,9 @@ void generateFile(string source, string dest, int n, int d_rel, int d_quest);
 
 
 /* FONCTION : generateMatrix - Generation une matrice de 0 et de 1 aleatoirement et renvoie le nombre de 1 */
-int generateMatrix(int nb, int** m, int r);
+int generateMatrix(int n, int** m, int r);
 /* COMPLEXITE : o(nb²)
-   ENTREE : nb, la taille de la matrice
+   ENTREE : n, la taille de la matrice
             m, la matrice d'entier
             r, le ratio de remplissage
    ALGORITHME :
@@ -81,4 +101,13 @@ int generateMatrix(int nb, int** m, int r);
 
 /* FONCTION : convertNumToRatio - Convertit le nombre donne en ratio par rapport a nbSum */
 float convertNumToRatio(int n, int nbSum);
+/* COMPLEXITE : Constant o(1)
+   ENTREE : n, le nombre de personne
+            nbSum, le nombre de liens desire
+   ALGORITHME :
+
+*/
+};
+
+
 #endif // GENERATOR_H_INCLUDED

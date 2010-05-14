@@ -6,8 +6,8 @@ OBJET            : matrice d'adjacence
 DATE DE CREATION : 30/04/2010
 AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 --------------------------------------------------------------------------------
-DETAILS 		 : SCC (Strongly Connected Component) = CFC (Composante Fortement Connexe)
-				 : DFS (Depth First Search) = PPG(Parcours en Profondeur du Graphe)
+DETAILS 		     : SCC (Strongly Connected Component) = CFC (Composante Fortement Connexe)
+                 : DFS (Depth First Search) = PPG(Parcours en Profondeur du Graphe)
 
 ============================================================================= */
 
@@ -33,7 +33,7 @@ class AdjMat {
 private:
 
     /* ATTRIBUTS */
-    int unsigned m_size;
+    int m_size;
     int** m_graph;
 
     vector < s_summit > m_tabSummit;

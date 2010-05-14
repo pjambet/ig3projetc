@@ -32,8 +32,7 @@ int main(int argc, char* argv[]) {
 
     /* Variables */
     int choice; /* Choix de l'utilisateur */
-    int nbPerson;
-    float densite_relation, densite_question;
+
     string choice2; /* Choix d'affichage du rapport */
     clock_t t_ini, t_open, t_cfc, t_dist, t_create; /* Stockage des temps d'execution */
 
@@ -42,7 +41,9 @@ int main(int argc, char* argv[]) {
     string opt;
     string repertory;
 
+    Generator gene;
     Graph G;
+
     // Stockage de l'option' de lancement
     if (argc > 1)
         opt = argv[1];
@@ -53,43 +54,72 @@ int main(int argc, char* argv[]) {
            3eme argument : nombre de sommets
            4eme argument : densite de relation
            5eme argument : nombre (ou densite, on verra) de questions */
-        generateFile( TEST_GENE_IN, TEST_GENE_OUT, atoi(argv[2]),
-            (int) (atoi(argv[3])*100), (int) convertNumToRatio(atoi(argv[4]), atoi(argv[2]) ) );
+        gene.changeOptionAutomatic( TEST_GENE_IN, TEST_GENE_OUT, atoi(argv[2]),
+            (int) atoi(argv[3]), (int) atoi(argv[4]) );
+        gene.generateFile();
+
         repertory = TEST_GENE_OUT;
         G.initGraph(repertory);
 
+        cout << G.getSizeGraph() << " " << atoi(argv[3]) << " " << atoi(argv[4]) << " ";
+
         /* Calcul des CFC */
         t_ini = clock();
-        cout << G.getSizeGraph() << " " << atoi(argv[3]) << " " << atoi(argv[4]) << " ";
         G.searchSCC();
-
         t_cfc = clock();
 
         cout << ((double) t_cfc - t_ini) / CLOCKS_PER_SEC << " ";
 
         /*Calcul des chemins */
         t_ini = clock();
-
         G.searchDistances();
-
         t_dist = clock();
 
         cout << ((double) t_dist - t_ini) / CLOCKS_PER_SEC << endl;
 
     } else if ( (argc == 2) && ( (opt == "--help") || (opt == "-h") ) ) {
-        cout << "Usage: " << argv[0] << " <OPTION>" << endl;
-        cout << endl << "OPTION : " << endl;
-        cout << "\t--log <nb_sommetq> <densite_relation> <nb_qestions>"
-        << endl << "\tLance le programme le plus simplement possible"
-        << endl << "\tLes informations passees en parametre permettent de generer"
-        << endl << "\tun graphe aleatoirement, le graphe genere est ensuite analyse"
-        << endl << "\tpar LAGER et les resultats seront affiches sur une seule ligne"
-        << endl << "\tavec le format suivant : "
-        << endl << endl << "<Nombre_de_sommet> <Densite_de_relation>"
-        << " <Nombre_de_questions> <temps_calcul_CFC> <temps_calcul_questions>"
-        << endl << endl;
-    } else {
+        cout << endl;
+        cout << "	 _                          " << endl;
+        cout << "	| |    __ _  __ _  ___ _ __ " << endl;
+        cout << "	| |   / _` |/ _` |/ _ \\ '__|" << endl;
+        cout << "	| |__| (_| | (_| |  __/ |   " << endl;
+        cout << "	|_____\\__,_|\\__, |\\___|_|   " << endl;
+        cout << "	            |___/        " << endl << endl;
+        cout << "Lager Ain't a Graph Explorer for Rookies !" << endl << endl << endl;
 
+        cout << "USAGE: " << argv[0] << " <OPTION>" << endl;
+        cout << endl << "OPTION : " << endl;
+        cout << " --log <Nombre_de_sommets> <Nombre_de_relations> <Nombre_de_qestions>"
+             << endl << "\t| Lance le programme le plus simplement possible"
+             << endl << "\t| Les informations passees en parametre permettent de generer"
+             << endl << "\t| un graphe aleatoirement, le graphe genere est ensuite analyse"
+             << endl << "\t| par LAGER et les resultats seront affiches sur une seule ligne"
+             << endl << "\t| avec le format suivant : "
+             << endl << "\t| <Nombre_de_sommet> <Nombre_de_relation>"
+             << " <Nombre_de_questions> <Temps_calcul_CFC> <Temps_calcul_questions>"
+             << endl << endl;
+
+        cout << " <fichier_d_entree> <fichier_de_sortie>"
+             << endl << "\t| Lance LAGER en utilisant le premier argument comme fichier source"
+             << endl << "\t| (Le fichier d'entree doit exister)"
+             << endl << "\t| Les donnees sont ensuite automatiquement sauvegardees "
+             << endl << "\t| dans le fichier indique par le second argument"
+             << endl << "\t| (Le fichier de sortie est cree automatiquement s'il n'existe pas)"
+             << endl << endl;
+
+        cout << " <fichier_d_entree>"
+             << endl << "\t| Lance LAGER en utilisant cet argument comme fichier source"
+             << endl << "\t| (Ce fichier doit exister)"
+             << endl << "\t| Il sera demande a l'utilisateur le chemin du fichier de sortie"
+             << endl << endl;
+
+        cout << " (Aucun argument)"
+             << endl << "\t| Lance LAGER normalement"
+             << endl << endl;
+
+
+    } else {
+        cout << endl;
         cout << "	 _                          " << endl;
         cout << "	| |    __ _  __ _  ___ _ __ " << endl;
         cout << "	| |   / _` |/ _` |/ _ \\ '__|" << endl;
@@ -104,10 +134,8 @@ int main(int argc, char* argv[]) {
         // cout << "- Appuyez sur 5 pour changer de structure de donnee" << endl;
         cout << "- Appuyez sur 0 pour fermer le programme" << endl << endl;
 
+
         while (1) {
-
-
-
             cout << "Entrez votre choix : ";
             cin >> choice;
 
@@ -140,6 +168,7 @@ int main(int argc, char* argv[]) {
                 G.initGraph(dir_in);
 
                 t_open = clock();
+
                 cout << ((double) t_open - t_ini) / CLOCKS_PER_SEC << " sec." << endl << endl;
                 choice = -1;
                 break;
@@ -148,6 +177,7 @@ int main(int argc, char* argv[]) {
 
                 if (G.isAnalysable()) {
                     /* graphe enregistre */
+
                     if (!G.isAnalyzed()) {
                         if (argc > 2) {
                             /* s'il y a 2 arguments, on utilise le 2eme argument comme
@@ -192,6 +222,7 @@ int main(int argc, char* argv[]) {
                         G.saveGraph(dir_out);
 
                         cout << "Donnees sauvegardees... " << endl;
+                        G.setAnalyzed(true);
                     } else {
                         cout << "Graphe deja analyse !" << endl << endl;
                     }
@@ -220,25 +251,13 @@ int main(int argc, char* argv[]) {
 
             case 4 :
 
-                nbPerson = 0;
-                densite_relation = 0;
-                densite_question = 0;
-
-                cout << "Entrez le nombre de sommets desires : ";
-                cin >> nbPerson;
-
-                cout << "Entrez la densite de relation desiree (ratio pour 100) : ";
-                cin >> densite_relation;
-
-                cout << "Entrez la densite de question desiree (ratio pour 100) : ";
-                cin >> densite_question;
-
+                gene.changeOptionManual();
 
                 cout << "Generation d'un fichier... ";
                 t_ini = clock();
 
-                generateFile( TEST_GENE_IN, TEST_GENE_OUT, nbPerson, (int)
-                              (densite_relation*100), (int) (densite_question*100) );
+
+                gene.generateFile();
 
                 t_create = clock();
 

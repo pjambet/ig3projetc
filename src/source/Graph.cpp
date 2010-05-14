@@ -15,7 +15,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 Constructeurs et Desctructeurs
 ===================================*/
 Graph::Graph (): m_sizeGraph(0), m_nbSCC(0), m_nbDist(0) {
-    m_matFriends = new int*;
+    // m_matFriends = new int*;
 }
 
 Graph::~Graph () {
@@ -112,8 +112,12 @@ void Graph::initGraph (string& fileNameIn) {
 
             /* Lecture des donnees et stockage */
             for (i = 0; i < (int) nbConnections; i++) {
-                fscanf(f_in, "%[^,], %[^\n]\n", x, y);
-                m_matFriends[m_idToRank[x]][m_idToRank[y]] = 1;
+                fscanf(f_in, "%[^,], %[^\r\n]\n", x, y);
+
+                xRank = m_idToRank[x];
+                yRank = m_idToRank[y];
+
+                m_matFriends[xRank][yRank] = 1;
             }
 
         } else {
@@ -123,7 +127,7 @@ void Graph::initGraph (string& fileNameIn) {
 
             /* Structure de liste */
             for (i = 0; i < (int) nbConnections; i++) {
-                fscanf(f_in, "%[^,], %[^\n]\n", x, y);
+                fscanf(f_in, "%[^,], %[^\r\n]\n", x, y);
 
                 xRank = m_idToRank[x];
                 yRank = m_idToRank[y];
@@ -143,7 +147,7 @@ void Graph::initGraph (string& fileNameIn) {
 
         /* Etape 6 - Stockage des questions */
         for (i = 0; i < (int) m_nbDist; i++) {
-            fscanf(f_in, "%[^ ] -> %[^\n]\n", x, y);
+            fscanf(f_in, "%[^ ] -> %[^\r\n]\n", x, y);
             xRank = m_idToRank[x];
             yRank = m_idToRank[y];
 
@@ -204,6 +208,11 @@ bool Graph::isAnalysable() {
 bool Graph::isAnalyzed() {
     return m_analyzed;
 }
+void Graph::setAnalyzed(bool b) {
+  m_analyzed = b;
+}
+
+
 
 unsigned int Graph::getSizeGraph() {
     return m_sizeGraph;
@@ -219,58 +228,54 @@ void Graph::searchSCC () {
     AdjMat matrix;
     AdjList list;
 
+    if (m_structGraph == 'm') {
+        matrix.initData(m_tabSummit, m_matFriends);
+        tabSummitTemp = matrix.initSCC();
 
-    if (!m_analyzed) {
-        // Si le fichier n'a pas ete analyse
-        if (m_structGraph == 'm') {
-            matrix.initData(m_tabSummit, m_matFriends);
-            tabSummitTemp = matrix.initSCC();
-
-        } else {
-            list.initData(m_tabSummit, m_listFriends, m_listDualFriends);
-            tabSummitTemp = list.initSCC();
-        }
+    } else {
+        list.initData(m_tabSummit, m_listFriends, m_listDualFriends);
+        tabSummitTemp = list.initSCC();
+    }
 
 
-        d = tabSummitTemp[0].beg;
-        f = tabSummitTemp[0].end;
-        cpt_SCC = 0;
+    d = tabSummitTemp[0].beg;
+    f = tabSummitTemp[0].end;
+    cpt_SCC = 0;
 
 
 
-        if (m_sizeGraph != 0) {
-            cpt_SCC++;
-            m_listSCC.push_back(v);
-            m_listSCC[cpt_SCC-1].push_back(m_idToRank[tabSummitTemp[0].id]);
+    if (m_sizeGraph != 0) {
+        cpt_SCC++;
+        m_listSCC.push_back(v);
+        m_listSCC[cpt_SCC-1].push_back(m_idToRank[tabSummitTemp[0].id]);
 
-            m_tabSummit[m_idToRank[tabSummitTemp[0].id]].important = tabSummitTemp[0].important;
+        m_tabSummit[m_idToRank[tabSummitTemp[0].id]].important = tabSummitTemp[0].important;
 
-            for (i = 1; i < (int) m_sizeGraph; i++) {
-                /* On regarde les autres sommets */
-                m_tabSummit[m_idToRank[tabSummitTemp[i].id]].important = tabSummitTemp[i].important;
+        for (i = 1; i < (int) m_sizeGraph; i++) {
+            /* On regarde les autres sommets */
+            m_tabSummit[m_idToRank[tabSummitTemp[i].id]].important = tabSummitTemp[i].important;
 
-                if ((d < (tabSummitTemp[i].beg)) && (f > (tabSummitTemp[i].end))) {
-                    m_listSCC[cpt_SCC-1].push_back(m_idToRank[tabSummitTemp[i].id]);
-                } else {
-                    d = tabSummitTemp[i].beg;
-                    f = tabSummitTemp[i].end;
-                    cpt_SCC++;
+            if ((d < (tabSummitTemp[i].beg)) && (f > (tabSummitTemp[i].end))) {
+                m_listSCC[cpt_SCC-1].push_back(m_idToRank[tabSummitTemp[i].id]);
+            } else {
+                d = tabSummitTemp[i].beg;
+                f = tabSummitTemp[i].end;
+                cpt_SCC++;
 
-                    m_listSCC.push_back(v);
-                    m_listSCC[cpt_SCC-1].push_back(m_idToRank[tabSummitTemp[i].id]);
-                }
-
+                m_listSCC.push_back(v);
+                m_listSCC[cpt_SCC-1].push_back(m_idToRank[tabSummitTemp[i].id]);
             }
 
-        } else {
-            cerr << "Erreur - Aucun graphe n'est ouvert !" << endl;
         }
 
-        m_nbSCC = cpt_SCC;
+    } else {
+        cerr << "Erreur - Aucun graphe n'est ouvert !" << endl;
+    }
 
-        for (i = 0; i < (int) m_nbSCC; i++) {
-            sort(m_listSCC[i].begin(), m_listSCC[i].end());
-        }
+    m_nbSCC = cpt_SCC;
+
+    for (i = 0; i < (int) m_nbSCC; i++) {
+        sort(m_listSCC[i].begin(), m_listSCC[i].end());
     }
 }
 
@@ -288,60 +293,58 @@ void Graph::searchDistances () {
     AdjMat matrix;
     AdjList list;
 
-    if (!m_analyzed) {
-        /* Attention ! Delicat a comprendre */
-        /* Etape 1 : Pour tous les points de depart distincts,
-           on cherche et on stocke les plus courts chemins */
-        if (m_structGraph == 'm') {
-            matrix.initData(m_tabSummit, m_matFriends);
-            for (it = m_listQuestion.begin(); it != m_listQuestion.end(); it++) {
-                m_listDist[it->first] = matrix.initDist(it->first);
-            }
-
-        } else {
-            list.initData(m_tabSummit, m_listFriends, m_listDualFriends);
-
-            for (it = m_listQuestion.begin(); it != m_listQuestion.end(); it++) {
-                m_listDist[it->first] = list.initDist(it->first);
-            }
-        }
-
-
-        /* Etape 2 : A partir de la liste de question, pour chaque point de depart,
-           On regarde les id des points où aller et on stocke le chemin inverse dans path
-           On stockera ensuite ce chemin dans le multimap listPath avec le point de depart comme cle */
+    /* Attention ! Delicat a comprendre */
+    /* Etape 1 : Pour tous les points de depart distincts,
+       on cherche et on stocke les plus courts chemins */
+    if (m_structGraph == 'm') {
+        matrix.initData(m_tabSummit, m_matFriends);
         for (it = m_listQuestion.begin(); it != m_listQuestion.end(); it++) {
-            /* Pour tous les points de departs distincts */
-
-            for (i = 0; i < (int) it->second.size(); i++) {
-                /* it->second[i] = l'id ou on veut aller a partir de it->first */
-                path.clear();
-
-                token = it->second[i];
-                path.push_back(it->second[i]);
-                /* En meme temps, la distance de it->first a i est donnee par m_tabSummit[path[0]].beg */
-
-
-                if ( (m_listDist[it->first][token].end == -1) && (token != it->first)) {
-                    /* Si il n'existe pas de chemin entre les 2 points
-                       On stocke directement le point de depart (rang) */
-                    path.push_back(it->first);
-                }
-
-                while (token != -1) {
-                    /* Tant qu'on n'est pas arrive a un pere "NULL", on remonte */
-                    token = m_listDist[it->first][token].end;
-                    path.push_back(token);
-                }
-
-                path.pop_back();
-                /* On retire le dernier point qui est normalement -1 */
-
-                m_listPath.insert(pair< int, vector< int > >(it->first, path));
-
-            }
+            m_listDist[it->first] = matrix.initDist(it->first);
         }
-        m_analyzed = true;
+
+    } else {
+        list.initData(m_tabSummit, m_listFriends, m_listDualFriends);
+
+        for (it = m_listQuestion.begin(); it != m_listQuestion.end(); it++) {
+            m_listDist[it->first] = list.initDist(it->first);
+
+        }
+    }
+
+
+    /* Etape 2 : A partir de la liste de question, pour chaque point de depart,
+       On regarde les id des points où aller et on stocke le chemin inverse dans path
+       On stockera ensuite ce chemin dans le multimap listPath avec le point de depart comme cle */
+    for (it = m_listQuestion.begin(); it != m_listQuestion.end(); it++) {
+        /* Pour tous les points de departs distincts */
+
+        for (i = 0; i < (int) it->second.size(); i++) {
+            /* it->second[i] = l'id ou on veut aller a partir de it->first */
+            path.clear();
+
+            token = it->second[i];
+            path.push_back(it->second[i]);
+            /* En meme temps, la distance de it->first a i est donnee par m_tabSummit[path[0]].beg */
+
+
+            if ( (m_listDist[it->first][token].end == -1) && (token != it->first)) {
+                /* Si il n'existe pas de chemin entre les 2 points
+                   On stocke directement le point de depart (rang) */
+                path.push_back(it->first);
+            }
+
+            while (token != -1) {
+                /* Tant qu'on n'est pas arrive a un pere "NULL", on remonte */
+                token = m_listDist[it->first][token].end;
+                path.push_back(token);
+            }
+
+            path.pop_back();
+            /* On retire le dernier point qui est normalement -1 */
+
+            m_listPath.insert(pair< int, vector< int > >(it->first, path));
+
+        }
     }
 }
 

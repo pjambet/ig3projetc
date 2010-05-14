@@ -227,3 +227,7 @@ float Generator::convertNumToRatio(int n, int nbSum) {
     return (nbSum * RATIO) / (n * n - n);
 }
 
+string Generator::getDestination() {
+	return destination;
+}
+

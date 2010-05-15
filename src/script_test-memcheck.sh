@@ -6,9 +6,9 @@
 date >> log
 for (( i = 100; i < 2000; i+=100 )); do
 	echo -n $i " ";
-	for (( j = 1; j < 10; j+=1 )); do
-		for (( k=10; k < 1000; k+=20 )); do			
-			./GrapheFB --log $i $j $k >> log 			
+	for (( j = 100; j < 1000; j+=100 )); do
+		for (( k=10; k < 500; k+=50 )); do			
+			valgrind ./GrapheFB --log $i $j $k >> log2 2>&1			
 		done
 	done
 done

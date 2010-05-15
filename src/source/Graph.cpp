@@ -162,7 +162,7 @@ void Graph::initGraph (string& fileNameIn) {
 void Graph::clearGraph () {
     int i;
 
-    m_sizeGraph = 0;
+    
     m_tabSummit.clear();
 
     m_idToRank.clear();
@@ -171,14 +171,14 @@ void Graph::clearGraph () {
     m_listFriends.clear();
     m_listDualFriends.clear();
 
-
     if ((m_structGraph == 'm') && (m_sizeGraph)) {
         for (i = 0; i < (int) m_sizeGraph; i++) {
             delete[] m_matFriends[i];
         }
         delete[] m_matFriends;
+        m_matFriends = NULL;
     }
-
+	m_sizeGraph = 0;
 
     m_nbSCC = 0;
     m_listSCC.clear();
@@ -205,17 +205,79 @@ bool Graph::isAnalysable() {
     return (m_sizeGraph != 0);
 }
 
+
 bool Graph::isAnalyzed() {
     return m_analyzed;
 }
+
+
 void Graph::setAnalyzed(bool b) {
   m_analyzed = b;
 }
 
 
-
 unsigned int Graph::getSizeGraph() {
     return m_sizeGraph;
+}
+
+
+unsigned int Graph::getNbDist() {
+	return m_nbDist;
+}
+
+unsigned int Graph::getNbScc() {
+	return m_nbSCC;
+}
+
+
+int** Graph::getMatFriends() {
+	return m_matFriends;
+}
+
+vector< s_summit > Graph::getTabSummit() {
+	return m_tabSummit;
+}
+
+
+map< string, int > Graph::getIdToRank() {
+	return m_idToRank;
+}
+
+
+vector< vector< int > > Graph::getListFriends() {
+	return m_listFriends;
+}
+
+
+vector< vector< int > > Graph::getListDualFriends() {
+	return m_listDualFriends;
+}
+
+vector< vector < int > > Graph::getListSCC() {
+	return m_listSCC;
+}
+
+
+map< int, vector< int > > Graph::getListQuestion() {
+	return m_listQuestion;
+}
+
+
+map< int, vector< s_summit > > Graph::getListDist() {
+	return m_listDist;
+}
+
+
+multimap< int, vector< int > > Graph::getListPath() {
+	return m_listPath;
+}
+
+
+void Graph::setStructGraph(char c) {
+	if ((c == 'l') || (c == 'm'))
+		m_structGraph = c;
+	else
+		cerr << "Structure inconnue " << endl;
 }
 
 void Graph::searchSCC () {

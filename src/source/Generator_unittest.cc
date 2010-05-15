@@ -25,11 +25,11 @@ TEST(Generator, GenerateFile) {
 	char chaine[100] = "";// variable "tampon" qui permet de lire le fichier
 	char buffer[100];// deuxieme variable "tampon" qui permet de lire le fichier
 	bool continuer = true;//booleen utile au parcour du fichier
-	char tmp1[10], tmp2[10];
+	char tmp1[10];
 	//On teste si la structure du fichier est conforme au sujet
 	EXPECT_TRUE(G.getDestination().c_str() != NULL);
 	
-	G.changeOptionAutomatic( "../test/noms.dat", "../test/gene", 750, 1000, 250);
+	G.changeOptionAutomatic( "../test/noms.dat", "../test/gene", 1000, 1000, 500);
 	G.generateFile();
 	
 	FILE* fichier = NULL;
@@ -53,15 +53,19 @@ TEST(Generator, GenerateFile) {
 	// Lecture des relations
 	nbrel_th = atoi(&buffer[0]);
 	continuer = true;
- 	while ( continuer ) {
- 		fscanf(fichier, "%[^,], %[^\r\n]\n", tmp1, tmp2);
-		cout << chaine << endl;
+ 	do {
+ 		fscanf(fichier, "%s", tmp1 );
+		//cout << chaine << endl;
+		//cout << tmp1 << endl;
 		nbrel_re++;
-		continuer = false;		
-	}
+		//cout << "chaine[0] :" << chaine[0] << "chaine[1] :" << chaine[1] << "chaine[2] :" << chaine[2] << "chaine[3] :" << chaine[3] << "chaine[4] :" << chaine[4] << "chaine[5] :" << chaine[5] << endl;
+		if (tmp1[strlen(tmp1) - 1] != ',') {
+			continuer = false;
+		}
+	} while ((fgets(chaine, 100, fichier) ) != NULL && (continuer)) ;
  
  	// Lecture des questions
- 	nbquest_th = atoi(&buffer[0]);
+ 	nbquest_th = atoi(tmp1);
  	while (fgets(chaine, 100, fichier) != NULL) {
 		nbquest_re++;
 	}

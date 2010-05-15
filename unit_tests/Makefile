@@ -27,7 +27,7 @@ CXXFLAGS += -g -Wall -Wextra
 
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
-TESTS = test_gene
+TESTS = GrapheFB_unittest
 
 # All Google Test headers.  Usually you shouldn't change this
 # definition.
@@ -69,12 +69,41 @@ gtest_main.a : gtest-all.o gtest_main.o
 # gtest_main.a, depending on whether it defines its own main()
 # function.
 
-Generator.o : $(USER_DIR)/source/Generator.cpp $(USER_DIR)/headers/Generator.h $(GTEST_HEADERS)
+AdjList.o: $(USER_DIR)/source/AdjList.cpp $(USER_DIR)/headers/Summit.h
+	$(CXX) $(CXXFLAGS) -o AdjList.o -c $(USER_DIR)/source/AdjList.cpp
+
+AdjList_unittest.o: $(USER_DIR)/source/AdjList_unittest.cc \
+                     $(USER_DIR)/headers/AdjList.h $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/source/AdjList_unittest.cc
+	
+AdjMat.o: $(USER_DIR)/source/AdjMat.cpp $(USER_DIR)/headers/Summit.h
+	$(CXX) $(CXXFLAGS) -o AdjMat.o -c $(USER_DIR)/source/AdjMat.cpp
+	
+AdjMat_unittest.o: $(USER_DIR)/source/AdjMat_unittest.cc \
+                     $(USER_DIR)/headers/AdjMat.h $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/source/AdjMat_unittest.cc
+	
+Graph.o: $(USER_DIR)/source/Graph.cpp $(USER_DIR)/headers/AdjList.h $(USER_DIR)/headers/AdjMat.h
+	$(CXX) $(CXXFLAGS) -o Graph.o -c $(USER_DIR)/source/Graph.cpp
+
+Graph_unittest.o: $(USER_DIR)/source/Graph_unittest.cc \
+                     $(USER_DIR)/headers/Graph.h $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/source/Graph_unittest.cc
+	
+Summit.o: $(USER_DIR)/source/Summit.cpp $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/source/Summit.cpp
+
+Summit_unittest.o: $(USER_DIR)/source/Summit_unittest.cc \
+                  $(USER_DIR)/headers/Summit.h $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/source/Summit_unittest.cc
+
+Generator.o : $(USER_DIR)/source/Generator.cpp $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/source/Generator.cpp
 
-test_gene.o : $(USER_DIR)/source/test_gene.cc \
+Generator_unittest.o : $(USER_DIR)/source/Generator_unittest.cc \
                      $(USER_DIR)/headers/Generator.h $(GTEST_HEADERS)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/source/test_gene.cc
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/source/Generator_unittest.cc
 
-test_gene : Generator.o test_gene.o gtest_main.a
+GrapheFB_unittest : AdjList.o AdjList_unittest.o AdjMat.o AdjMat_unittest.o Graph.o Graph_unittest.o \
+                    Summit.o Summit_unittest.o Generator.o Generator_unittest.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@

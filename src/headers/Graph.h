@@ -106,6 +106,19 @@ public:
     bool isAnalyzed();
 
     unsigned int getSizeGraph();
+    unsigned int getNbDist();
+    unsigned int getNbScc();
+    int** getMatFriends();
+    vector< s_summit > getTabSummit();
+    map< string, int > getIdToRank();
+    vector< vector< int > > getListFriends();
+    vector< vector< int > > getListDualFriends();
+    vector< vector < int > > getListSCC();
+    map< int, vector< int > > getListQuestion();
+    map< int, vector< s_summit > > getListDist();
+    multimap< int, vector< int > > getListPath();
+
+    void setStructGraph(char c);
 
     bool isAnalysable();
     /* DETAIL : On considere que la condition minimale pour qu'un graphe soit analysable

@@ -42,6 +42,7 @@ private :
     string database;
     string destination;
     int nbPerson;
+    int nbPersonMax;
     int nbRelation;
     int nbQuestion;
 
@@ -53,6 +54,7 @@ private :
        - destination : Le fichier ou sera cree le fichier genere
 
        - nbPerson : Le nombre de personne desire
+       - nbPersonMax : Le nombre de personne maximum disponible avec le fichier database
        - nbRelation : Le nombre de relation desire
        - nbQuestion : Le nombre de question desire */
 
@@ -105,7 +107,7 @@ public :
            Lire et stocker les noms et id contenus dans le fichier
          Fermer le fichier source
 
-         Ouvrir le fichier de destination dest, s'il n'existe pas, il est automatiquement cree
+         Ouvrir le fichier de destination destination, s'il n'existe pas, il est automatiquement cree
            Inscrire le nombre de personne n dans le fichier
            Choisir aleatoirement n personnes et les inscrire dans le fichier sous le format "nom, id, frequence"
 
@@ -118,7 +120,15 @@ public :
            Placer aleatoirement les questions selon le pourcentage d_quest dans la matrice n*n
            Inscrire le nombre de questions obtenu dans le fichier
            Lire la matrice et inscrire les relations dans le fichier sous le format "id1 -> id2"
-         Fermer le fichier dest */
+         Fermer le fichier destination */
+
+
+    /* PROCEDURE : generateDatabase - Generation une database de nom et d'id */
+    void generateDatabase();
+    /* COMPLEXITE :
+       ENTREE : -
+       ALGORITHME :
+    */
 
 
     /* FONCTION : generateMatrix - Generation une matrice de 0 et de 1 aleatoirement et renvoie le nombre de 1 */

@@ -12,73 +12,108 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 
 
 Generator::Generator() : database("../test/noms.dat"), destination("../test/gene"),
-                          nbPerson(0), nbRelation(0), nbQuestion(0) {
+                         nbPerson(0), nbRelation(0), nbQuestion(0) {
+
+    FILE* fichier = fopen(database.c_str(), "r");
+    nbPersonMax = 0;
+
+    if (fichier == NULL) {
+        cerr << endl << "Fichier de donnees introuvable !" << endl;
+        exit (-1);
+
+    } else {
+        while (!feof(fichier)) {
+            fscanf(fichier, "%*[^\r\n]\n");
+            nbPersonMax++;
+        }
+        fclose(fichier);
+
+    }
+
 }
 
 Generator::~Generator() {
 }
 
 void Generator::changeOptionAutomatic(string db, string dest, int nP, int nR, int nQ) {
-  database = db;
-  destination = dest;
-  nbPerson = nP;
-  nbRelation = nR;
-      assert( nbRelation <= (nbPerson * nbPerson - nbPerson) );
-  nbQuestion = nQ;
-      assert( nbQuestion <= (nbPerson * nbPerson - nbPerson) );
+    database = db;
+    destination = dest;
+    nbPerson = nP;
+    nbRelation = nR;
+    assert( nbRelation <= (nbPerson * nbPerson - nbPerson) );
+    nbQuestion = nQ;
+    assert( nbQuestion <= (nbPerson * nbPerson - nbPerson) );
 
 }
 
 void Generator::changeOptionManual() {
-  string choice;
-
-  cout << "Options actuelles :" << endl;
-  cout << "\tBase de donnees          : " << database << endl;
-  cout << "\tFichier de destination   : " << destination << endl;
-  cout << "\tNombre de personnes      : " << nbPerson << endl;
-  cout << "\tNombre de relations      : environ " << nbRelation << " (max : " << nbPerson * nbPerson - nbPerson << ")" << endl;
-  cout << "\tNombre de questions      : environ " << nbQuestion << " (max : " << nbPerson * nbPerson - nbPerson << ")" << endl;
-  cout << endl << endl;
-
-
-  cout << "Voulez-vous changer la database et la destination ? (o/n) ";
-  cin >> choice;
-
-  if (choice == "o" || choice == "O" || choice == "oui" || choice == "Oui") {
-  cout << "Base de donnees : ";
-      cin >> database;
-  cout << "Fichier de destination : ";
-      cin >> destination;
-
-  cout << "Changements effectues" << endl << endl;
-
-  } else {
-    cout << "Aucun changement effectue." << endl << endl;
-
-  }
+    string choice;
+    FILE* fichier;
+    cout << "Options actuelles :" << endl;
+    cout << "\tBase de donnees          : " << database << endl;
+    cout << "\tFichier de destination   : " << destination << endl;
+    cout << "\tNombre de personnes      : " << nbPerson << " (max : " << nbPersonMax << ")" << endl;
+    cout << "\tNombre de relations      : environ " << nbRelation << " (max : " << nbPerson * nbPerson - nbPerson << ")" << endl;
+    cout << "\tNombre de questions      : environ " << nbQuestion << " (max : " << nbPerson * nbPerson - nbPerson << ")" << endl;
+    cout << endl << endl;
 
 
-  cout << "Voulez-vous changer les parametres chiffres ? (o/n) ";
-  cin >> choice;
+    cout << "Voulez-vous changer la database et la destination ? (o/n) ";
+    cin >> choice;
 
-  if (choice == "o" || choice == "O" || choice == "oui" || choice == "Oui") {
-  cout << "Nombre de personnes : ";
-      cin >> nbPerson;
+    if (choice == "o" || choice == "O" || choice == "oui" || choice == "Oui") {
+        cout << "Base de donnees : ";
+        cin >> database;
 
-  do {
-  cout << "Nombre de relations (max : " << nbPerson * nbPerson - nbPerson << ") : ";
-      cin >> nbRelation;
-  } while ( nbRelation > (nbPerson * nbPerson - nbPerson) );
+        fichier = fopen(database.c_str(), "r");
 
-  do {
-  cout << "Nombre de questions (max : " << nbPerson * nbPerson - nbPerson << ") : ";
-      cin >> nbQuestion;
-  } while ( nbQuestion > (nbPerson * nbPerson - nbPerson) );
+        if (fichier == NULL) {
+            cerr << endl << "Fichier de donnees introuvable !" << endl;
+            exit (-1);
 
-  } else {
-    cout << "Aucun changement effectue." << endl << endl;
+        } else {
+        nbPersonMax = 0;
+            while (!feof(fichier)) {
+                fscanf(fichier, "%*[^\r\n]\n");
+                nbPersonMax++;
+            }
+            fclose(fichier);
+        }
 
-  }
+        cout << "Fichier de destination : ";
+        cin >> destination;
+
+        cout << "Changements effectues" << endl << endl;
+
+    } else {
+        cout << "Aucun changement effectue." << endl << endl;
+
+    }
+
+
+    cout << "Voulez-vous changer les parametres chiffres ? (o/n) ";
+    cin >> choice;
+
+    if (choice == "o" || choice == "O" || choice == "oui" || choice == "Oui") {
+        do {
+        cout << "Nombre de personnes (max : " << nbPersonMax << ") : ";
+        cin >> nbPerson;
+        } while (nbPerson > nbPersonMax);
+
+        do {
+            cout << "Nombre de relations (max : " << nbPerson * nbPerson - nbPerson << ") : ";
+            cin >> nbRelation;
+        } while ( nbRelation > (nbPerson * nbPerson - nbPerson) );
+
+        do {
+            cout << "Nombre de questions (max : " << nbPerson * nbPerson - nbPerson << ") : ";
+            cin >> nbQuestion;
+        } while ( nbQuestion > (nbPerson * nbPerson - nbPerson) );
+
+    } else {
+        cout << "Aucun changement effectue." << endl << endl;
+
+    }
 }
 
 
@@ -122,83 +157,85 @@ void Generator::generateFile() {
     assert(nbPerson < (int) database_nom.size());
     /* On verifie que le nombre de personne est bien inferieur au nombre de personne dans la database */
 
-  if (nbPerson > 0) {
+    if (nbPerson > 0) {
 
-    fichier = fopen(destination.c_str(), "w+");
+        fichier = fopen(destination.c_str(), "w+");
 
-    /* Nombre de personne */
-    fprintf(fichier, "%d\n", nbPerson);
+        /* Nombre de personne */
+        fprintf(fichier, "%d\n", nbPerson);
 
-    /* Personnes */
-    i = 0;
-    while (i < nbPerson) {
-        random = rand()%database_nom.size();
-        strcpy(nom, database_nom[random].c_str());
-        strcpy(id, database_id[random].c_str());
+        /* Personnes */
+        i = 0;
+        while (i < nbPerson) {
+            random = rand()%database_nom.size();
+            strcpy(nom, database_nom[random].c_str());
+            strcpy(id, database_id[random].c_str());
 
-        if (find(liste_id.begin(), liste_id.end(), id) == liste_id.end()) {
-            /* Si la personne n'est pas encore dans la liste */
+            if (find(liste_id.begin(), liste_id.end(), id) == liste_id.end()) {
+                /* Si la personne n'est pas encore dans la liste */
 
-            random = rand()%FREQ_MAX;
-            /* Determination de la frequence au hasard */
-            fprintf(fichier, "%s, %s, %d\n", nom, id, random);
-            liste_id.push_back(id);
-            /* Stockage des id choisies */
-            i++;
-        }
-    }
-
-
-    /* Initialisation de la matrice */
-    matrice = new int*[nbPerson];
-    for (i = 0; i < nbPerson; i++) {
-        matrice[i] = new int[nbPerson];
-    }
-
-
-    /* Matrice de relation */
-    nbLink = generateMatrix(nbPerson, matrice, (int) convertNumToRatio(nbPerson, nbRelation));
-
-    /* Nombre de relation */
-    fprintf(fichier, "%d\n", nbLink);
-
-    for (i = 0; i < nbPerson; i++) {
-        for (j = 0; j < nbPerson; j++) {
-            if ((matrice[i][j])) {
-                fprintf(fichier, "%s, %s\n", liste_id[i].c_str(), liste_id[j].c_str());
+                random = rand()%FREQ_MAX;
+                /* Determination de la frequence au hasard */
+                fprintf(fichier, "%s, %s, %d\n", nom, id, random);
+                liste_id.push_back(id);
+                /* Stockage des id choisies */
+                i++;
             }
         }
-    }
 
 
-    /* Matrice de question */
-    nbQuest = generateMatrix(nbPerson, matrice, (int) convertNumToRatio(nbPerson, nbQuestion));
+        /* Initialisation de la matrice */
+        matrice = new int*[nbPerson];
+        for (i = 0; i < nbPerson; i++) {
+            matrice[i] = new int[nbPerson];
+        }
 
-    /* Nombre de question */
-    fprintf(fichier, "%d\n", nbQuest);
-    for (i = 0; i < nbPerson; i++) {
-        for (j = 0; j < nbPerson; j++) {
-            if (matrice[i][j]) {
-                fprintf(fichier, "%s -> %s\n", liste_id[i].c_str(), liste_id[j].c_str());
+
+        /* Matrice de relation */
+        nbLink = generateMatrix(nbPerson, matrice, (int) convertNumToRatio(nbPerson, nbRelation));
+
+        /* Nombre de relation */
+        fprintf(fichier, "%d\n", nbLink);
+
+        for (i = 0; i < nbPerson; i++) {
+            for (j = 0; j < nbPerson; j++) {
+                if ((matrice[i][j])) {
+                    fprintf(fichier, "%s, %s\n", liste_id[i].c_str(), liste_id[j].c_str());
+                }
             }
         }
+
+
+        /* Matrice de question */
+        nbQuest = generateMatrix(nbPerson, matrice, (int) convertNumToRatio(nbPerson, nbQuestion));
+
+        /* Nombre de question */
+        fprintf(fichier, "%d\n", nbQuest);
+        for (i = 0; i < nbPerson; i++) {
+            for (j = 0; j < nbPerson; j++) {
+                if (matrice[i][j]) {
+                    fprintf(fichier, "%s -> %s\n", liste_id[i].c_str(), liste_id[j].c_str());
+                }
+            }
+        }
+
+
+        /* Liberation de la memoire*/
+        for (i = 0; i < nbPerson; i++) {
+            delete[] matrice[i];
+        }
+
+        delete[] matrice;
+
+
+        fclose(fichier);
+    } else {
+        cout << "Le graphe doit posseder au moins 1 personne ! ";
     }
-
-
-    /* Liberation de la memoire*/
-    for (i = 0; i < nbPerson; i++) {
-        delete[] matrice[i];
-    }
-
-    delete[] matrice;
-
-
-  fclose(fichier);
- } else {
-   cout << "Le graphe doit posseder au moins 1 personne ! ";
- }
 }
 
+void Generator::generateDatabase() {
+}
 
 int Generator::generateMatrix(int n, int** m, int r) {
     int i, j;
@@ -228,6 +265,6 @@ float Generator::convertNumToRatio(int n, int nbSum) {
 }
 
 string Generator::getDestination() {
-	return destination;
+    return destination;
 }
 

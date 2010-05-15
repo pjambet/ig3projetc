@@ -28,82 +28,172 @@ Includes
 #include "AdjList.h"
 #include "AdjMat.h"
 
+
+/*=================================
+Constantes
+===================================*/
 #define TEST_STRUCT 'm'
 
 using namespace std;
 
 
 class Graph {
+private:
 
     /* Attributs */
-    /* ********* */
-    /* Dans tout ce qui est vecteur et map (sauf m_idToRank, on ne stocke que le rang de l'id
-       Le rang est sa place dans m_tabSummit */
-private:
-    int unsigned m_sizeGraph; /* Taille du graphe = nombre de personne */
-    vector< s_summit > m_tabSummit; /* Tableau de personnes */
-
-
-    map< string, int > m_idToRank; /* Trouve le rang dans m_tabSummit a partir de son id */
-
-
-    char m_structGraph; /* Structure du graphe : 'l' pour liste, 'm' pour matrice */
-
-
-    vector< vector< int > > m_listFriends; /* Pour une id, on associe une liste de gens a qui il fait confiance */
-    vector< vector< int > > m_listDualFriends; /* Pour une id, on associe une liste de gens qui lui font confiance */
-
-    int** m_matFriends; /* Matrice d'adjacence */
-
-    int unsigned m_nbSCC; /* Nombre de CFC */
-    vector< vector < int > > m_listSCC; /* Vecteur de CFC
-                                            Chaque CFC est represente par un vecteur d'id (entier) */
-
-    int unsigned m_nbDist; /* Nombre de distance a determiner */
-    map< int, vector< int > > m_listQuestion; /* Stocke les questions dans un map */
-    map< int, vector< s_summit > > m_listDist; /* Structure de stockage des distances
-                                                  A chaque id est associe le tableau de sommet trouve avec Disjktra */
-    multimap< int, vector< int > > m_listPath; /* Stocke les chemins = chemin a suivre dans m_tabSummit pour arriver */
-
+    int unsigned m_sizeGraph;
+    vector< s_summit > m_tabSummit;
+    map< string, int > m_idToRank;
+    char m_structGraph;
     bool m_analyzed;
 
-    /* Methodes */
-    /* ******** */
+    vector< vector< int > > m_listFriends;
+    vector< vector< int > > m_listDualFriends;
+
+    int** m_matFriends;
+
+    int unsigned m_nbSCC;
+    vector< vector < int > > m_listSCC;
+
+    int unsigned m_nbDist;
+    map< int, vector< int > > m_listQuestion;
+    map< int, vector< s_summit > > m_listDist;
+    multimap< int, vector< int > > m_listPath;
+
+    /* EXPLICATIONS DES ATTRIBUTS :
+
+    	Structure de stockage et d'analyse du graphe.
+    	Les donnees essentielles conservees sont :
+    	- m_sizeGraph : Le nombre de sommet dans le graphe
+     	- m_tabSummit : Tableau contenant les donnees des sommets
+     	- m_idToRank : Permet de faire une association entre une id et son emplacement dans m_tabSummit
+      - m_structGraph : Indique si le graphe est analyse avec une structure de matrice (m) ou de liste de voisins (l)
+      - m_analyzed : Indique si apres une initialisation, le graphe a deja ete analyse ou pas
+
+      Si la structure est liste, on stocke les donnees dans les attributs suivants :
+      - m_listFriend : Un vecteur associant a chaque sommet une liste de fils,
+                       m_listFriend[i][j] = x si m_tabSummit[x] est un fils de m_tabSummit[i]
+      - m_listDualFriend : Un vecteur associant a chaque sommet une liste de pere,
+                           m_listDualFriend[i][j] = x si m_tabSummit[x] est un pere de m_tabSummit[i]
+
+      Si la structure est matrice, on stocke les donnees dans l'attribut suivant :
+      - m_matFriends : La matrice d'adjacence associee au donnees
+
+      On stocke aussi les donnees sur les CFC :
+      - m_nbSCC : Le nombre de CFC dans le graphe
+      - m_listSCC : La liste de liste de CFC
+                    Pour i quelconque, m_listSCC[i] contient un vecteur de sommets de la meme CFC
+
+      Ainsi que les donnees sur les distances :
+      - m_nbDist : Le nombre de distance a determiner
+      - m_listQuestion : On stocke pour chaque point de depart distinct, un vecteur de sommet ou on doit aller
+      - m_listDist : On stocke pour chaque point de depart distinct, le tableau de sommet regroupant la distance de ce point vers tous les autres
+      - m_listPath : On stocke pour chaque point de depart, un vecteur contenant un chemin a suivre
+                     La structure multimap permet d'avoir des chemins differents pour un meme point de depart */
+
+    /* ****************************************************** */
+    /* ****************************************************** */
+
 public:
 
-    /* Constructeurs et Destructeurs */
+    /* CONSTRUCTEURS ET DESTRUCTEURS */
     Graph ();
     ~Graph ();
 
 
-    /* Initialisation */
-    void initGraph (string& fileNameIn); /* Initialisation du graphe a partir d'un fichier */
-    void clearGraph (); /* Remise a zero du graphe */
+    /* ACCESSEURS */
+    void setAnalyzed(bool b);
+    bool isAnalyzed();
 
-
-    /* Accesseurs */
-    bool isAnalysable(); /* Renvoie vrai si on peu analyser = ( taille du graffe != 0 )*/
-    bool isAnalyzed(); /* Renvoie vrai si le graphe a déja été analysé, faux sinon */
-    void setAnalyzed(bool b); /* Change l'etat d'analyse du graphe */
     unsigned int getSizeGraph();
 
+    bool isAnalysable();
+    /* DETAIL : On considere que la condition minimale pour qu'un graphe soit analysable
+                est que m_sizeGraph != 0 */
 
-    /* Recherche */
-    void searchSCC (); /* Cherche et stocke les listes des CFC a partir de m_tabSummit */
-    void searchDistances (); /* Utilise Djiskstra */
+
+    /* METHODE D'INITIALISATION DE LA CLASSE */
+
+    /* PROCEDURE : initGraph - Initialisation des donnees */
+    void initGraph (string& fileNameIn);
+    /* COMPLEXITE :
+       ENTREE : fileNameIn, nom du fichier d'entree pour initialiser
+       ALGORITHME :
+         Ouvrir le fichier indique par fileNameIn
+         1 - Lecture du nombre de personne
+         2 - Lecture des donnees sur les personnes
+            Inserer chaque nouvelle personne dans m_tabSummit
+            Inserer dans m_idToRank la correspondance entre l'id et sa place dans m_tabSummit
+         3 - Lecture du nombre de relation
+         INTERMEDIAIRE - Determiner la structure a adopter
+         4 - Lecture des relations
+            si la structure est une matrice
+                "x, y" dans le fichier implique que m_matFriends[m_idToRank[x]][m_idToRank[y]] = 1
+            si la structure est une liste
+                "x, y" implique qu'on ajoute m_idToRank[y] dans le vecteur correspondant aux amis de x
+                et m_idToRank[x] dans le vecteur correspondant aux amis duals de y
+        */
 
 
-    /* Autres et optionnels */
+    /* PROCEDURE : clearGraph - Remise a zero des donnees */
+    void clearGraph ();
+    /* COMPLEXITE :
+       ENTREE : -
+       ALGORITHME :
+        */
+
+
+    /* RECHERCHE */
+
+    /* PROCEDURE : searchSCC - Recherche des CFC */
+    void searchSCC ();
+    /* COMPLEXITE :
+       ENTREE : -
+       ALGORITHME :
+        */
+
+
+    /* PROCEDURE : searchDistances - Recherche des distances a determiner */
+    void searchDistances ();
+    /* COMPLEXITE :
+       ENTREE : -
+       ALGORITHME :
+        */
+
+
+    /* AUTRES ET OPTIONNELS */
+
+    /* PROCEDURE : initGraph - Initialisation des donnees */
     char chooseStruct (); /* Choisit la structure la mieux adaptee pour analyser le graphe */
+    /* COMPLEXITE :
+       ENTREE : -
+       ALGORITHME :
+        */
+
+
+    /* PROCEDURE : initGraph - Initialisation des donnees */
     void saveGraph (string& fileNameOut); /* Sauvegarde les resultats dans un fichier */
+    /* COMPLEXITE :
+       ENTREE : fileNameOut, nom du fichier d'enregistrement des donnees
+                (ce fichier peut ne pas exister, il sera alors cree)
+       ALGORITHME :
+        */
 
 
     /* Affichage */
-    void printGraph (); /* Procedure d'affichage du graphe
-                          Affiche
-                          - les personnes
-                          - les composantes fortements connexes
-                          - les distances demandees */
+    /* PROCEDURE : initGraph - Initialisation des donnees */
+    void printGraph ();
+    /* COMPLEXITE :
+       ENTREE : -
+       ALGORITHME :
+        */
+
+
+    /* Procedure d'affichage du graphe
+                      Affiche
+                      - les personnes
+                      - les composantes fortements connexes
+                      - les distances demandees */
 
 };
 

@@ -11,8 +11,8 @@ DETAILS          : Ce fichier définit la structure "struct_summit" qui permet
 				   calcul de CFC ...
 ============================================================================= */
 
-#ifndef SOMMET_H_INCLUDED
-#define SOMMET_H_INCLUDED
+#ifndef SUMMIT_H_INCLUDED
+#define SUMMIT_H_INCLUDED
 
 
 /*=================================
@@ -54,8 +54,7 @@ typedef struct struct_summit {
                Pour la recherche de distance, il contient la distance minimale vers le point de depart du graphe
        - end : Pour CFC, il s'agit du temps final quand tous ses descendants non explore l'ont ete
                Pour les distances, il contient l'indice du pere a la plus courte distance
-       - important : booleen indiquant si le point peut-etre considere comme important ou pas
-    */
+       - important : booleen indiquant si le point peut-etre considere comme important ou pas */
 
 } s_summit;
 
@@ -65,24 +64,23 @@ void printSummit (s_summit s);
 /* COMPLEXITE : Constant o(1)
    ENTREE : s, un element de type s_summit a afficher
    ALGORITHME :
-     Affiche les attributs name, id et freq de l'element s
-*/
+     Affiche les attributs name, id et freq de l'element s */
+
 
 /* FONCTION : orderBeg - Donne une notion d'ordre entre deux elements de type s_summit, le critere est l'attribut beg */
 bool orderBeg(s_summit a, s_summit b);
 /* COMPLEXITE : Constant o(1)
    ENTREE : a et b, deux elements de type s_summit a comparer
    ALGORITHME :
-     Renvoie le resultat de l'evalutation (a.beg < b.beg)
-*/
+     Renvoie le resultat de l'evalutation (a.beg < b.beg) */
+
 
 /* FONCTION : orderEnd - Donne une notion d'ordre entre deux elements de type s_summit, le critere est l'attribut end */
 bool orderEnd(s_summit a, s_summit b);
 /* COMPLEXITE : Constant o(1)
    ENTREE : a et b, deux elements de type s_summit a comparer
    ALGORITHME :
-     Renvoie le resultat de l'evalutation (a.end < b.end)
-*/
+     Renvoie le resultat de l'evalutation (a.end < b.end) */
 
-#endif // SOMMET_H_INCLUDED
+#endif // SUMMIT_H_INCLUDED
 

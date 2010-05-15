@@ -11,8 +11,8 @@ DETAILS 		     : SCC (Strongly Connected Component) = CFC (Composante Fortement 
 
 ============================================================================= */
 
-#ifndef MATADJ_H_INCLUDED
-#define MATADJ_H_INCLUDED
+#ifndef ADJMAT_H_INCLUDED
+#define ADJMAT_H_INCLUDED
 
 /*=================================
 Includes
@@ -44,10 +44,9 @@ private:
        Les donnees conservees sont :
        - m_size : La taille de la matrice et le nombre de sommet dans le graphe
        - m_graph : Une matrice de 0 et de 1, pour i et j quelconques,
-                   m_graph[i][j] = 1 si j est le descendant de i,
+                   m_graph[i][j] = 1 si m_tabSummit[j] est le descendant de m_tabSummit[i],
                    0 sinon
-       - m_tabSummit : Tableau contenant les donnees des sommets, pour i quelconque,
-                       si (i < m_size), alors m_tabSummit[i] correspond a i-eme ligne et colonne de m_graph */
+       - m_tabSummit : Tableau contenant les donnees des sommets */
 
 
     /* ****************************************************** */
@@ -59,7 +58,8 @@ public:
     AdjMat ();
     ~AdjMat ();
 
-    /* Methode d'initialisation de la classe */
+
+    /* METHODE D'INITIALISATION DE LA CLASSE */
 
     /* PROCEDURE : initData - Initialisation des donnees */
     void initData (vector< s_summit >& v, int** m);
@@ -73,15 +73,15 @@ public:
          Copie la matrice m dans m_tabSummit */
 
 
-    /* Methodes de recherche de Composantes Fortement Connexes (Strongly Connected Component) */
+    /* METHODES DE RECHERCHE DE COMPOSANTES FORTEMENT CONNEXES (STRONGLY CONNECTED COMPONENT) */
 
     /* FONCTION : initSCC - Initialise les donnees pour trouver plus facilement les CFC */
     vector< s_summit > initSCC ();
-    /* COMPLEXITE : Premier parcours en profondeur ->
-                    Tri decroissant ->
-                    Second parcours en profondeur ->
-                    Determination des importances ->
-                    Tri croissant ->
+    /* COMPLEXITE : Premier parcours en profondeur -> Quadratique
+                    Tri decroissant -> Quasi-Lineaire
+                    Second parcours en profondeur -> Quadratique
+                    Determination des importances -> Polynomial
+                    Tri croissant -> Quasi-Lineaire
        ENTREE : -
        ALGORITHME :
          Executer un premier parcours en profondeur du graphe
@@ -102,10 +102,10 @@ public:
        ENTREE : -
        ALGORITHME :
          Initialiser le temps a 0
-           Pour chaque sommet non explore, on fait un appel sur DFSHidden
-             Noter le temps de rencontre du sommet
-               Pour chaque descendant non explore, appel recursif DFSHidden
-             Noter le temps de fin d'exploration */
+         Pour chaque sommet non explore, on fait un appel sur DFSHidden
+           Noter le temps de rencontre du sommet
+             Pour chaque descendant non explore, appel recursif DFSHidden
+           Noter le temps de fin d'exploration */
 
 
     /* PROCEDURE : DFSD - Parcours en profondeur du graphe dual */
@@ -115,14 +115,13 @@ public:
        ENTREE : -
        ALGORITHME :
          Initialiser le temps a 0
-           Pour chaque sommet non explore, on fait un appel sur DFSDHidden
-             Noter le temps de rencontre du sommet
-               Pour chaque parent non explore, appel recursif DFSDHidden
-             Noter le temps de fin d'exploration */
+         Pour chaque sommet non explore, on fait un appel sur DFSDHidden
+           Noter le temps de rencontre du sommet
+             Pour chaque parent non explore, appel recursif DFSDHidden
+           Noter le temps de fin d'exploration */
 
 
-
-    /* Methodes de recherche des plus courts chemins (Dijkstra) */
+    /* METHODES DE RECHERCHE DES PLUS COURTS CHEMINS (DIJKSTRA) */
 
     /* FONCTION : initDist - Utilise l'algorithme de Dijkstra pour determiner les plus courts chemins */
     vector< s_summit > initDist (int x);
@@ -143,7 +142,6 @@ public:
 
     /* FONCTION : extractMin - Chercher le sommet non explore avec la distance la plus courte du point de depart */
     int extractMin(int x);
-    int extractMin(int x, map<int, int>& m);
     /* COMPLEXITE : Lineaire
        ENTREE : x, un sommet du graphe, le point de depart
        ALGORITHME :
@@ -156,37 +154,85 @@ public:
          Renvoyer l'indice du minimum */
 
 
-    /* Methodes de tri du tableau de sommets */
+    /* METHODES DE TRI DU TABLEAU DE SOMMETS */
 
-    /* FONCTION : sortDescEnd - Trie les ordres finaux en decroissant tout en conservant les id */
+    /* PROCEDURE : sortDescEnd - Trie les ordres finaux en decroissant tout en conservant les id */
     void sortDescEnd();
+    /* COMPLEXITE : Quasi-lineaire
+       ENTREE : -
+       ALGORITHME :
+           Sauvegarde les id
+           Tri m_tabSummit
+           Restaure les id */
+
+
+    /* PROCEDURE : sortAscBeg - Trie les ordres de debut en croissant sans conservation des id */
     void sortAscBeg();
     /* COMPLEXITE : Quasi-lineaire
        ENTREE : -
        ALGORITHME :
-         Initialiser l'indice du minimum a x et la distance minimum a l'infini
-
-         Pour tous les sommets du graphe
-           Si on trouve un point non explore avec une distance plus courte
-           On la sauvegarde
-
-         Renvoyer l'indice du minimum */
+         Utiliser un algorithme de tri sur m_tabSummit */
 
 
+    /* METHODES DE DETERMINATION D'IMPORTANCE */
+
+    /* FONCTION : isImportant - Determine l'importance d'un point */
+    bool isImportant(int x);
+    /* COMPLEXITE : Polynomial
+       ENTREE : x, un sommet du graphe
+       ALGORITHME :
+         1 - Eliminer les cas simples ou le point n'est pas important
+         Si le point est un puit (aucun fils) ou une source (aucun pere)
+         Ou bien si le point n'est relie au reste du graphe que via un seul point (pere et fils unique et identique)
+           Renvoyer faux
+
+         2 - Tester les autres cas
+         Pour tous les fils i de x de la meme CFC
+           Si i ne possede qu'un seul pere (= x)
+             Renvoyer vrai
+           Sinon si aucun des autres peres de i n'est dans la meme CFC
+             Renvoyer vrai
+
+         Pour tous les pere i de x de la meme CFC
+           Si i ne possede qu'un seul fils (= x)
+             Renvoyer vrai
+           Sinon si aucun des autres fils de i n'est dans la meme CFC
+             Renvoyer vrai
+
+         3 - Si la fonction n'a encore rien renvoye
+         Renvoyer faux */
 
 
-    bool isImportant(int x); // Renvoie vrai si le point x est important, x le rang d'un sommet dans m_tabSummit
+    /* PROCEDURE : nbNeighborhood - Compte le nombre de fils et de pere d'un point */
+    void nbNeighborhood(int x, int& nbF, int& nbC);
+    /* COMPLEXITE : Lineaire
+       ENTREE : x, un sommet du graphe
+                nbF, nombre de pere (father) de x
+                nbC, nombre de fils (child) de x
+       ALGORITHME :
+         Initialiser nbF et nbC a 0
+         Pour i de 0 a m_size
+           Si m_graph[x][i] = 1, on incremente le nombre de fils
+           Si m_graph[i][x] = 1, on incremente le nombre de pere
 
-    void nbNeighborhood(int x, int& nbF, int& nbC); // Trouve le nombre de voisin de x (nombre de pere nbF et nombre de fils nbC)
-    // 0 si il n'y en a pas
-    // 1 si il y en a qu'un
-    // 2 si il y en a deux ou plus
+         Si les nbF et nbC passent au dessus de 2, renvoyer 2 */
 
-    bool areInTheSameSCC(int x, int y); // Renvoie vrai si x et y sont dans la meme CFC
+
+    /* FONCTION : areInTheSameSCC - Indique si deux sommets sont dans la meme CFC */
+    bool areInTheSameSCC(int x, int y);
+    /* COMPLEXITE : Lineaire
+       ENTREE : x, un sommet du graphe
+                y, un sommet du graphe
+       ALGORITHME :
+         Pour i de 0 a m_size
+           Si on trouve un sommet dont temps beg et end encadre les beg et end de x et de y en meme temps
+             Renvoyer vrai
+
+         Renvoyer faux si on a pas trouve un sommet qui satisfait cette condition */
 
 
     void printMat (); // Affiche la matrice adjacente
 };
 
 
-#endif // MATADJ_H_INCLUDED
+#endif // ADJMAT_H_INCLUDED

@@ -3,12 +3,8 @@
 /* Project: Projet C IG3                    */
 /* Date: 13.04.2010                         */
 /********************************************/
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <regex.h>
+
 #include "../headers/fbfriends.h"
-#include "../headers/os_dependent.h"
 
 // Extracts all the accounts from the given file.
 // Accounts are placed in the given array (enough space is assumed).
@@ -167,6 +163,7 @@ int main(int argc, char** argv)
 
 	// Get the list of friends for the given account
 	n_accounts = get_friends_list(argv[1], argv[2], argv[3], &accounts);
+
 
 	// Show the list of friends
 	if (n_accounts > 0)

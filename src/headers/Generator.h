@@ -20,12 +20,14 @@ Includes
 #include <string>
 #include <cstring>
 #include <vector>
+#include <map>
 #include <algorithm>
 #include <ctime>
 #include <cstdlib>
 #include <cstdio>
 #include <cassert>
 
+#include "fbfriends.h"
 /*=================================
 Constantes
 ===================================*/
@@ -133,7 +135,7 @@ public :
 
     /* FONCTION : generateMatrix - Generation une matrice de 0 et de 1 aleatoirement et renvoie le nombre de 1 */
     int generateMatrix(int n, int** m, int r);
-    /* COMPLEXITE : o(nb²)
+    /* COMPLEXITE : o(nbÂ²)
        ENTREE : n, la taille de la matrice
                 m, la matrice d'entier
                 r, le ratio de remplissage

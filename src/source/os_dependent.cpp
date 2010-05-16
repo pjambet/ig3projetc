@@ -3,47 +3,32 @@
 /* Project: Projet C IG3                    */
 /* Date: 13.04.2010                         */
 /********************************************/
-#include <stdio.h>
+
 #include "../headers/os_dependent.h"
 
 // Executes a command and waits for it to finish.
 // The command should work on the shell (executable should be in PATH).
 int exec_and_wait(char* command)
 {
-	STARTUPINFOA si;
-    PROCESS_INFORMATION pi;
+	int status;
+	pid_t pid;
 
-    ZeroMemory( &si, sizeof(si) );
-    si.cb = sizeof(si);
-    ZeroMemory( &pi, sizeof(pi) );
-
-    // Start the child process.
-    if( !CreateProcessA( NULL,   // No module name (use command line)
-        command,        // Command line
-        NULL,           // Process handle not inheritable
-        NULL,           // Thread handle not inheritable
-        FALSE,          // Set handle inheritance to FALSE
-        0,              // No creation flags
-        NULL,           // Use parent's environment block
-        NULL,           // Use parent's starting directory
-        &si,            // Pointer to STARTUPINFO structure
-        &pi )           // Pointer to PROCESS_INFORMATION structure
-    )
-    {
-        printf( "CreateProcess failed (%d).\n", (int) GetLastError() );
-        return 1;
-    }
-
-    // Wait until child process exits.
-    if (WaitForSingleObject( pi.hProcess, INFINITE ))
+	pid = fork ();
+	if (pid == 0)
 	{
-		printf("There was an error waiting for the process.\n");
-		return 1;
+	  /* This is the child process.  Execute the shell command. */
+	  execl (SHELL, SHELL, "-c", command, NULL);
 	}
-
-    // Close process and thread handles.
-    CloseHandle( pi.hProcess );
-    CloseHandle( pi.hThread );
+	else if (pid < 0)
+	{
+		perror("Fork failed.");
+		/* The fork failed.  Report failure.  */
+		status = -1;
+	}
+	else
+	/* This is the parent process.  Wait for the child to complete.  */
+	if (waitpid (pid, &status, 0) != pid)
+	  status = -1;
 
 	return 0;
 }

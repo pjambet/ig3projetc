@@ -243,8 +243,8 @@ int main(int argc, char* argv[]) {
 
             case 3 :
 
-                cout << "Recuperation des donnees de Facebook... " << "Indisponible."
-                << endl << endl;
+                cout << "Recuperation des donnees de Facebook... " << endl << endl;
+                gene.generateDatabase();
                 choice = -1;
 
                 break;

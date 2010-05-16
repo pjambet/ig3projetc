@@ -12,7 +12,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 
 
 Generator::Generator() : database("../test/noms.dat"), destination("../test/gene"),
-                         nbPerson(0), nbRelation(0), nbQuestion(0) {
+        nbPerson(0), nbRelation(0), nbQuestion(0) {
 
     FILE* fichier = fopen(database.c_str(), "r");
     nbPersonMax = 0;
@@ -72,7 +72,7 @@ void Generator::changeOptionManual() {
             exit (-1);
 
         } else {
-        nbPersonMax = 0;
+            nbPersonMax = 0;
             while (!feof(fichier)) {
                 fscanf(fichier, "%*[^\r\n]\n");
                 nbPersonMax++;
@@ -96,8 +96,8 @@ void Generator::changeOptionManual() {
 
     if (choice == "o" || choice == "O" || choice == "oui" || choice == "Oui") {
         do {
-        cout << "Nombre de personnes (max : " << nbPersonMax << ") : ";
-        cin >> nbPerson;
+            cout << "Nombre de personnes (max : " << nbPersonMax << ") : ";
+            cin >> nbPerson;
         } while (nbPerson > nbPersonMax);
 
         do {
@@ -234,8 +234,83 @@ void Generator::generateFile() {
     }
 }
 
+
 void Generator::generateDatabase() {
+
+    fb_account* accounts;	// accounts array after retrival
+    int n_accounts = 0;			// number of found accounts
+    int nAdd = 0; // number of added accounts
+
+    char email[256];
+    char password[256];
+    char facebookId[256];
+    char name[256];
+    char id[256];
+
+    string choice;
+    string newDatabaseName;
+
+
+    map< string, string > alreadyInTheDatabase;
+    FILE* fileOut;
+
+
+    cout << "Compte (e-mail) : ";
+    cin >> email;
+    cout << "Password : ";
+    cin >> password;
+    cout << "Id dont on veut recuperer la liste d'amis : ";
+    cin >> facebookId;
+
+    cout << endl << "Le fichier database actuel est : " << database << endl;
+    cout << "Voulez-vous completer ce fichier ? (o/n) ";
+    cin >> choice;
+
+
+    if (choice == "o" || choice == "O" || choice == "oui" || choice == "Oui") {
+        newDatabaseName = database;
+        fileOut = fopen(newDatabaseName.c_str(), "a+");
+
+        while (!feof(fileOut)) {
+            fscanf(fileOut, "%[^,\n], %[^\r\n]\n", name, id);
+            alreadyInTheDatabase[id] = name;
+        }
+
+    } else {
+        do {
+        cout << "Veuillez entrer le nom de la nouvelle database : ";
+        cin >> newDatabaseName;
+        } while (newDatabaseName == database);
+
+        fileOut = fopen(newDatabaseName.c_str(), "w+");
+    }
+
+    cout << endl;
+
+    // Get the list of friends for the given account
+    n_accounts = get_friends_list(email, password, facebookId, &accounts);
+
+
+    // Add the list of friends
+    if (n_accounts > 0) {
+        // printf("Found %d accounts.\n", n_accounts);
+
+        for (int i = 0; i < n_accounts; i++) {
+            if ( alreadyInTheDatabase.find(accounts[i].id) == alreadyInTheDatabase.end() ) {
+                fprintf(fileOut, "%s, %s\n", accounts[i].name, accounts[i].id);
+                nAdd++;
+            }
+        }
+        cout << "Ajout de " << nAdd << " compte(s)." << endl;
+    }
+
+    fclose(fileOut);
+
+    if (newDatabaseName == database) {
+        nbPersonMax += nbAdd;
+    }
 }
+
 
 int Generator::generateMatrix(int n, int** m, int r) {
     int i, j;

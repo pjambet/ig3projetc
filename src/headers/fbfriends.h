@@ -4,8 +4,15 @@
 /* Date: 13.04.2010                         */
 /********************************************/
 
-#ifndef FBFRIENDS_H_INCLUDED
-#define FBFRIENDS_H_INCLUDED
+#ifndef __FBFRIENDS_H__
+#define __FBFRIENDS_H__
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <regex.h>
+
+#include "../headers/os_dependent.h"
 
 // Information about a facebook account.
 // We are only interested in the id and the name.
@@ -17,7 +24,11 @@ struct facebook_account{
 // Define a shortcut
 typedef struct facebook_account fb_account;
 
+// Extracts all the accounts from the given file.
+// Accounts are placed in the given array (enough space is assumed).
+// Returns the number of found accounts.
 int identify_accounts(char* file_name, fb_account* accounts);
+
 int get_friends_list(char* email, char* password, char* id, fb_account** friends);
 
-#endif // FBFRIENDS_H_INCLUDED
+#endif

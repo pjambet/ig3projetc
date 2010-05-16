@@ -239,7 +239,7 @@ void Generator::generateDatabase() {
 
     fb_account* accounts;	// accounts array after retrival
     int n_accounts = 0;			// number of found accounts
-    int nAdd = 0; // number of added accounts
+    int nbAdd = 0; // number of added accounts
 
     char email[256];
     char password[256];
@@ -298,10 +298,10 @@ void Generator::generateDatabase() {
         for (int i = 0; i < n_accounts; i++) {
             if ( alreadyInTheDatabase.find(accounts[i].id) == alreadyInTheDatabase.end() ) {
                 fprintf(fileOut, "%s, %s\n", accounts[i].name, accounts[i].id);
-                nAdd++;
+                nbAdd++;
             }
         }
-        cout << "Ajout de " << nAdd << " compte(s)." << endl;
+        cout << "Ajout de " << nbAdd << " compte(s)." << endl;
     }
 
     fclose(fileOut);

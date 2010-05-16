@@ -13,7 +13,7 @@ GrapheFB: fbfriends.o AdjList.o AdjMat.o Generator.o Graph.o Summit.o main.o
 	$(CXX) $(CXXFLAGS) -o GrapheFB $(CURDIR)/source/os_dependent.c fbfriends.o AdjList.o AdjMat.o Generator.o Graph.o Summit.o main.o
 #
 fbfriends.o: $(CURDIR)/source/fbfriends.c $(CURDIR)/headers/os_dependent.h
-	$(CXX) $(CXXFLAGS) -o fbfriends.o -c $(CURDIR)/source/fbfriends.c $(CURDIR)/source/os_dependent.c
+	$(CXX) -ansi -g -w -o fbfriends.o -c $(CURDIR)/source/fbfriends.c 
 #
 Summit.o: $(CURDIR)/source/Summit.cpp
 	$(CXX) $(CXXFLAGS) -o Summit.o -c $(CURDIR)/source/Summit.cpp

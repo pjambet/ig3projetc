@@ -11,6 +11,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 
 #include "../headers/Summit.h"
 
+
 void printSummit (s_summit s) {
     cout << "Nom : " << s.name << endl;
     cout << "    id( " << s.id << " ) frequence( " << s.freq << " ) " << endl;
@@ -18,9 +19,11 @@ void printSummit (s_summit s) {
     //cout << "    important ( " << s.important << " )" << endl;
 }
 
+
 bool orderBeg(s_summit a, s_summit b) {
     return (a.beg < b.beg);
 }
+
 
 bool orderEnd(s_summit a, s_summit b) {
     return (a.end < b.end);

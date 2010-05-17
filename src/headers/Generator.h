@@ -33,6 +33,7 @@ Constantes
 ===================================*/
 #define FREQ_MAX 100
 #define RATIO 10000
+#define REPERTORY_TEST "../test/"
 
 using namespace std;
 
@@ -41,12 +42,14 @@ class Generator {
 private :
 
     /* ATTRIBUTS */
-    string database;
-    string destination;
-    int nbPerson;
-    int nbPersonMax;
-    int nbRelation;
-    int nbQuestion;
+    string m_database;
+    string m_destination;
+    int m_nbPerson;
+    int m_nbPersonMax;
+    int m_nbRelation;
+    int m_nbQuestion;
+
+    bool m_connected;
 
     /* EXPLICATIONS DES ATTRIBUTS :
 
@@ -58,7 +61,9 @@ private :
        - nbPerson : Le nombre de personne desire
        - nbPersonMax : Le nombre de personne maximum disponible avec le fichier database
        - nbRelation : Le nombre de relation desire
-       - nbQuestion : Le nombre de question desire */
+       - nbQuestion : Le nombre de question desire
+
+       - connected : indique si on s'est deja connecte sur facebook (et donc, qu'on possede un cookie valide) */
 
 
     /* ****************************************************** */

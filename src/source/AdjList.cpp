@@ -209,7 +209,7 @@ vector< s_summit > AdjList::initDist (int x) {
 
             nSize = (int) m_graph[n].size();
             for ( i = 0; i < nSize; i++) { // Pour tous les fils de n
-              nCurrent = m_graph[n][i];
+                nCurrent = m_graph[n][i];
 
                 if (m_tabSummit[nCurrent].beg > (m_tabSummit[n].beg + m_tabSummit[nCurrent].freq) ) { // Relacher
 
@@ -309,38 +309,38 @@ bool AdjList::isImportant(int x) {
             sizeTempY = (int) m_graphDual[y].size(); /* Nombre de pere de y */
 
             if (areInTheSameSCC(x, y)) {
-            nbChild = m_graph[y].size();
-            nbFather = m_graphDual[y].size();
-            /* On va compter le nombre de ses peres et fils */
+                nbChild = m_graph[y].size();
+                nbFather = m_graphDual[y].size();
+                /* On va compter le nombre de ses peres et fils */
 
-            if ((nbFather > 0 ) && (nbChild > 0 )) {
-                if (nbFather == 1) {
-                    /* Si le fils a qu'un pere, alors x est important */
-                    important = true;
-
-                } else {
-                    sameCFC = false; /* Indique si on a rencontre un pere de la meme CFC */
-                    j = 0;
-
-                    /* S'il y a plusieurs pere, si aucun d'eux n'est dans la CFC, alors le point est important */
-                    while ( (!sameCFC) && (j < sizeTempY) ) {
-                        if ( (areInTheSameSCC(y, m_graphDual[y][j])) && (m_graphDual[y][j] != x) ) {
-                            /* Parcours des peres de i */
-                            /* On regarde si j est dans la meme CFC */
-                            sameCFC = true; /* On dit qu'on a vu un pere dans la meme CFC */
-
-                        }
-                        j++;
-                    }
-
-                    if (!sameCFC) {
-                        /* Si, au final, on a pas rencontre un frere de x de la meme CFC, alors le point est important */
+                if ((nbFather > 0 ) && (nbChild > 0 )) {
+                    if (nbFather == 1) {
+                        /* Si le fils a qu'un pere, alors x est important */
                         important = true;
+
+                    } else {
+                        sameCFC = false; /* Indique si on a rencontre un pere de la meme CFC */
+                        j = 0;
+
+                        /* S'il y a plusieurs pere, si aucun d'eux n'est dans la CFC, alors le point est important */
+                        while ( (!sameCFC) && (j < sizeTempY) ) {
+                            if ( (areInTheSameSCC(y, m_graphDual[y][j])) && (m_graphDual[y][j] != x) ) {
+                                /* Parcours des peres de i */
+                                /* On regarde si j est dans la meme CFC */
+                                sameCFC = true; /* On dit qu'on a vu un pere dans la meme CFC */
+
+                            }
+                            j++;
+                        }
+
+                        if (!sameCFC) {
+                            /* Si, au final, on a pas rencontre un frere de x de la meme CFC, alors le point est important */
+                            important = true;
+                        }
+
+
                     }
-
-
                 }
-            }
             }
             i++;
         }
@@ -354,36 +354,36 @@ bool AdjList::isImportant(int x) {
 
             if (areInTheSameSCC(x, y)) {
 
-            nbChild = m_graph[y].size();
-            nbFather = m_graphDual[y].size();
-            /* On va compter le nombre de ses peres et fils */
+                nbChild = m_graph[y].size();
+                nbFather = m_graphDual[y].size();
+                /* On va compter le nombre de ses peres et fils */
 
-            if ((nbFather > 0 ) && (nbChild > 0 )) {
-                if (nbChild == 1) {
-                    /* Si le pere a fils, alors le pere est important */
-                    important = true;
-
-                } else {
-                    sameCFC = false; /* Indique si on a rencontre un fils de la meme CFC */
-                    j = 0;
-
-                    /* S'il y a plusieurs fils, si aucun d'eux n'est dans la CFC, alors le point est important */
-                    while ((!sameCFC) && (j < sizeTempY) ) {
-                        if ( (areInTheSameSCC(y, m_graph[y][j])) && (m_graph[y][j] != x) ) {
-                            /* Parcours des fils de i != x */
-                            /* On regarde si j est dans la meme CFC */
-                            sameCFC = true; /* On dit qu'on a vu un fils dans la meme CFC */
-
-                        }
-                        j++;
-                    }
-
-                    if (!sameCFC) {
-                        /* Si, au final, on a pas rencontre un frere de x de la meme CFC, alors le point est important */
+                if ((nbFather > 0 ) && (nbChild > 0 )) {
+                    if (nbChild == 1) {
+                        /* Si le pere a fils, alors le pere est important */
                         important = true;
+
+                    } else {
+                        sameCFC = false; /* Indique si on a rencontre un fils de la meme CFC */
+                        j = 0;
+
+                        /* S'il y a plusieurs fils, si aucun d'eux n'est dans la CFC, alors le point est important */
+                        while ((!sameCFC) && (j < sizeTempY) ) {
+                            if ( (areInTheSameSCC(y, m_graph[y][j])) && (m_graph[y][j] != x) ) {
+                                /* Parcours des fils de i != x */
+                                /* On regarde si j est dans la meme CFC */
+                                sameCFC = true; /* On dit qu'on a vu un fils dans la meme CFC */
+
+                            }
+                            j++;
+                        }
+
+                        if (!sameCFC) {
+                            /* Si, au final, on a pas rencontre un frere de x de la meme CFC, alors le point est important */
+                            important = true;
+                        }
                     }
                 }
-            }
             }
 
             i++;

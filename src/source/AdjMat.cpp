@@ -18,6 +18,7 @@ Constructeurs et Desctructeurs
 AdjMat::AdjMat () : m_size(0) {
 }
 
+
 AdjMat::~AdjMat () {
     int i;
 
@@ -25,7 +26,7 @@ AdjMat::~AdjMat () {
         for (i = 0; i < m_size; i++) {
             delete[] m_graph[i];
         }
-    delete[] m_graph;
+        delete[] m_graph;
 
     }
 
@@ -50,6 +51,7 @@ void AdjMat::initData (vector< s_summit >& v, int** m) {
 
 }
 
+
 vector< s_summit > AdjMat::initSCC () {
     int i;
 
@@ -66,7 +68,6 @@ vector< s_summit > AdjMat::initSCC () {
 
     return m_tabSummit;
 }
-
 
 
 /*=================================
@@ -88,6 +89,7 @@ void AdjMat::DFS () {
         }
     }
 }
+
 
 void AdjMat::DFSHidden (int i, int& t) { // Parcours en profondeur du graphe (recursif)
     int j;
@@ -113,6 +115,7 @@ void AdjMat::DFSHidden (int i, int& t) { // Parcours en profondeur du graphe (re
     /* On marque le temps qu'il a fallu pour l'explorer */
 }
 
+
 void AdjMat::DFSD () {
     int i;
     int temps;
@@ -135,6 +138,7 @@ void AdjMat::DFSD () {
 
 
 }
+
 
 void AdjMat::DFSDHidden (int i, int& t) { // Parcours en profondeur du graphe dual (recursif)
     int j;
@@ -468,7 +472,6 @@ void AdjMat::nbNeighborhood(int x, int& nbF, int& nbC) {
         i++;
     }
 }
-
 
 
 bool AdjMat::areInTheSameSCC(int x, int y) {

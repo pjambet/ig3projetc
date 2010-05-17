@@ -18,6 +18,7 @@ Graph::Graph (): m_sizeGraph(0), m_nbSCC(0), m_nbDist(0) {
     // m_matFriends = new int*;
 }
 
+
 Graph::~Graph () {
     int i;
 
@@ -162,7 +163,7 @@ void Graph::initGraph (string& fileNameIn) {
 void Graph::clearGraph () {
     int i;
 
-    
+
     m_tabSummit.clear();
 
     m_idToRank.clear();
@@ -178,7 +179,7 @@ void Graph::clearGraph () {
         delete[] m_matFriends;
         m_matFriends = NULL;
     }
-	m_sizeGraph = 0;
+    m_sizeGraph = 0;
 
     m_nbSCC = 0;
     m_listSCC.clear();
@@ -212,7 +213,7 @@ bool Graph::isAnalyzed() {
 
 
 void Graph::setAnalyzed(bool b) {
-  m_analyzed = b;
+    m_analyzed = b;
 }
 
 
@@ -222,63 +223,67 @@ unsigned int Graph::getSizeGraph() {
 
 
 unsigned int Graph::getNbDist() {
-	return m_nbDist;
+    return m_nbDist;
 }
 
+
 unsigned int Graph::getNbScc() {
-	return m_nbSCC;
+    return m_nbSCC;
 }
 
 
 int** Graph::getMatFriends() {
-	return m_matFriends;
+    return m_matFriends;
 }
 
+
 vector< s_summit > Graph::getTabSummit() {
-	return m_tabSummit;
+    return m_tabSummit;
 }
 
 
 map< string, int > Graph::getIdToRank() {
-	return m_idToRank;
+    return m_idToRank;
 }
 
 
 vector< vector< int > > Graph::getListFriends() {
-	return m_listFriends;
+    return m_listFriends;
 }
 
 
 vector< vector< int > > Graph::getListDualFriends() {
-	return m_listDualFriends;
+    return m_listDualFriends;
 }
 
+
 vector< vector < int > > Graph::getListSCC() {
-	return m_listSCC;
+    return m_listSCC;
 }
 
 
 map< int, vector< int > > Graph::getListQuestion() {
-	return m_listQuestion;
+    return m_listQuestion;
 }
 
 
 map< int, vector< s_summit > > Graph::getListDist() {
-	return m_listDist;
+    return m_listDist;
 }
 
 
 multimap< int, vector< int > > Graph::getListPath() {
-	return m_listPath;
+    return m_listPath;
 }
 
 
 void Graph::setStructGraph(char c) {
-	if ((c == 'l') || (c == 'm'))
-		m_structGraph = c;
-	else
-		cerr << "Structure inconnue " << endl;
+    if ((c == 'l') || (c == 'm'))
+        m_structGraph = c;
+    else
+        cerr << "Structure inconnue " << endl;
 }
+
 
 void Graph::searchSCC () {
     int d, f; /* Reperes de debut et fin d'intervalle */
@@ -467,6 +472,7 @@ void Graph::saveGraph (string& fileNameOut) {
 
 }
 
+
 /*=================================
 Affichage
 ===================================*/
@@ -532,7 +538,6 @@ void Graph::printGraph () {
     }
 
     cout << endl;
-
 
 
     cout << "Nombre de distances : " << m_nbDist << " " << endl;

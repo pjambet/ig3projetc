@@ -11,11 +11,11 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include "../headers/Generator.h"
 
 
-Generator::Generator() : database("../test/noms.dat"), destination("../test/gene"),
-        nbPerson(0), nbRelation(0), nbQuestion(0) {
+Generator::Generator() : m_database("noms.dat"), m_destination("gene"),
+                         m_nbPerson(0), m_nbRelation(0), m_nbQuestion(0), m_connected(false) {
 
-    FILE* fichier = fopen(database.c_str(), "r");
-    nbPersonMax = 0;
+    FILE* fichier = fopen((REPERTORY_TEST + m_database).c_str(), "r");
+    m_nbPersonMax = 0;
 
     if (fichier == NULL) {
         cerr << endl << "Fichier de donnees introuvable !" << endl;
@@ -24,7 +24,7 @@ Generator::Generator() : database("../test/noms.dat"), destination("../test/gene
     } else {
         while (!feof(fichier)) {
             fscanf(fichier, "%*[^\r\n]\n");
-            nbPersonMax++;
+            m_nbPersonMax++;
         }
         fclose(fichier);
 
@@ -36,13 +36,13 @@ Generator::~Generator() {
 }
 
 void Generator::changeOptionAutomatic(string db, string dest, int nP, int nR, int nQ) {
-    database = db;
-    destination = dest;
-    nbPerson = nP;
-    nbRelation = nR;
-    assert( nbRelation <= (nbPerson * nbPerson - nbPerson) );
-    nbQuestion = nQ;
-    assert( nbQuestion <= (nbPerson * nbPerson - nbPerson) );
+    m_database = db;
+    m_destination = dest;
+    m_nbPerson = nP;
+    m_nbRelation = nR;
+    assert( m_nbRelation <= (m_nbPerson * m_nbPerson - m_nbPerson) );
+    m_nbQuestion = nQ;
+    assert( m_nbQuestion <= (m_nbPerson * m_nbPerson - m_nbPerson) );
 
 }
 
@@ -50,11 +50,11 @@ void Generator::changeOptionManual() {
     string choice;
     FILE* fichier;
     cout << "Options actuelles :" << endl;
-    cout << "\tBase de donnees          : " << database << endl;
-    cout << "\tFichier de destination   : " << destination << endl;
-    cout << "\tNombre de personnes      : " << nbPerson << " (max : " << nbPersonMax << ")" << endl;
-    cout << "\tNombre de relations      : environ " << nbRelation << " (max : " << nbPerson * nbPerson - nbPerson << ")" << endl;
-    cout << "\tNombre de questions      : environ " << nbQuestion << " (max : " << nbPerson * nbPerson - nbPerson << ")" << endl;
+    cout << "\tBase de donnees          : " << m_database << endl;
+    cout << "\tFichier de destination   : " << m_destination << endl;
+    cout << "\tNombre de personnes      : " << m_nbPerson << " (max : " << m_nbPersonMax << ")" << endl;
+    cout << "\tNombre de relations      : environ " << m_nbRelation << " (max : " << m_nbPerson * m_nbPerson - m_nbPerson << ")" << endl;
+    cout << "\tNombre de questions      : environ " << m_nbQuestion << " (max : " << m_nbPerson * m_nbPerson - m_nbPerson << ")" << endl;
     cout << endl << endl;
 
 
@@ -63,25 +63,25 @@ void Generator::changeOptionManual() {
 
     if (choice == "o" || choice == "O" || choice == "oui" || choice == "Oui") {
         cout << "Base de donnees : ";
-        cin >> database;
+        cin >> m_database;
 
-        fichier = fopen(database.c_str(), "r");
+        fichier = fopen( (REPERTORY_TEST + m_database).c_str(), "r");
 
         if (fichier == NULL) {
             cerr << endl << "Fichier de donnees introuvable !" << endl;
             exit (-1);
 
         } else {
-            nbPersonMax = 0;
+            m_nbPersonMax = 0;
             while (!feof(fichier)) {
                 fscanf(fichier, "%*[^\r\n]\n");
-                nbPersonMax++;
+                m_nbPersonMax++;
             }
             fclose(fichier);
         }
 
         cout << "Fichier de destination : ";
-        cin >> destination;
+        cin >> m_destination;
 
         cout << "Changements effectues" << endl << endl;
 
@@ -96,19 +96,19 @@ void Generator::changeOptionManual() {
 
     if (choice == "o" || choice == "O" || choice == "oui" || choice == "Oui") {
         do {
-            cout << "Nombre de personnes (max : " << nbPersonMax << ") : ";
-            cin >> nbPerson;
-        } while (nbPerson > nbPersonMax);
+            cout << "Nombre de personnes (max : " << m_nbPersonMax << ") : ";
+            cin >> m_nbPerson;
+        } while (m_nbPerson > m_nbPersonMax);
 
         do {
-            cout << "Nombre de relations (max : " << nbPerson * nbPerson - nbPerson << ") : ";
-            cin >> nbRelation;
-        } while ( nbRelation > (nbPerson * nbPerson - nbPerson) );
+            cout << "Nombre de relations (max : " << m_nbPerson * m_nbPerson - m_nbPerson << ") : ";
+            cin >> m_nbRelation;
+        } while ( m_nbRelation > (m_nbPerson * m_nbPerson - m_nbPerson) );
 
         do {
-            cout << "Nombre de questions (max : " << nbPerson * nbPerson - nbPerson << ") : ";
-            cin >> nbQuestion;
-        } while ( nbQuestion > (nbPerson * nbPerson - nbPerson) );
+            cout << "Nombre de questions (max : " << m_nbPerson * m_nbPerson - m_nbPerson << ") : ";
+            cin >> m_nbQuestion;
+        } while ( m_nbQuestion > (m_nbPerson * m_nbPerson - m_nbPerson) );
 
     } else {
         cout << "Aucun changement effectue." << endl << endl;
@@ -138,7 +138,7 @@ void Generator::generateFile() {
 
 
     /* Initialisation du fichier de noms */
-    fichier = fopen(database.c_str(), "r");
+    fichier = fopen( (REPERTORY_TEST + m_database).c_str(), "r");
 
     if (fichier == NULL) {
         cerr << endl << "Fichier de donnees introuvable !" << endl;
@@ -154,19 +154,19 @@ void Generator::generateFile() {
         fclose(fichier);
     }
 
-    assert(nbPerson < (int) database_nom.size());
+    assert(m_nbPerson <= (int) database_nom.size());
     /* On verifie que le nombre de personne est bien inferieur au nombre de personne dans la database */
 
-    if (nbPerson > 0) {
+    if (m_nbPerson > 0) {
 
-        fichier = fopen(destination.c_str(), "w+");
+        fichier = fopen( (REPERTORY_TEST + m_destination).c_str(), "w+");
 
         /* Nombre de personne */
-        fprintf(fichier, "%d\n", nbPerson);
+        fprintf(fichier, "%d\n", m_nbPerson);
 
         /* Personnes */
         i = 0;
-        while (i < nbPerson) {
+        while (i < m_nbPerson) {
             random = rand()%database_nom.size();
             strcpy(nom, database_nom[random].c_str());
             strcpy(id, database_id[random].c_str());
@@ -185,20 +185,20 @@ void Generator::generateFile() {
 
 
         /* Initialisation de la matrice */
-        matrice = new int*[nbPerson];
-        for (i = 0; i < nbPerson; i++) {
-            matrice[i] = new int[nbPerson];
+        matrice = new int*[m_nbPerson];
+        for (i = 0; i < m_nbPerson; i++) {
+            matrice[i] = new int[m_nbPerson];
         }
 
 
         /* Matrice de relation */
-        nbLink = generateMatrix(nbPerson, matrice, (int) convertNumToRatio(nbPerson, nbRelation));
+        nbLink = generateMatrix(m_nbPerson, matrice, (int) convertNumToRatio(m_nbPerson, m_nbRelation));
 
         /* Nombre de relation */
         fprintf(fichier, "%d\n", nbLink);
 
-        for (i = 0; i < nbPerson; i++) {
-            for (j = 0; j < nbPerson; j++) {
+        for (i = 0; i < m_nbPerson; i++) {
+            for (j = 0; j < m_nbPerson; j++) {
                 if ((matrice[i][j])) {
                     fprintf(fichier, "%s, %s\n", liste_id[i].c_str(), liste_id[j].c_str());
                 }
@@ -207,12 +207,12 @@ void Generator::generateFile() {
 
 
         /* Matrice de question */
-        nbQuest = generateMatrix(nbPerson, matrice, (int) convertNumToRatio(nbPerson, nbQuestion));
+        nbQuest = generateMatrix(m_nbPerson, matrice, (int) convertNumToRatio(m_nbPerson, m_nbQuestion));
 
         /* Nombre de question */
         fprintf(fichier, "%d\n", nbQuest);
-        for (i = 0; i < nbPerson; i++) {
-            for (j = 0; j < nbPerson; j++) {
+        for (i = 0; i < m_nbPerson; i++) {
+            for (j = 0; j < m_nbPerson; j++) {
                 if (matrice[i][j]) {
                     fprintf(fichier, "%s -> %s\n", liste_id[i].c_str(), liste_id[j].c_str());
                 }
@@ -221,7 +221,7 @@ void Generator::generateFile() {
 
 
         /* Liberation de la memoire*/
-        for (i = 0; i < nbPerson; i++) {
+        for (i = 0; i < m_nbPerson; i++) {
             delete[] matrice[i];
         }
 
@@ -239,7 +239,7 @@ void Generator::generateDatabase() {
 
     fb_account* accounts;	// accounts array after retrival
     int n_accounts = 0;			// number of found accounts
-    int nbAdd = 0; // number of added accounts
+    int nAdd = 0; // number of added accounts
 
     char email[256];
     char password[256];
@@ -254,22 +254,33 @@ void Generator::generateDatabase() {
     map< string, string > alreadyInTheDatabase;
     FILE* fileOut;
 
-
+    if (!m_connected) {
+    cout << "Connexion requise." << endl;
     cout << "Compte (e-mail) : ";
-    cin >> email;
+    cin >> email; // projetcc@yahoo.fr
     cout << "Password : ";
-    cin >> password;
+    cin >> password; // projetig3
+    cout << endl;
+        if (!connectToFacebook(email, password)) {
+            m_connected = true;
+            cout << "Connexion reussie !" << endl << endl;
+        }
+    }
+
     cout << "Id dont on veut recuperer la liste d'amis : ";
     cin >> facebookId;
+    // 1397721284 pierre
+    // 654254122 michael
 
-    cout << endl << "Le fichier database actuel est : " << database << endl;
+
+    cout << endl << "Le fichier database actuel est : " << m_database << endl;
     cout << "Voulez-vous completer ce fichier ? (o/n) ";
     cin >> choice;
 
 
     if (choice == "o" || choice == "O" || choice == "oui" || choice == "Oui") {
-        newDatabaseName = database;
-        fileOut = fopen(newDatabaseName.c_str(), "a+");
+        newDatabaseName = m_database;
+        fileOut = fopen( (REPERTORY_TEST + newDatabaseName).c_str(), "a+");
 
         while (!feof(fileOut)) {
             fscanf(fileOut, "%[^,\n], %[^\r\n]\n", name, id);
@@ -280,15 +291,19 @@ void Generator::generateDatabase() {
         do {
         cout << "Veuillez entrer le nom de la nouvelle database : ";
         cin >> newDatabaseName;
-        } while (newDatabaseName == database);
+        } while (newDatabaseName == m_database);
 
-        fileOut = fopen(newDatabaseName.c_str(), "w+");
+        fileOut = fopen( (REPERTORY_TEST + newDatabaseName).c_str(), "w+");
     }
 
     cout << endl;
 
+    if (!m_connected) {
+
+    }
+
     // Get the list of friends for the given account
-    n_accounts = get_friends_list(email, password, facebookId, &accounts);
+    n_accounts = get_friends_list(facebookId, &accounts);
 
 
     // Add the list of friends
@@ -298,16 +313,16 @@ void Generator::generateDatabase() {
         for (int i = 0; i < n_accounts; i++) {
             if ( alreadyInTheDatabase.find(accounts[i].id) == alreadyInTheDatabase.end() ) {
                 fprintf(fileOut, "%s, %s\n", accounts[i].name, accounts[i].id);
-                nbAdd++;
+                nAdd++;
             }
         }
-        cout << "Ajout de " << nbAdd << " compte(s)." << endl;
+        cout << "Ajout de " << nAdd << " compte(s)." << endl;
     }
 
     fclose(fileOut);
 
-    if (newDatabaseName == database) {
-        nbPersonMax += nbAdd;
+    if (newDatabaseName == m_database) {
+        m_nbPersonMax += nAdd;
     }
 }
 
@@ -339,7 +354,8 @@ float Generator::convertNumToRatio(int n, int nbSum) {
     return (nbSum * RATIO) / (n * n - n);
 }
 
+
 string Generator::getDestination() {
-    return destination;
+    return m_destination;
 }
 

@@ -115,21 +115,11 @@ int identify_accounts(char* file_name, fb_account* accounts)
 
 // Tries to get the list of friends for a given id.
 // We rely on the 'curl' tool being properly installed and accessible.
-int get_friends_list(char* email, char* password, char* id, fb_account** friends)
+int get_friends_list(char* id, fb_account** friends)
 {
-	// We connect to facebook main page because we are interested in the cookies the server will send us.
-	// The cookies are written in the 'cookies' file.
-	if (exec_and_wait("curl -D cookies --user-agent \"Mozilla/4.0\" http://www.facebook.com/ -o facebook.html"))
-		return 0;
-
-	// We send the user and the password and save the new set of cookies in 'cookies_auth'.
-	char cmd[1024];
-	sprintf(cmd, "curl -D cookies_auth -b cookies -d \"email=%s&pass=%s\" --insecure --user-agent \"Mozilla/4.0\" https://login.facebook.com/login.php?login_attempt=1 -o facebook.html", email, password);
-	if (exec_and_wait(cmd))
-		return 0;
-
+    char cmd[1024];
 	// Prepare the final request: the list of friends.
-	sprintf(cmd, "curl -b cookies_auth --user-agent \"Mozilla/4.0\" http://www.facebook.com/friends/?id=%s -o friendslist.html", id);
+	sprintf(cmd, "curl -b ../test/cookies_auth --user-agent \"Mozilla/4.0\" http://www.facebook.com/friends/?id=%s -o ../test/friendslist.html", id);
 
 	// Make the request.
 	if (exec_and_wait(cmd))
@@ -137,7 +127,7 @@ int get_friends_list(char* email, char* password, char* id, fb_account** friends
 
 	// We don't know how many friends there are so we allocate memory for a maximum of 2000 friends
 	fb_account *accounts = (fb_account*) malloc(sizeof(fb_account) * 2000);
-	int n_accounts = identify_accounts("friendslist.html", accounts);
+	int n_accounts = identify_accounts("../test/friendslist.html", accounts);
 
 	// Free unnecessary memory
 	accounts = (fb_account*)realloc(accounts, sizeof(fb_account) * n_accounts);
@@ -145,6 +135,21 @@ int get_friends_list(char* email, char* password, char* id, fb_account** friends
 	// Set the return value for the accounts and return the number
 	*friends = accounts;
 	return n_accounts;
+}
+
+
+int connectToFacebook(char* email, char* password) {
+	// We connect to facebook main page because we are interested in the cookies the server will send us.
+	// The cookies are written in the 'cookies' file.
+	if (exec_and_wait("curl -D ../test/cookies --user-agent \"Mozilla/4.0\" http://www.facebook.com/ -o ../test/facebook.html"))
+		return 0;
+
+	// We send the user and the password and save the new set of cookies in 'cookies_auth'.
+	char cmd[1024];
+	sprintf(cmd, "curl -D ../test/cookies_auth -b ../test/cookies -d \"email=%s&pass=%s\" --insecure --user-agent \"Mozilla/4.0\" https://login.facebook.com/login.php?login_attempt=1 -o ../test/facebook.html", email, password);
+	if (exec_and_wait(cmd))
+		return 0;
+
 }
 
 /*

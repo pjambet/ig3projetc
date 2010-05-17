@@ -12,7 +12,7 @@
 #include <string.h>
 #include <regex.h>
 
-#include "win_dependent.h"
+#include "../headers/os_dependent.h"
 
 // Information about a facebook account.
 // We are only interested in the id and the name.
@@ -29,6 +29,7 @@ typedef struct facebook_account fb_account;
 // Returns the number of found accounts.
 int identify_accounts(char* file_name, fb_account* accounts);
 
-int get_friends_list(char* email, char* password, char* id, fb_account** friends);
+int get_friends_list(char* id, fb_account** friends);
 
+int connectToFacebook(char* email, char* password);
 #endif

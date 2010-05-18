@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "tre/regex.h"
+#include <regex.h>
 
 #include "os_dependent.h"
 

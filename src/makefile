@@ -34,7 +34,7 @@ main.o: $(CURDIR)/source/main.cpp $(CURDIR)/headers/Generator.h $(CURDIR)/header
 	$(CXX) $(CXXFLAGS) -o main.o -c $(CURDIR)/source/main.cpp
 clean:
 	@rm -rf *.o
-#
+
 mrproper: clean
 	@rm -rf GrapheFB
 

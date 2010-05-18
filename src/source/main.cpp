@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
     Graph G;
 
     // Stockage de l'option' de lancement
-    if (argc > 1)
+    if (argc > 1 )
         opt = argv[1];
 
     if ((argc == 5) && ( (opt == "--log") || (opt == "-l") ) ) {

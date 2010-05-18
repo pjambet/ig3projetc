@@ -11,7 +11,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include "../headers/Generator.h"
 
 
-Generator::Generator() : m_database("noms.dat"), m_destination("gene"),
+Generator::Generator() : m_database("facebook.dat"), m_destination("gene"),
                          m_nbPerson(0), m_nbRelation(0), m_nbQuestion(0), m_connected(false) {
 
     FILE* fichier = fopen((REPERTORY_TEST + m_database).c_str(), "r");

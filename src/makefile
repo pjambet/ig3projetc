@@ -10,10 +10,10 @@ CXXFLAGS ?= -Wall -ansi -g
 all: GrapheFB clean
 #
 GrapheFB: fbfriends.o AdjList.o AdjMat.o Generator.o Graph.o Summit.o main.o
-	$(CXX) $(CXXFLAGS) -o GrapheFB $(CURDIR)/source/os_dependent.c fbfriends.o AdjList.o AdjMat.o Generator.o Graph.o Summit.o main.o
+	$(CXX) $(CXXFLAGS) -o GrapheFB $(CURDIR)/source/unix_dependent.c fbfriends.o AdjList.o AdjMat.o Generator.o Graph.o Summit.o main.o
 #
-fbfriends.o: $(CURDIR)/source/fbfriends.c $(CURDIR)/headers/os_dependent.h
-	$(CXX) -ansi -g -w -o fbfriends.o -c $(CURDIR)/source/fbfriends.c 
+fbfriends.o: $(CURDIR)/source/fbfriends.cpp $(CURDIR)/headers/unix_dependent.h
+	$(CXX) -ansi -g -w -o fbfriends.o -c $(CURDIR)/source/fbfriends.cpp 
 #
 Summit.o: $(CURDIR)/source/Summit.cpp
 	$(CXX) $(CXXFLAGS) -o Summit.o -c $(CURDIR)/source/Summit.cpp

@@ -19,13 +19,15 @@ DETAILS 		 : Ce fichier réalise les tests unitaires afin de verifier et
 
 
 TEST(Generator, GenerateFile) {
+
 	Generator G;
 	int nbpers_th = 0, nbrel_th = 0, nbquest_th = 0;//taille theorique, la taille qu'on lit au debut
 	int nbpers_re = 0, nbrel_re = 0, nbquest_re = 0;//taille réelle, egale au nombre de lignes qui suivent
 	char chaine[100] = "";// variable "tampon" qui permet de lire le fichier
 	char buffer[100];// deuxieme variable "tampon" qui permet de lire le fichier
 	bool continuer = true;//booleen utile au parcour du fichier
-	char tmp1[10];
+	char tmp1[100];
+	
 	//On teste si la structure du fichier est conforme au sujet
 	EXPECT_TRUE(G.getDestination().c_str() != NULL);
 	
@@ -36,6 +38,7 @@ TEST(Generator, GenerateFile) {
 	
 	ASSERT_TRUE((fichier = fopen(G.getDestination().c_str(), "r")))
 		<< "Echec de l'ouverture de " << G.getDestination();
+		
 	// Lecture des relations
 	fscanf(fichier, "%d\n", &nbpers_th);
 	while ((fgets(chaine, 100, fichier) ) != NULL && (continuer)) {
@@ -49,19 +52,21 @@ TEST(Generator, GenerateFile) {
 		}
 		strcpy(buffer, chaine);
 	}
-	
+		
 	// Lecture des relations
 	nbrel_th = atoi(&buffer[0]);
 	continuer = true;
  	do {
+ 		//LIGNE DANGEUREUSE !!!
+ 		//Déclence une erreur chelou : stack smashing detected
+ 		//si la taille de tmp1 est "dépassé"
  		fscanf(fichier, "%s", tmp1 );
-		//cout << chaine << endl;
-		//cout << tmp1 << endl;
 		nbrel_re++;
-		//cout << "chaine[0] :" << chaine[0] << "chaine[1] :" << chaine[1] << "chaine[2] :" << chaine[2] << "chaine[3] :" << chaine[3] << "chaine[4] :" << chaine[4] << "chaine[5] :" << chaine[5] << endl;
+		
 		if (tmp1[strlen(tmp1) - 1] != ',') {
 			continuer = false;
 		}
+		
 	} while ((fgets(chaine, 100, fichier) ) != NULL && (continuer)) ;
  
  	// Lecture des questions
@@ -81,7 +86,6 @@ TEST(Generator, GenerateFile) {
 
 // Teste la fonction GenerateMatrix
 TEST(Generator, GenerateMatrix) {
-
 	Generator G;
 	// Pour chacun des tests, on teste si le nombre réel de sommet et "conforme"
 	// au nombre demandé, le test est faux si le nombre est inférieur a 95% du nombre

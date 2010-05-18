@@ -10,7 +10,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#include "../headers/unix_dependent.h"
+#include "os_dependent.h"
 
 #define SHELL "/bin/sh"
 
@@ -37,6 +37,6 @@ int exec_and_wait(char* command)
 	/* This is the parent process.  Wait for the child to complete.  */
 	if (waitpid (pid, &status, 0) != pid)
 	  status = -1;
-
+	
 	return 0;
 }

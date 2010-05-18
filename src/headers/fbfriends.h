@@ -12,7 +12,7 @@
 #include <string.h>
 #include "tre/regex.h"
 
-#include "win_dependent.h"
+#include "os_dependent.h"
 
 // Information about a facebook account.
 // We are only interested in the id and the name.

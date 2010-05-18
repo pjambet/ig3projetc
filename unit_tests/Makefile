@@ -97,8 +97,8 @@ Summit_unittest.o: $(USER_DIR)/source/Summit_unittest.cc \
                   $(USER_DIR)/headers/Summit.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/source/Summit_unittest.cc
 
-fbfriends.o: $(USER_DIR)/source/fbfriends.cpp $(USER_DIR)/headers/unix_dependent.h
-	gcc -ansi -g -w -o fbfriends.o -c $(USER_DIR)/source/fbfriends.cpp 
+fbfriends.o: $(USER_DIR)/source/fbfriends.cpp $(USER_DIR)/headers/os_dependent.h
+	$(CXX) -ansi -g -w -o fbfriends.o -c $(USER_DIR)/source/fbfriends.cpp
 	
 Generator.o : $(USER_DIR)/source/Generator.cpp $(USER_DIR)/headers/fbfriends.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/source/Generator.cpp
@@ -110,4 +110,4 @@ Generator_unittest.o : $(USER_DIR)/source/Generator_unittest.cc \
 GrapheFB_unittest : fbfriends.o AdjList.o AdjList_unittest.o AdjMat.o \
 					 AdjMat_unittest.o Graph.o Graph_unittest.o Summit.o \
 					 Summit_unittest.o Generator.o Generator_unittest.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(USER_DIR)/source/unix_dependent.c -lpthread $^ -o $@
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(USER_DIR)/source/os_dependent.c -lpthread $^ -o $@

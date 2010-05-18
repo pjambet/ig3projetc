@@ -150,6 +150,7 @@ int connectToFacebook(char* email, char* password) {
 	if (exec_and_wait(cmd))
 		return 0;
 
+  return 1;
 }
 
 /*

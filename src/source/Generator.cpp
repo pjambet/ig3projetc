@@ -261,7 +261,7 @@ void Generator::generateDatabase() {
     cout << "Password : ";
     cin >> password; // projetig3
     cout << endl;
-        if (!connectToFacebook(email, password)) {
+        if (connectToFacebook(email, password)) {
             m_connected = true;
             cout << "Connexion reussie !" << endl << endl;
         }

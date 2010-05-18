@@ -10,9 +10,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <regex.h>
+#include "tre/regex.h"
 
-#include "../headers/os_dependent.h"
+#include "win_dependent.h"
 
 // Information about a facebook account.
 // We are only interested in the id and the name.

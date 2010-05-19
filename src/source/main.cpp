@@ -32,8 +32,10 @@ int main(int argc, char* argv[]) {
 
     /* Variables */
     int choice; /* Choix de l'utilisateur */
+
     string choice2; /* Choix d'affichage du rapport */
     clock_t t_ini, t_open, t_cfc, t_dist, t_create; /* Stockage des temps d'execution */
+
     string nom_in, nom_out;
     string dir_in, dir_out;
     string opt;
@@ -41,11 +43,10 @@ int main(int argc, char* argv[]) {
 
     Generator gene;
     Graph G;
-    
-    // Stockage de l'option' de lancement
-    if (argc > 1 )
-        opt = argv[1];
 
+    // Stockage de l'option' de lancement
+    if (argc > 1)
+        opt = argv[1];
 
     if ((argc == 5) && ( (opt == "--log") || (opt == "-l") ) ) {
         /* 1er argument : nom de l'execution
@@ -60,14 +61,14 @@ int main(int argc, char* argv[]) {
         repertory = TEST_GENE_OUT;
         G.initGraph(repertory);
 
-        cout << G.getSizeGraph() << " " << atoi(argv[3]) << " " << atoi(argv[4]) << " ";
+        cout << G.getSizeGraph() << "\t" << atoi(argv[3]) << "\t" << atoi(argv[4]) << "\t";
 
         /* Calcul des CFC */
         t_ini = clock();
         G.searchSCC();
         t_cfc = clock();
 
-        cout << ((double) t_cfc - t_ini) / CLOCKS_PER_SEC << " ";
+        cout << ((double) t_cfc - t_ini) / CLOCKS_PER_SEC << "\t";
 
         /*Calcul des chemins */
         t_ini = clock();

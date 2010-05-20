@@ -3,15 +3,17 @@
 # Premiere boucle : i => nombre de sommets
 # Deuxieme boucle : j => nombre de relations
 # Troisieme boucle : k => nombre de questions
-date >> log
-for (( l = 1; l <= 5; l++ )); do
-	for (( i = 200; i < 2000; i+=400 )); do
-		echo -n $i " ";
-		for (( j = 1; j < 100; j+=20 )); do
-			nb_rel=$(($(($j*$i))/100))
-			for (( k=1; k < 100; k+=20 )); do
-				nb_quest=$(($(($k*$i))/100))			
-					./GrapheFB --log $i $nb_quest $nb_rel >> log4 			
+date >> ../test/log
+
+for (( i = 200; i <= 2000; i+=200 )); do
+	ibis=$(($(($i*$i))-$i))
+	echo -n $i " ";
+	for j in 5 7 10 100 200 500 750 1000; do
+		nb_rel=$(($(($j*$ibis))/1000))
+		for k in 5 7 10 100 200 500 750 1000; do
+			nb_quest=$(($(($k*$ibis))/1000))	
+			for (( l = 1; l < 5; l++ )); do		
+				./Lager --log $i $nb_rel $nb_quest >> ../test/log
 			done
 		done
 	done	

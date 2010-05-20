@@ -11,16 +11,14 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 
 #include "../headers/Graph.h"
 
-/*=================================
-Constructeurs et Desctructeurs
-===================================*/
+/* CONSTRUCTEURS ET DESTRUCTEURS */
 Graph::Graph (): m_sizeGraph(0), m_nbSCC(0), m_nbDist(0) {
-    // m_matFriends = new int*;
 }
 
 
 Graph::~Graph () {
     int i;
+
 
     if ((m_structGraph == 'm') && (m_sizeGraph)) {
         for (i = 0; i < (int) m_sizeGraph; i++) {
@@ -28,43 +26,128 @@ Graph::~Graph () {
         }
         delete[] m_matFriends;
     }
+}
+/* -------------------------------------------------------------------------- */
 
+
+/* ACCESSEURS */
+void Graph::setAnalyzed(bool b) {
+    m_analyzed = b;
 }
 
 
-/*=================================
-Initialisation
-===================================*/
+bool Graph::isAnalyzed() {
+    return m_analyzed;
+}
+
+
+unsigned int Graph::getSizeGraph() {
+    return m_sizeGraph;
+}
+
+
+unsigned int Graph::getNbDist() {
+    return m_nbDist;
+}
+
+
+unsigned int Graph::getNbScc() {
+    return m_nbSCC;
+}
+
+
+int** Graph::getMatFriends() {
+    return m_matFriends;
+}
+
+
+vector< s_summit > Graph::getTabSummit() {
+    return m_tabSummit;
+}
+
+
+map< string, int > Graph::getIdToRank() {
+    return m_idToRank;
+}
+
+
+vector< vector< int > > Graph::getListFriends() {
+    return m_listFriends;
+}
+
+
+vector< vector< int > > Graph::getListDualFriends() {
+    return m_listDualFriends;
+}
+
+
+vector< vector < int > > Graph::getListSCC() {
+    return m_listSCC;
+}
+
+
+map< int, vector< int > > Graph::getListQuestion() {
+    return m_listQuestion;
+}
+
+
+map< int, vector< s_summit > > Graph::getListDist() {
+    return m_listDist;
+}
+
+
+multimap< int, vector< int > > Graph::getListPath() {
+    return m_listPath;
+}
+
+
+void Graph::setStructGraph(char c) {
+    if ((c == 'l') || (c == 'm')) {
+        m_structGraph = c;
+    } else {
+        cerr << "ERREUR - Structure inconnue " << endl;
+	}
+}
+
+
+bool Graph::isAnalysable() {
+    return (m_sizeGraph != 0);
+}
+/* -------------------------------------------------------------------------- */
+
+
+/* METHODE D'INITIALISATION DE LA CLASSE */
+
+/* PROCEDURE : initGraph - Initialisation des donnees */
 void Graph::initGraph (string& fileNameIn) {
-    clearGraph();
-
     /* Variables */
-    /* Generales */
-    int i, j;
-    FILE* f_in;
+		/* Generales */
+		int i, j;
+		FILE* f_in;
 
-    /* Etape 2 */
-    s_summit s;
-    char nameTemp[255];
-    char idTemp[30];
+		/* Etape 2 */
+		s_summit s;
+		char nameTemp[255];
+		char idTemp[30];
 
-    /* Etape 3 */
-    int unsigned nbConnections;
+		/* Etape 3 */
+		int unsigned nbConnections;
 
-    /* Etape 4 */
-    char x[30], y[30];
-    int xRank, yRank;
-    map< int, vector < int > >::iterator itFriends;
+		/* Etape 4 */
+		char x[30], y[30];
+		int xRank, yRank;
+		map< int, vector < int > >::iterator itFriends;
 
-    /* Etape 6 */
-    map< int, vector< int > >::iterator itDist;
+		/* Etape 6 */
+		map< int, vector< int > >::iterator itDist;
 
 
     /* Corps de la fonction */
+    clearGraph();
     f_in = fopen(fileNameIn.c_str(), "r");
 
     if (f_in == NULL) {
-        cerr << "Erreur - Impossible d'ouvrir le fichier ou fichier inexistant." << endl;
+        cerr << "ERREUR - Impossible d'ouvrir le fichier ou fichier inexistant." << endl;
 
     } else {
         /* Etape 1 - Lecture du nombre de personne*/
@@ -156,22 +239,21 @@ void Graph::initGraph (string& fileNameIn) {
         }
         fclose(f_in);
     }
-
-    m_analyzed = false;
 }
+/* -------------------------------------------------------------------------- */
 
+
+/* PROCEDURE : clearGraph - Remise a zero des donnees */
 void Graph::clearGraph () {
     int i;
 
-
     m_tabSummit.clear();
-
     m_idToRank.clear();
-
+    m_structGraph = 'x';
+    m_analyzed = false;
 
     m_listFriends.clear();
     m_listDualFriends.clear();
-
     if ((m_structGraph == 'm') && (m_sizeGraph)) {
         for (i = 0; i < (int) m_sizeGraph; i++) {
             delete[] m_matFriends[i];
@@ -179,6 +261,7 @@ void Graph::clearGraph () {
         delete[] m_matFriends;
         m_matFriends = NULL;
     }
+
     m_sizeGraph = 0;
 
     m_nbSCC = 0;
@@ -189,112 +272,29 @@ void Graph::clearGraph () {
     m_listDist.clear();
     m_listPath.clear();
 
-    m_structGraph = 'x';
+
 
 }
+/* -------------------------------------------------------------------------- */
 
 
-char Graph::chooseStruct () {
-    return TEST_STRUCT;
-}
+/* RECHERCHE */
 
-
-/*=================================
-Recherche
-===================================*/
-bool Graph::isAnalysable() {
-    return (m_sizeGraph != 0);
-}
-
-
-bool Graph::isAnalyzed() {
-    return m_analyzed;
-}
-
-
-void Graph::setAnalyzed(bool b) {
-    m_analyzed = b;
-}
-
-
-unsigned int Graph::getSizeGraph() {
-    return m_sizeGraph;
-}
-
-
-unsigned int Graph::getNbDist() {
-    return m_nbDist;
-}
-
-
-unsigned int Graph::getNbScc() {
-    return m_nbSCC;
-}
-
-
-int** Graph::getMatFriends() {
-    return m_matFriends;
-}
-
-
-vector< s_summit > Graph::getTabSummit() {
-    return m_tabSummit;
-}
-
-
-map< string, int > Graph::getIdToRank() {
-    return m_idToRank;
-}
-
-
-vector< vector< int > > Graph::getListFriends() {
-    return m_listFriends;
-}
-
-
-vector< vector< int > > Graph::getListDualFriends() {
-    return m_listDualFriends;
-}
-
-
-vector< vector < int > > Graph::getListSCC() {
-    return m_listSCC;
-}
-
-
-map< int, vector< int > > Graph::getListQuestion() {
-    return m_listQuestion;
-}
-
-
-map< int, vector< s_summit > > Graph::getListDist() {
-    return m_listDist;
-}
-
-
-multimap< int, vector< int > > Graph::getListPath() {
-    return m_listPath;
-}
-
-
-void Graph::setStructGraph(char c) {
-    if ((c == 'l') || (c == 'm'))
-        m_structGraph = c;
-    else
-        cerr << "Structure inconnue " << endl;
-}
-
-
+/* PROCEDURE : searchSCC - Recherche des CFC */
 void Graph::searchSCC () {
-    int d, f; /* Reperes de debut et fin d'intervalle */
-    int i;
-    int unsigned cpt_SCC; /* Compteur de CFC*/
-    vector < int > v;
+	/* Variables */
+		int d, f; /* Reperes de debut et fin d'intervalle */
+		int i; /* Variable de boucle */
+		int unsigned cpt_SCC; /* Compteur de CFC */
 
-    vector< s_summit > tabSummitTemp;
-    AdjMat matrix;
-    AdjList list;
+		vector < int > v; 
+		vector< s_summit > tabSummitTemp;
+			/* Vecteurs temporaires */
 
+		AdjMat matrix;
+		AdjList list;
+
+	/* Initialisation */
     if (m_structGraph == 'm') {
         matrix.initData(m_tabSummit, m_matFriends);
         tabSummitTemp = matrix.initSCC();
@@ -304,63 +304,62 @@ void Graph::searchSCC () {
         tabSummitTemp = list.initSCC();
     }
 
-
+	/* Preparation - On initialise une CFC vide et on ajoute le premier sommet de tabSummitTemp */
     d = tabSummitTemp[0].beg;
     f = tabSummitTemp[0].end;
-    cpt_SCC = 0;
+
+    cpt_SCC = 1;
+    m_listSCC.push_back(v);
+    m_listSCC[cpt_SCC-1].push_back(m_idToRank[tabSummitTemp[0].id]);
+
+	/* On transmet l'importance dans le tableau original */
+    m_tabSummit[m_idToRank[tabSummitTemp[0].id]].important = tabSummitTemp[0].important;
+
+    for (i = 1; i < (int) m_sizeGraph; i++) {
+        /* On regarde les autres sommets de tabsummitTemp */
+        m_tabSummit[m_idToRank[tabSummitTemp[i].id]].important = tabSummitTemp[i].important;
 
 
+        if ( (d < tabSummitTemp[i].beg) && (f > tabSummitTemp[i].end) ) {
+			/* Cas ou le point est dans l'intervalle ]d, f[, on l'ajoute dans la meme CFC */
+            m_listSCC[cpt_SCC-1].push_back(m_idToRank[tabSummitTemp[i].id]);
 
-    if (m_sizeGraph != 0) {
-        cpt_SCC++;
-        m_listSCC.push_back(v);
-        m_listSCC[cpt_SCC-1].push_back(m_idToRank[tabSummitTemp[0].id]);
+        } else {
+			/* Cas ou les deux ensembles sont disjoints, on cree une nouvelle CFC */
+            d = tabSummitTemp[i].beg;
+            f = tabSummitTemp[i].end;
+            cpt_SCC++;
 
-        m_tabSummit[m_idToRank[tabSummitTemp[0].id]].important = tabSummitTemp[0].important;
-
-        for (i = 1; i < (int) m_sizeGraph; i++) {
-            /* On regarde les autres sommets */
-            m_tabSummit[m_idToRank[tabSummitTemp[i].id]].important = tabSummitTemp[i].important;
-
-            if ((d < (tabSummitTemp[i].beg)) && (f > (tabSummitTemp[i].end))) {
-                m_listSCC[cpt_SCC-1].push_back(m_idToRank[tabSummitTemp[i].id]);
-            } else {
-                d = tabSummitTemp[i].beg;
-                f = tabSummitTemp[i].end;
-                cpt_SCC++;
-
-                m_listSCC.push_back(v);
-                m_listSCC[cpt_SCC-1].push_back(m_idToRank[tabSummitTemp[i].id]);
-            }
+            m_listSCC.push_back(v);
+            m_listSCC[cpt_SCC-1].push_back(m_idToRank[tabSummitTemp[i].id]);
 
         }
-
-    } else {
-        cerr << "Erreur - Aucun graphe n'est ouvert !" << endl;
     }
+
 
     m_nbSCC = cpt_SCC;
 
+	/* Tri des ID dans les CFC (inutile avec des donnees reelles ?)
     for (i = 0; i < (int) m_nbSCC; i++) {
         sort(m_listSCC[i].begin(), m_listSCC[i].end());
     }
+	*/
 }
+/* -------------------------------------------------------------------------- */
 
 
-/*=================================
-Recherche
-===================================*/
-
+/* PROCEDURE : searchDistances - Recherche des distances a determiner */
 void Graph::searchDistances () {
-    int i;
-    int token;
-    map< int, vector< int > >::iterator it;
-    vector < int > path;
+	/* Variables */
+		int i;
+		int token; /* Jeton pour stocker les sommets a atteindre */
+		vector < int > path; /* Vecteur temporaire pour stocker un chemin */
+		map< int, vector< int > >::iterator it;
 
-    AdjMat matrix;
-    AdjList list;
+		AdjMat matrix;
+		AdjList list;
 
-    /* Attention ! Delicat a comprendre */
+
     /* Etape 1 : Pour tous les points de depart distincts,
        on cherche et on stocke les plus courts chemins */
     if (m_structGraph == 'm') {
@@ -371,15 +370,14 @@ void Graph::searchDistances () {
 
     } else {
         list.initData(m_tabSummit, m_listFriends, m_listDualFriends);
-
         for (it = m_listQuestion.begin(); it != m_listQuestion.end(); it++) {
             m_listDist[it->first] = list.initDist(it->first);
-
         }
+
     }
 
 
-    /* Etape 2 : A partir de la liste de question, pour chaque point de depart,
+    /* Etape 2 : A partir de la liste de question, pour chaque point de depart distinct,
        On regarde les id des points où aller et on stocke le chemin inverse dans path
        On stockera ensuite ce chemin dans le multimap listPath avec le point de depart comme cle */
     for (it = m_listQuestion.begin(); it != m_listQuestion.end(); it++) {
@@ -389,14 +387,13 @@ void Graph::searchDistances () {
             /* it->second[i] = l'id ou on veut aller a partir de it->first */
             path.clear();
 
-            token = it->second[i];
+            token = it->second[i]; /* Stockage du sommet ou on veut aller */
             path.push_back(it->second[i]);
-            /* En meme temps, la distance de it->first a i est donnee par m_tabSummit[path[0]].beg */
-
+            /* Note : La distance de it->first a i est donnee par m_tabSummit[path[0]].beg */
 
             if ( (m_listDist[it->first][token].end == -1) && (token != it->first)) {
                 /* Si il n'existe pas de chemin entre les 2 points
-                   On stocke directement le point de depart (rang) */
+                   On stocke directement le point de depart */
                 path.push_back(it->first);
             }
 
@@ -406,30 +403,42 @@ void Graph::searchDistances () {
                 path.push_back(token);
             }
 
-            path.pop_back();
             /* On retire le dernier point qui est normalement -1 */
+            path.pop_back();
 
+			/* On stocke le chemin avec comme cle, le point de depart */
             m_listPath.insert(pair< int, vector< int > >(it->first, path));
 
         }
     }
 }
+/* -------------------------------------------------------------------------- */
 
 
-/*=================================
-Autres et optionnels
-===================================*/
+/* AUTRES ET OPTIONNELS */
+
+/* FONCTION : chooseStruct - Determine la structure a adopter pour analyser le graphe */
+char Graph::chooseStruct () {
+    return TEST_STRUCT;
+}
+/* -------------------------------------------------------------------------- */
+
+
+/* PROCEDURE : saveGraph - Sauvegarde des resultats dans un fichier */
 void Graph::saveGraph (string& fileNameOut) {
+	/* Variables */
     FILE* f_out;
-    int i, j;
-    int start, finish;
+    int i, j; /* Variables de boucle */
+    int start, finish; /* Stocke les points de depart et d'arrivee */
     multimap<int, vector< int > >::iterator itStart;
 
 
+	/* Initialisation */
     f_out = fopen(fileNameOut.c_str(), "w+");
 
     /* Nombre de CFC */
     fprintf(f_out, "%d\n", m_nbSCC);
+
     /* CFC */
     for (i = 0; i < (int) m_listSCC.size(); i++) {
         for (j = 0; j < (int) m_listSCC[i].size()-1; j++) {
@@ -442,12 +451,12 @@ void Graph::saveGraph (string& fileNameOut) {
         if (m_tabSummit[ m_listSCC[i].back() ].important) {
             fprintf(f_out, "*");
         }
-        fprintf(f_out, "%s\n", m_tabSummit[ m_listSCC[i].back() ].id.c_str());
 
+        fprintf(f_out, "%s\n", m_tabSummit[ m_listSCC[i].back() ].id.c_str());
     }
 
     /*Chemins*/
-    fprintf(f_out, "%d\n", m_nbDist);
+    // fprintf(f_out, "%d\n", m_nbDist);
 
     for (itStart = m_listPath.begin(); itStart != m_listPath.end(); itStart++) {
 
@@ -459,7 +468,7 @@ void Graph::saveGraph (string& fileNameOut) {
             fprintf(f_out, "Pas de chemin entre %s et %s\n",  m_listDist[start][itStart->second.back()].id.c_str(), m_listDist[start][finish].id.c_str());
 
         } else {
-            fprintf(f_out, "%d : ", m_listDist[itStart->first][itStart->second.front()].beg); // = La distance
+            fprintf(f_out, "%d : ", m_listDist[itStart->first][itStart->second.front()].beg); /* = La distance */
 
             for (i = itStart->second.size()-1; i > 0; i--) {
                 fprintf(f_out, "%s, ", m_listDist[itStart->first][itStart->second[i]].id.c_str());
@@ -471,14 +480,15 @@ void Graph::saveGraph (string& fileNameOut) {
     fclose(f_out);
 
 }
+/* -------------------------------------------------------------------------- */
 
 
-/*=================================
-Affichage
-===================================*/
+/* Affichage */
+/* PROCEDURE : printGraph - Affichage des resultats dans le terminal */
 void Graph::printGraph () {
-    int i, j;
-    int start, finish;
+	/* Variables */
+    int i, j; /* Variables de boucle */
+    int start, finish; /* Stocke les points de depart et d'arrivee */
     multimap<int, vector< int > >::iterator itStart;
 
     cout << "Rapport de graphe :" << endl << endl;
@@ -520,8 +530,8 @@ void Graph::printGraph () {
             cout << "]" << endl;
         }
     }
-
     cout << endl;
+
 
     cout << "Nombre de CFC : " << m_nbSCC << endl;
     cout << "CFC : " << endl;
@@ -536,7 +546,6 @@ void Graph::printGraph () {
         }
         cout << "}" << endl;
     }
-
     cout << endl;
 
 
@@ -561,6 +570,6 @@ void Graph::printGraph () {
             cout << m_listDist[start][finish].id << endl;
         }
     }
-
-
 }
+/* -------------------------------------------------------------------------- */
+

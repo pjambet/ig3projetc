@@ -40,7 +40,7 @@ using namespace std;
 class Graph {
 private:
 
-    /* Attributs */
+    /* ATTRIBUTS */
     int unsigned m_sizeGraph;
     vector< s_summit > m_tabSummit;
     map< string, int > m_idToRank;
@@ -150,9 +150,20 @@ public:
 
     /* PROCEDURE : clearGraph - Remise a zero des donnees */
     void clearGraph ();
-    /* COMPLEXITE :
+    /* COMPLEXITE : Lineaire
        ENTREE : -
        ALGORITHME :
+			Reinitialiser les structures de stockage
+			Mettre la structure en inconnu (x)
+			Mettre l'etat du graphe a "non analyse"
+
+			Si la structure est liste
+				Reinitialiser la liste des amis et des amis duals
+			Sinon
+				Desallouer la matrice d'adjacence
+
+			Reinitialiser les CFC
+			Reinitialiser les distances
         */
 
 
@@ -176,17 +187,17 @@ public:
 
     /* AUTRES ET OPTIONNELS */
 
-    /* PROCEDURE : initGraph - Initialisation des donnees */
-    char chooseStruct (); /* Choisit la structure la mieux adaptee pour analyser le graphe */
+	/* FONCTION : chooseStruct - Determine la structure la mieux adaptee pour analyser le graphe */
+    char chooseStruct ();
     /* COMPLEXITE :
        ENTREE : -
        ALGORITHME :
         */
 
 
-    /* PROCEDURE : initGraph - Initialisation des donnees */
-    void saveGraph (string& fileNameOut); /* Sauvegarde les resultats dans un fichier */
-    /* COMPLEXITE :
+    /* PROCEDURE : saveGraph - Sauvegarde des resultats dans un fichier */
+    void saveGraph (string& fileNameOut);
+    /* COMPLEXITE : Lineaire
        ENTREE : fileNameOut, nom du fichier d'enregistrement des donnees
                 (ce fichier peut ne pas exister, il sera alors cree)
        ALGORITHME :
@@ -194,20 +205,16 @@ public:
 
 
     /* Affichage */
-    /* PROCEDURE : initGraph - Initialisation des donnees */
+    /* PROCEDURE : printGraph - Affichage des resultats dans le terminal */
     void printGraph ();
-    /* COMPLEXITE :
+    /* COMPLEXITE : Lineaire
        ENTREE : -
        ALGORITHME :
+			Affiche 
+              - les personnes
+              - les composantes fortements connexes
+              - les distances demandees
         */
-
-
-    /* Procedure d'affichage du graphe
-                      Affiche
-                      - les personnes
-                      - les composantes fortements connexes
-                      - les distances demandees */
-
 };
 
 #endif // GRAPHE_H_INCLUDED

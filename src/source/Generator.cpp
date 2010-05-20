@@ -10,7 +10,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 ============================================================================= */
 #include "../headers/Generator.h"
 
-
+/* CONSTRUCTEURS ET DESCTRUCTEURS : */
 Generator::Generator() : m_database("facebook.dat"), m_destination("gene"),
                          m_nbPerson(0), m_nbRelation(0), m_nbQuestion(0), m_connected(false) {
 
@@ -27,14 +27,25 @@ Generator::Generator() : m_database("facebook.dat"), m_destination("gene"),
             m_nbPersonMax++;
         }
         fclose(fichier);
-
     }
-
 }
+
 
 Generator::~Generator() {
 }
+/* -------------------------------------------------------------------------- */
 
+
+/* ACCESSEURS */
+string Generator::getDestination() {
+    return m_destination;
+}
+/* -------------------------------------------------------------------------- */
+
+
+/* METHODE D'INITIALISATION DE LA CLASSE */
+
+/* PROCEDURE : changeOptionAutomatic - Initialisation des donnees sans passer par un menu */
 void Generator::changeOptionAutomatic(string db, string dest, int nP, int nR, int nQ) {
     m_database = db;
     m_destination = dest;
@@ -45,7 +56,10 @@ void Generator::changeOptionAutomatic(string db, string dest, int nP, int nR, in
     assert( m_nbQuestion <= (m_nbPerson * m_nbPerson - m_nbPerson) );
 
 }
+/* -------------------------------------------------------------------------- */
 
+
+/* PROCEDURE : changeOptionManual - Initialisation des donnees via un menu */
 void Generator::changeOptionManual() {
     string choice;
     FILE* fichier;
@@ -115,8 +129,10 @@ void Generator::changeOptionManual() {
 
     }
 }
+/* -------------------------------------------------------------------------- */
 
 
+/* PROCEDURE : generateFile - Generation d'un fichier d'entree */
 void Generator::generateFile() {
     srand(time(NULL));
 
@@ -233,8 +249,10 @@ void Generator::generateFile() {
         cout << "Le graphe doit posseder au moins 1 personne ! ";
     }
 }
+/* -------------------------------------------------------------------------- */
 
 
+/* PROCEDURE : generateDatabase - Generation une database de nom et d'id */
 void Generator::generateDatabase() {
 
     fb_account* accounts;	// accounts array after retrival
@@ -325,8 +343,10 @@ void Generator::generateDatabase() {
         m_nbPersonMax += nAdd;
     }
 }
+/* -------------------------------------------------------------------------- */
 
 
+/* FONCTION : generateMatrix - Generation une matrice de 0 et de 1 aleatoirement et renvoie le nombre de 1 */
 int Generator::generateMatrix(int n, int** m, int r) {
     int i, j;
     int cpt;
@@ -348,14 +368,12 @@ int Generator::generateMatrix(int n, int** m, int r) {
 
     return cpt;
 }
+/* -------------------------------------------------------------------------- */
 
 
-float Generator::convertNumToRatio(int n, int nbSum) {
-    return (nbSum * RATIO) / (n * n - n);
+/* FONCTION : convertNumToRatio - Convertit le nombre donne en ratio par rapport a nbSum */
+float Generator::convertNumToRatio(int n, unsigned long long nbSum) {
+    return  (nbSum * RATIO) / (n * n - n);
 }
-
-
-string Generator::getDestination() {
-    return m_destination;
-}
+/* -------------------------------------------------------------------------- */
 

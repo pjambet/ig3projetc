@@ -155,7 +155,7 @@ public :
 
 
     /* FONCTION : convertNumToRatio - Convertit le nombre donne en ratio par rapport a nbSum */
-    float convertNumToRatio(int n, int nbSum);
+    float convertNumToRatio(int n, unsigned long long nbSum);
     /* COMPLEXITE : Constant o(1)
        ENTREE : n, le nombre de personne
                 nbSum, le nombre de liens desire

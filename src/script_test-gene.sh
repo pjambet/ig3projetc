@@ -11,7 +11,7 @@ for (( l = 1; l <= 5; l++ )); do
 			nb_rel=$(($(($j*$i))/100))
 			for (( k=1; k < 100; k+=20 )); do
 				nb_quest=$(($(($k*$i))/100))			
-					./GrapheFB --log $i $nb_quest $nb_rel >> log 			
+					./GrapheFB --log $i $nb_quest $nb_rel >> log4 			
 			done
 		done
 	done	

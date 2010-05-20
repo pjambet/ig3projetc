@@ -7,10 +7,10 @@ CXXFLAGS ?= -Wall -ansi -g
 # Definition de l'acces aux repertoir des headers (utiles si l'on ne met pas le chemin dans les <#include ... > mais juste le nom du fichier
 #
 #
-all: GrapheFB clean
+all: Lager clean
 #
-GrapheFB: fbfriends.o AdjList.o AdjMat.o Generator.o Graph.o Summit.o main.o
-	$(CXX) $(CXXFLAGS) -o GrapheFB $(CURDIR)/source/os_dependent.c fbfriends.o AdjList.o AdjMat.o Generator.o Graph.o Summit.o main.o
+Lager: fbfriends.o AdjList.o AdjMat.o Generator.o Graph.o Summit.o main.o
+	$(CXX) $(CXXFLAGS) -o Lager $(CURDIR)/source/os_dependent.c fbfriends.o AdjList.o AdjMat.o Generator.o Graph.o Summit.o main.o
 #
 fbfriends.o: $(CURDIR)/source/fbfriends.cpp $(CURDIR)/headers/os_dependent.h
 	$(CXX) -ansi -g -w -o fbfriends.o -c $(CURDIR)/source/fbfriends.cpp
@@ -36,5 +36,5 @@ clean:
 	@rm -rf *.o
 
 mrproper: clean
-	@rm -rf GrapheFB
+	@rm -rf Lager
 

@@ -32,7 +32,7 @@ Includes
 /*=================================
 Constantes
 ===================================*/
-#define TEST_STRUCT 'l'
+#define TEST_STRUCT 'm'
 
 using namespace std;
 

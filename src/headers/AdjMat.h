@@ -72,6 +72,10 @@ public:
          Copie v dans m_tabSummit
          Copie la matrice m dans m_tabSummit */
 
+	/* ACCESSEURS */
+	
+	vector < s_summit > getTabSummit();
+	s_summit getTabSummit(int i);
 
     /* METHODES DE RECHERCHE DE COMPOSANTES FORTEMENT CONNEXES (STRONGLY CONNECTED COMPONENT) */
 

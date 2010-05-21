@@ -20,7 +20,7 @@ TEST(Graph, DefaultConstructor) {
 	EXPECT_EQ(0, (int)G.getNbDist() );
 	EXPECT_EQ(0, (int)G.getNbScc() );
 	EXPECT_EQ(0, (int)G.getSizeGraph() );
-	//EXPECT_EQ(NULL, G.getIdToRank() );
+	EXPECT_EQ(NULL, G.getMatFriends() );
 
 }
 

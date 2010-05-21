@@ -12,7 +12,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include "../headers/Graph.h"
 
 /* CONSTRUCTEURS ET DESTRUCTEURS */
-Graph::Graph (): m_sizeGraph(0), m_nbSCC(0), m_nbDist(0) {
+Graph::Graph (): m_sizeGraph(0),m_structGraph('m'), m_matFriends(NULL), m_nbSCC(0), m_nbDist(0) {
 }
 
 
@@ -113,6 +113,8 @@ void Graph::setStructGraph(char c) {
 bool Graph::isAnalysable() {
     return (m_sizeGraph != 0);
 }
+
+
 /* -------------------------------------------------------------------------- */
 
 
@@ -249,11 +251,12 @@ void Graph::clearGraph () {
 
     m_tabSummit.clear();
     m_idToRank.clear();
-    m_structGraph = 'x';
+    m_structGraph = 'm';
     m_analyzed = false;
 
     m_listFriends.clear();
     m_listDualFriends.clear();
+
     if ((m_structGraph == 'm') && (m_sizeGraph)) {
         for (i = 0; i < (int) m_sizeGraph; i++) {
             delete[] m_matFriends[i];
@@ -261,6 +264,8 @@ void Graph::clearGraph () {
         delete[] m_matFriends;
         m_matFriends = NULL;
     }
+    
+
 
     m_sizeGraph = 0;
 

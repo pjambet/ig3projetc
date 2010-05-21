@@ -69,6 +69,24 @@ vector< s_summit > AdjMat::initSCC () {
     return m_tabSummit;
 }
 
+/*=================================
+Accesseurs
+===================================*/
+
+vector < s_summit > AdjMat::getTabSummit() {
+	return m_tabSummit;
+}
+
+s_summit AdjMat::getTabSummit(int i) {
+	s_summit s;
+	if ((m_tabSummit.size() > 0 ) && (i >= 0) && (i < (int)m_tabSummit.size() ) ){
+		return m_tabSummit[i];
+	}
+	else {
+		cerr << "ERREUR sur l'ouverture de tabSummit !!" << endl;
+		return s;
+	}
+}
 
 /*=================================
 Parcours en profondeur

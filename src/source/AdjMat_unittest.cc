@@ -26,14 +26,17 @@ TEST(AdjMat, initSCC) {
 	// Dans ce test on va verifier le fonctionnement de DFS et DFSD
 	
 	AdjMat A;
+	Graph Gr;
 	
-	// On va verifier que les d(x) et f(x) sont conformes
-	// c-a-d si d(x) < d(y) < f(y) < d(x) si x est avant y dans le 
-	// parcours en profondeur de G et que y appartient a l'arbo de x
+	vector< s_summit > tabSummit;
+		
+	Gr.initGraph(s);
 	
-	//A.initData();
+	tabSummit = Gr.getTabSummit();
 	
+	A.initData(tabSummit, Gr.getMatFriends());
 	
+	A.initSCC();	
 	
 	
 }

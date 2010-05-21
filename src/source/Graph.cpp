@@ -179,7 +179,9 @@ void Graph::initGraph (string& fileNameIn) {
 
 
         /* Etape intermediaire : Definition de la structure a adopter */
-        m_structGraph = chooseStruct();
+        //On a décidé de mettre ca de coté pour une question de simplicité
+        //Le choix de la representation est laissé a l'utilisateur
+        //m_structGraph = chooseStruct();
 
 
         /* Etape 4 - Stocker les amis en fonction de la structure choisie */

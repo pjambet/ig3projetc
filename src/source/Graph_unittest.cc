@@ -83,15 +83,25 @@ TEST(Graph, searchDistances) {
 
 }
 
-TEST(Graph, searchSCC) {
+TEST(Graph, searchSCCMat) {
+	
+	Graphe Gr;
+	
+	Gr.setStructGraph('m');
+	Gr.searchSCC();
+		
+}
 
+
+TEST(Graph, searchSCCList) {
+	
+	Graphe Gr;
+	
+	Gr.setStructGraph('l');
+	Gr.searchSCC();
 
 }
 
-TEST(Graph, chooseStruct) {
-	//TODO
-
-}
 
 TEST(Graph, saveGraph) {
 

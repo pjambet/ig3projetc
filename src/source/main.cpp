@@ -37,12 +37,12 @@ using namespace std;
 int main(int argc, char* argv[]) {
 
     /* VARIABLES */
-    int choice; 
-    string choice2; 
+    int choice;
+    string choice2;
 		/* - choice : choix de l'utilisateur pour le menu
 		   - choice2 : choix de l'utilisateur pour l'affichage du rapport */
 
-    clock_t t_ini, t_open, t_cfc, t_dist, t_create; 
+    clock_t t_ini, t_open, t_cfc, t_dist, t_create;
 		/* Stockage des temps d'execution */
 
     string nom_in, nom_out;
@@ -61,7 +61,7 @@ int main(int argc, char* argv[]) {
 
     /* ****************************************************** */
     /* ****************************************************** */
-	
+
 
 	/* S'il existe un premier argument, on le stocke pour plus tard */
     if (argc > 1)
@@ -179,7 +179,7 @@ int main(int argc, char* argv[]) {
             case 1 :
 
                 if (argc > 1) {
-					/* Si le premier argument donne en premier parametre n'est pas --log 
+					/* Si le premier argument donne en premier parametre n'est pas --log
 					   On le considere comme le fichier d'entree */
                     nom_in = argv[1];
 
@@ -211,7 +211,7 @@ int main(int argc, char* argv[]) {
 			/* CASE 2 : Analyse du graphe */
             case 2 :
 
-                if (G.isAnalysable()) { 
+                if (G.isAnalysable()) {
 					/* On teste si un graphe a ete donne en entree */
 
                     if (!G.isAnalyzed()) {

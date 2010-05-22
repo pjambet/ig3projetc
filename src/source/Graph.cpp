@@ -12,7 +12,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include "../headers/Graph.h"
 
 /* CONSTRUCTEURS ET DESTRUCTEURS */
-Graph::Graph (): m_sizeGraph(0),m_structGraph('m'), m_matFriends(NULL), m_nbSCC(0), m_nbDist(0) {
+Graph::Graph (): m_sizeGraph(0), m_structGraph('m'), m_matFriends(NULL), m_nbSCC(0), m_nbDist(0) {
 }
 
 
@@ -20,8 +20,8 @@ Graph::~Graph () {
     int i;
 
 
-    if ((m_structGraph == 'm') && (m_sizeGraph)) {
-        for (i = 0; i < (int) m_sizeGraph; i++) {
+    if ( (m_structGraph == 'm') && (m_sizeGraph) ) {
+        for (i = 0; i < (int) m_sizeGraph; ++i) {
             delete[] m_matFriends[i];
         }
         delete[] m_matFriends;
@@ -102,10 +102,10 @@ multimap< int, vector< int > > Graph::getListPath() {
 
 
 void Graph::setStructGraph(char c) {
-    if ((c == 'l') || (c == 'm')) {
+    if ( (c == 'l') || (c == 'm') ) {
         m_structGraph = c;
     } else {
-        cerr << "ERREUR - Structure inconnue " << endl;
+        cerr << "ERREUR - Structure inconnue. (Graph.cpp - setStructGraph)" << endl;
 	}
 }
 
@@ -138,18 +138,14 @@ void Graph::initGraph (string& fileNameIn) {
 		/* Etape 4 */
 		char x[30], y[30];
 		int xRank, yRank;
-		map< int, vector < int > >::iterator itFriends;
-
-		/* Etape 6 */
-		map< int, vector< int > >::iterator itDist;
 
 
     /* Corps de la fonction */
     clearGraph();
     f_in = fopen(fileNameIn.c_str(), "r");
 
-    if (f_in == NULL) {
-        cerr << "ERREUR - Impossible d'ouvrir le fichier ou fichier inexistant." << endl;
+    if ( f_in == NULL ) {
+        cerr << "ERREUR - Impossible d'ouvrir le fichier ou fichier inexistant. (Graph.cpp - initGraph)" << endl;
 
     } else {
         /* Etape 1 - Lecture du nombre de personne*/
@@ -162,7 +158,7 @@ void Graph::initGraph (string& fileNameIn) {
         s.end = 0;
         s.important = false;
 
-        for (i = 0; i < (int) m_sizeGraph; i++) {
+        for (i = 0; i < (int) m_sizeGraph; ++i) {
             fscanf(f_in, "%[^,], %[^,], %d\n", nameTemp, idTemp, &s.freq);
 
             s.name = nameTemp;
@@ -170,7 +166,7 @@ void Graph::initGraph (string& fileNameIn) {
             s.num = i;
             m_tabSummit.push_back(s);
 
-            m_idToRank[s.id] = i; // Stocke la relation entre l'id et son emplacement dans m_tabSummit
+            m_idToRank[s.id] = i; /* Stocke la relation entre l'id et son emplacement dans m_tabSummit */
         }
 
 
@@ -179,27 +175,27 @@ void Graph::initGraph (string& fileNameIn) {
 
 
         /* Etape intermediaire : Definition de la structure a adopter */
-        //On a dÃ©cidÃ© de mettre ca de cotÃ© pour une question de simplicitÃ©
-        //Le choix de la representation est laissÃ© a l'utilisateur
+        //On a décidé de mettre ca de coté pour une question de simplicité
+        //Le choix de la representation est laissé a l'utilisateur
         //m_structGraph = chooseStruct();
 
 
         /* Etape 4 - Stocker les amis en fonction de la structure choisie */
-        if (m_structGraph == 'm') {
+        if ( m_structGraph == 'm' ) {
             /* Structure de matrice */
             /* Initialisation de la matrice */
 
             m_matFriends = new int*[m_sizeGraph];
-            for (i = 0; i < (int) m_sizeGraph; i++) {
+            for (i = 0; i < (int) m_sizeGraph; ++i) {
                 m_matFriends[i]= new int[m_sizeGraph];
 
-                for (j = 0; j < (int) m_sizeGraph; j++) {
+                for (j = 0; j < (int) m_sizeGraph; ++j) {
                     m_matFriends[i][j] = 0;
                 }
             }
 
             /* Lecture des donnees et stockage */
-            for (i = 0; i < (int) nbConnections; i++) {
+            for (i = 0; i < (int) nbConnections; ++i) {
                 fscanf(f_in, "%[^,], %[^\r\n]\n", x, y);
 
                 xRank = m_idToRank[x];
@@ -214,7 +210,7 @@ void Graph::initGraph (string& fileNameIn) {
             m_listDualFriends.resize(m_sizeGraph);
 
             /* Structure de liste */
-            for (i = 0; i < (int) nbConnections; i++) {
+            for (i = 0; i < (int) nbConnections; ++i) {
                 fscanf(f_in, "%[^,], %[^\r\n]\n", x, y);
 
                 xRank = m_idToRank[x];
@@ -234,7 +230,7 @@ void Graph::initGraph (string& fileNameIn) {
 
 
         /* Etape 6 - Stockage des questions */
-        for (i = 0; i < (int) m_nbDist; i++) {
+        for (i = 0; i < (int) m_nbDist; ++i) {
             fscanf(f_in, "%[^ ] -> %[^\r\n]\n", x, y);
             xRank = m_idToRank[x];
             yRank = m_idToRank[y];
@@ -249,25 +245,24 @@ void Graph::initGraph (string& fileNameIn) {
 
 /* PROCEDURE : clearGraph - Remise a zero des donnees */
 void Graph::clearGraph () {
-    int i;
+    unsigned int i;
+
 
     m_tabSummit.clear();
     m_idToRank.clear();
-    m_structGraph = 'm';
+    // m_structGraph = 'm';
     m_analyzed = false;
 
     m_listFriends.clear();
     m_listDualFriends.clear();
 
-    if ((m_structGraph == 'm') && (m_sizeGraph)) {
-        for (i = 0; i < (int) m_sizeGraph; i++) {
+    if ( (m_structGraph == 'm') && (m_sizeGraph) ) {
+        for (i = 0; i < m_sizeGraph; ++i) {
             delete[] m_matFriends[i];
         }
         delete[] m_matFriends;
         m_matFriends = NULL;
     }
-    
-
 
     m_sizeGraph = 0;
 
@@ -278,9 +273,6 @@ void Graph::clearGraph () {
     m_listQuestion.clear();
     m_listDist.clear();
     m_listPath.clear();
-
-
-
 }
 /* -------------------------------------------------------------------------- */
 
@@ -294,7 +286,7 @@ void Graph::searchSCC () {
 		int i; /* Variable de boucle */
 		int unsigned cpt_SCC; /* Compteur de CFC */
 
-		vector < int > v; 
+		vector < int > v;
 		vector< s_summit > tabSummitTemp;
 			/* Vecteurs temporaires */
 
@@ -302,7 +294,7 @@ void Graph::searchSCC () {
 		AdjList list;
 
 	/* Initialisation */
-    if (m_structGraph == 'm') {
+    if ( m_structGraph == 'm' ) {
         matrix.initData(m_tabSummit, m_matFriends);
         tabSummitTemp = matrix.initSCC();
 
@@ -322,10 +314,10 @@ void Graph::searchSCC () {
 	/* On transmet l'importance dans le tableau original */
     m_tabSummit[m_idToRank[tabSummitTemp[0].id]].important = tabSummitTemp[0].important;
 
-    for (i = 1; i < (int) m_sizeGraph; i++) {
+
+    for (i = 1; i < (int) m_sizeGraph; ++i) {
         /* On regarde les autres sommets de tabsummitTemp */
         m_tabSummit[m_idToRank[tabSummitTemp[i].id]].important = tabSummitTemp[i].important;
-
 
         if ( (d < tabSummitTemp[i].beg) && (f > tabSummitTemp[i].end) ) {
 			/* Cas ou le point est dans l'intervalle ]d, f[, on l'ajoute dans la meme CFC */
@@ -335,7 +327,7 @@ void Graph::searchSCC () {
 			/* Cas ou les deux ensembles sont disjoints, on cree une nouvelle CFC */
             d = tabSummitTemp[i].beg;
             f = tabSummitTemp[i].end;
-            cpt_SCC++;
+            ++cpt_SCC;
 
             m_listSCC.push_back(v);
             m_listSCC[cpt_SCC-1].push_back(m_idToRank[tabSummitTemp[i].id]);
@@ -346,8 +338,8 @@ void Graph::searchSCC () {
 
     m_nbSCC = cpt_SCC;
 
-	/* Tri des ID dans les CFC (inutile avec des donnees reelles ?)
-    for (i = 0; i < (int) m_nbSCC; i++) {
+	/* Tri des ID dans les CFC (inutile avec des donnees reelles)
+    for (i = 0; i < (int) m_nbSCC; ++i) {
         sort(m_listSCC[i].begin(), m_listSCC[i].end());
     }
 	*/
@@ -369,15 +361,15 @@ void Graph::searchDistances () {
 
     /* Etape 1 : Pour tous les points de depart distincts,
        on cherche et on stocke les plus courts chemins */
-    if (m_structGraph == 'm') {
+    if ( m_structGraph == 'm' ) {
         matrix.initData(m_tabSummit, m_matFriends);
-        for (it = m_listQuestion.begin(); it != m_listQuestion.end(); it++) {
+        for (it = m_listQuestion.begin(); it != m_listQuestion.end(); ++it) {
             m_listDist[it->first] = matrix.initDist(it->first);
         }
 
     } else {
         list.initData(m_tabSummit, m_listFriends, m_listDualFriends);
-        for (it = m_listQuestion.begin(); it != m_listQuestion.end(); it++) {
+        for (it = m_listQuestion.begin(); it != m_listQuestion.end(); ++it) {
             m_listDist[it->first] = list.initDist(it->first);
         }
 
@@ -385,12 +377,12 @@ void Graph::searchDistances () {
 
 
     /* Etape 2 : A partir de la liste de question, pour chaque point de depart distinct,
-       On regarde les id des points oÃ¹ aller et on stocke le chemin inverse dans path
+       On regarde les id des points où aller et on stocke le chemin inverse dans path
        On stockera ensuite ce chemin dans le multimap listPath avec le point de depart comme cle */
-    for (it = m_listQuestion.begin(); it != m_listQuestion.end(); it++) {
+    for (it = m_listQuestion.begin(); it != m_listQuestion.end(); ++it) {
         /* Pour tous les points de departs distincts */
 
-        for (i = 0; i < (int) it->second.size(); i++) {
+        for (i = 0; i < (int) it->second.size(); ++i) {
             /* it->second[i] = l'id ou on veut aller a partir de it->first */
             path.clear();
 
@@ -398,13 +390,13 @@ void Graph::searchDistances () {
             path.push_back(it->second[i]);
             /* Note : La distance de it->first a i est donnee par m_tabSummit[path[0]].beg */
 
-            if ( (m_listDist[it->first][token].end == -1) && (token != it->first)) {
+            if ( (m_listDist[it->first][token].end == -1) && (token != it->first) ) {
                 /* Si il n'existe pas de chemin entre les 2 points
                    On stocke directement le point de depart */
                 path.push_back(it->first);
             }
 
-            while (token != -1) {
+            while ( token != -1 ) {
                 /* Tant qu'on n'est pas arrive a un pere "NULL", on remonte */
                 token = m_listDist[it->first][token].end;
                 path.push_back(token);
@@ -447,15 +439,15 @@ void Graph::saveGraph (string& fileNameOut) {
     fprintf(f_out, "%d\n", m_nbSCC);
 
     /* CFC */
-    for (i = 0; i < (int) m_listSCC.size(); i++) {
-        for (j = 0; j < (int) m_listSCC[i].size()-1; j++) {
-            if (m_tabSummit[ m_listSCC[i][j] ].important) {
+    for (i = 0; i < (int) m_listSCC.size(); ++i) {
+        for (j = 0; j < (int) m_listSCC[i].size()-1; ++j) {
+            if ( m_tabSummit[ m_listSCC[i][j] ].important ) {
                 fprintf(f_out, "*");
             }
             fprintf(f_out, "%s, ", m_tabSummit[m_listSCC[i][j]].id.c_str());
         }
 
-        if (m_tabSummit[ m_listSCC[i].back() ].important) {
+        if ( m_tabSummit[ m_listSCC[i].back() ].important ) {
             fprintf(f_out, "*");
         }
 
@@ -465,12 +457,12 @@ void Graph::saveGraph (string& fileNameOut) {
     /*Chemins*/
     // fprintf(f_out, "%d\n", m_nbDist);
 
-    for (itStart = m_listPath.begin(); itStart != m_listPath.end(); itStart++) {
+    for (itStart = m_listPath.begin(); itStart != m_listPath.end(); ++itStart) {
 
         start = itStart->first;
         finish = itStart->second.front();
 
-        if (m_listDist[start][finish].beg == INT_MAX) {
+        if ( m_listDist[start][finish].beg == INT_MAX ) {
             /* Si la distance entre les 2 est infinie */
             fprintf(f_out, "Pas de chemin entre %s et %s\n",  m_listDist[start][itStart->second.back()].id.c_str(), m_listDist[start][finish].id.c_str());
 
@@ -502,36 +494,37 @@ void Graph::printGraph () {
     cout << "Nombre de personnes : " << m_sizeGraph << endl;
     cout << "Personnes : " << endl;
 
-    if (m_structGraph == 'm') {
-        for (i = 0; i < (int) m_sizeGraph; i++) {
+    if ( m_structGraph == 'm' ) {
+        for (i = 0; i < (int) m_sizeGraph; ++i) {
             printSummit(m_tabSummit[i]);
 
             cout << "   Amis : [ ";
-            for (j = 0; j < (int) m_sizeGraph; j++) {
+            for (j = 0; j < (int) m_sizeGraph; ++j) {
                 if (m_matFriends[i][j]) {
                     cout << m_tabSummit[j].id << " ";
                 }
             }
 
             cout << "]" << endl << "   Amis (Dual) : [ ";
-            for (j = 0; j < (int) m_sizeGraph; j++) {
+            for (j = 0; j < (int) m_sizeGraph; ++j) {
                 if (m_matFriends[j][i]) {
                     cout << m_tabSummit[j].id << " ";
                 }
             }
             cout << "]" << endl;
         }
+
     } else {
-        for (i = 0; i < (int) m_sizeGraph; i++) {
+        for (i = 0; i < (int) m_sizeGraph; ++i) {
             printSummit(m_tabSummit[i]);
 
             cout << "   Amis : [ ";
-            for (j = 0; j < (int) m_listFriends[i].size(); j++) {
+            for (j = 0; j < (int) m_listFriends[i].size(); ++j) {
                 cout << m_tabSummit[m_listFriends[i][j]].id << " ";
             }
 
             cout << "]" << endl << "   Amis (Dual) : [ ";
-            for (j = 0; j < (int) m_listDualFriends[i].size(); j++) {
+            for (j = 0; j < (int) m_listDualFriends[i].size(); ++j) {
                 cout << m_tabSummit[m_listDualFriends[i][j]].id << " ";
             }
             cout << "]" << endl;
@@ -543,10 +536,10 @@ void Graph::printGraph () {
     cout << "Nombre de CFC : " << m_nbSCC << endl;
     cout << "CFC : " << endl;
 
-    for (i = 0; i < (int) m_listSCC.size(); i++) {
+    for (i = 0; i < (int) m_listSCC.size(); ++i) {
         cout << "{ ";
-        for (j = 0; j < (int) m_listSCC[i].size(); j++) {
-            if (m_tabSummit[m_listSCC[i][j]].important) {
+        for (j = 0; j < (int) m_listSCC[i].size(); ++j) {
+            if ( m_tabSummit[m_listSCC[i][j]].important ) {
                 cout << "*";
             }
             cout << m_tabSummit[m_listSCC[i][j]].id << " ";
@@ -559,11 +552,11 @@ void Graph::printGraph () {
     cout << "Nombre de distances : " << m_nbDist << " " << endl;
     cout << "Distances : " << endl;
 
-    for (itStart = m_listPath.begin(); itStart != m_listPath.end(); itStart++) {
+    for (itStart = m_listPath.begin(); itStart != m_listPath.end(); ++itStart) {
         start = itStart->first;
         finish = itStart->second.front();
 
-        if (m_listDist[start][finish].beg == INT_MAX) {
+        if ( m_listDist[start][finish].beg == INT_MAX ) {
             /* Si la distance entre les 2 est infinie */
             cout << "Pas de chemin entre " << m_listDist[start][itStart->second.back()].id;
             cout << " et " << m_listDist[start][finish].id << endl;

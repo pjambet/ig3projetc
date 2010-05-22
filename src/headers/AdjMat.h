@@ -59,6 +59,30 @@ public:
     ~AdjMat ();
 
 
+	/* ACCESSEURS */
+	vector < s_summit > getTabSummit();
+	s_summit getTabSummit(int i);
+
+    /* METHODES DE TRI DU TABLEAU DE SOMMETS */
+
+    /* PROCEDURE : sortDescEnd - Trie les ordres finaux en decroissant tout en conservant les id */
+    void sortDescEnd();
+    /* COMPLEXITE : Quasi-lineaire
+       ENTREE : -
+       ALGORITHME :
+           Sauvegarde les id
+           Tri m_tabSummit
+           Restaure les id */
+
+
+    /* PROCEDURE : sortAscBeg - Trie les ordres de debut en croissant sans conservation des id */
+    void sortAscBeg();
+    /* COMPLEXITE : Quasi-lineaire
+       ENTREE : -
+       ALGORITHME :
+         Utiliser un algorithme de tri sur m_tabSummit */
+
+
     /* METHODE D'INITIALISATION DE LA CLASSE */
 
     /* PROCEDURE : initData - Initialisation des donnees */
@@ -72,10 +96,6 @@ public:
          Copie v dans m_tabSummit
          Copie la matrice m dans m_tabSummit */
 
-	/* ACCESSEURS */
-	
-	vector < s_summit > getTabSummit();
-	s_summit getTabSummit(int i);
 
     /* METHODES DE RECHERCHE DE COMPOSANTES FORTEMENT CONNEXES (STRONGLY CONNECTED COMPONENT) */
 
@@ -135,11 +155,12 @@ public:
          Initialiser tous les points : Etat non explore, distance infinie, et pere null (-1)
          Initialiser x a une distance nulle
 
-         Chercher le sommet n non explore qui possede la distance minimale
-         Le passer a atteint
-         Pour tous les descendants i de ce sommet
-           Si leurs distances est inferieures à celle de (n + la frequence de i)
-             Mettre a jour la distance et le pere le plus proche de i
+         Tant qu'il existe un sommet atteignable non explore
+           Chercher le sommet n non explore qui possede la distance minimale
+           Le passer a atteint
+           Pour tous les descendants i de ce sommet
+             Si leurs distances est inferieures à celle de (n + la frequence de i)
+               Mettre a jour la distance et le pere le plus proche de i
 
          Retourner le tableau de sommets */
 
@@ -156,26 +177,6 @@ public:
            On la sauvegarde
 
          Renvoyer l'indice du minimum */
-
-
-    /* METHODES DE TRI DU TABLEAU DE SOMMETS */
-
-    /* PROCEDURE : sortDescEnd - Trie les ordres finaux en decroissant tout en conservant les id */
-    void sortDescEnd();
-    /* COMPLEXITE : Quasi-lineaire
-       ENTREE : -
-       ALGORITHME :
-           Sauvegarde les id
-           Tri m_tabSummit
-           Restaure les id */
-
-
-    /* PROCEDURE : sortAscBeg - Trie les ordres de debut en croissant sans conservation des id */
-    void sortAscBeg();
-    /* COMPLEXITE : Quasi-lineaire
-       ENTREE : -
-       ALGORITHME :
-         Utiliser un algorithme de tri sur m_tabSummit */
 
 
     /* METHODES DE DETERMINATION D'IMPORTANCE */
@@ -233,9 +234,6 @@ public:
              Renvoyer vrai
 
          Renvoyer faux si on a pas trouve un sommet qui satisfait cette condition */
-
-
-    void printMat (); // Affiche la matrice adjacente
 };
 
 

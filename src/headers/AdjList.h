@@ -32,7 +32,7 @@ using namespace std;
 class AdjList {
 private :
 
-    /* Attributs */
+    /* ATTRIBUTS */
     int m_size;
     vector < vector <int> > m_graph;
     vector < vector <int> > m_graphDual;
@@ -59,6 +59,27 @@ public:
     AdjList ();
     ~AdjList ();
 
+
+    /* METHODES DE TRI DU TABLEAU DE SOMMETS */
+
+    /* PROCEDURE : sortDescEnd - Trie les ordres finaux en decroissant tout en conservant les id */
+    void sortDescEnd();
+    /* COMPLEXITE : Quasi-lineaire
+       ENTREE : -
+       ALGORITHME :
+           Sauvegarde les id
+           Tri m_tabSummit
+           Restaure les id */
+
+
+    /* PROCEDURE : sortAscBeg - Trie les ordres de debut en croissant sans conservation des id */
+    void sortAscBeg();
+    /* COMPLEXITE : Quasi-lineaire
+       ENTREE : -
+       ALGORITHME :
+         Utiliser un algorithme de tri sur m_tabSummit */
+
+
     /* Methode d'initialisation de la classe */
 
     /* PROCEDURE : initData - Initialisation des donnees */
@@ -80,9 +101,9 @@ public:
 
     /* FONCTION : initSCC - Initialise les donnees pour trouver plus facilement les CFC (SCC) */
     vector< s_summit > initSCC ();
-    /* COMPLEXITE : Premier parcours en profondeur -> Quadratique
+    /* COMPLEXITE : Premier parcours en profondeur -> Lineaire
                     Tri decroissant -> Quasi-Lineaire
-                    Second parcours en profondeur -> Quadratique
+                    Second parcours en profondeur -> Lineaire
                     Determination des importances -> Polynomial
                     Tri croissant -> Quasi-Lineaire
        ENTREE : -
@@ -101,7 +122,7 @@ public:
     /* PROCEDURE : DFS - Parcours en profondeur du graphe (Depth First Search) */
     void DFS ();
     void DFSHidden (int i, int& t);
-    /* COMPLEXITE : Quadratique
+    /* COMPLEXITE : Lineaire
        ENTREE : -
        ALGORITHME :
          Initialiser le temps a 0
@@ -114,7 +135,7 @@ public:
     /* PROCEDURE : DFSD - Parcours en profondeur du graphe dual */
     void DFSD ();
     void DFSDHidden (int i, int& t);
-    /* COMPLEXITE : Quadratique
+    /* COMPLEXITE : Lineaire
        ENTREE : -
        ALGORITHME :
          Initialiser le temps a 0
@@ -156,26 +177,6 @@ public:
            On la sauvegarde
 
          Renvoyer l'indice du minimum */
-
-
-    /* METHODES DE TRI DU TABLEAU DE SOMMETS */
-
-    /* PROCEDURE : sortDescEnd - Trie les ordres finaux en decroissant tout en conservant les id */
-    void sortDescEnd();
-    /* COMPLEXITE : Quasi-lineaire
-       ENTREE : -
-       ALGORITHME :
-           Sauvegarde les id
-           Tri m_tabSummit
-           Restaure les id */
-
-
-    /* PROCEDURE : sortAscBeg - Trie les ordres de debut en croissant sans conservation des id */
-    void sortAscBeg();
-    /* COMPLEXITE : Quasi-lineaire
-       ENTREE : -
-       ALGORITHME :
-         Utiliser un algorithme de tri sur m_tabSummit */
 
 
     /* METHODES DE DETERMINATION D'IMPORTANCE */

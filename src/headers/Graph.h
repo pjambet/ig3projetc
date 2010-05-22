@@ -32,7 +32,7 @@ Includes
 /*=================================
 Constantes
 ===================================*/
-#define TEST_STRUCT 'm'
+#define TEST_STRUCT 'l'
 
 using namespace std;
 
@@ -121,7 +121,6 @@ public:
     void setStructGraph(char c);
 
     bool isAnalysable();
-    
     /* DETAIL : On considere que la condition minimale pour qu'un graphe soit analysable
                 est que m_sizeGraph != 0 */
 
@@ -145,8 +144,7 @@ public:
                 "x, y" dans le fichier implique que m_matFriends[m_idToRank[x]][m_idToRank[y]] = 1
             si la structure est une liste
                 "x, y" implique qu'on ajoute m_idToRank[y] dans le vecteur correspondant aux amis de x
-                et m_idToRank[x] dans le vecteur correspondant aux amis duals de y
-        */
+                et m_idToRank[x] dans le vecteur correspondant aux amis duals de y */
 
 
     /* PROCEDURE : clearGraph - Remise a zero des donnees */
@@ -155,7 +153,6 @@ public:
        ENTREE : -
        ALGORITHME :
 			Reinitialiser les structures de stockage
-			Mettre la structure en inconnu (x)
 			Mettre l'etat du graphe a "non analyse"
 
 			Si la structure est liste
@@ -164,18 +161,25 @@ public:
 				Desallouer la matrice d'adjacence
 
 			Reinitialiser les CFC
-			Reinitialiser les distances
-        */
+			Reinitialiser les distances */
 
 
     /* RECHERCHE */
 
     /* PROCEDURE : searchSCC - Recherche des CFC */
     void searchSCC ();
-    /* COMPLEXITE :
+    /* COMPLEXITE : Depend de la structure
        ENTREE : -
        ALGORITHME :
-        */
+            Initialiser m_tabSummit
+            Stocker l'intervalle [beg, end] du premier sommet
+            Mettre ce premier sommet dans la premiere CFC
+
+            Pour i de 0 au nombre de sommet
+                Si l'intervalle est compris dans celui stocke, on ajoute l'element dans la CFC
+                Sinon   stocker le nouvel intervalle
+                        creer une nouvelle CFC
+                        ajouter ce sommet dans la nouvelle CFC */
 
 
     /* PROCEDURE : searchDistances - Recherche des distances a determiner */
@@ -211,7 +215,7 @@ public:
     /* COMPLEXITE : Lineaire
        ENTREE : -
        ALGORITHME :
-			Affiche 
+			Affiche
               - les personnes
               - les composantes fortements connexes
               - les distances demandees

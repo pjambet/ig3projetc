@@ -184,9 +184,18 @@ public:
 
     /* PROCEDURE : searchDistances - Recherche des distances a determiner */
     void searchDistances ();
-    /* COMPLEXITE :
+    /* COMPLEXITE : Depend de la structure
        ENTREE : -
        ALGORITHME :
+            Pour tous les points de depart distincts
+                Initialiser le m_tabSummit correspondant
+            Pour toutes les questions
+                S'il n'existe pas de chemin entre le point de depart et le point d'arrivee
+                    Stocker les deux points dans un vecteur
+                Sinon
+                    Stocker le chemin entier en sens inverse dans un vecteur en allant de pere en pere
+
+                Ajouter le vecteur dans la liste des distances avec le point de depart comme cle
         */
 
 
@@ -194,7 +203,7 @@ public:
 
 	/* FONCTION : chooseStruct - Determine la structure la mieux adaptee pour analyser le graphe */
     char chooseStruct ();
-    /* COMPLEXITE :
+    /* COMPLEXITE : Constant
        ENTREE : -
        ALGORITHME :
         */
@@ -206,6 +215,11 @@ public:
        ENTREE : fileNameOut, nom du fichier d'enregistrement des donnees
                 (ce fichier peut ne pas exister, il sera alors cree)
        ALGORITHME :
+            Ouvrir fileNameOut
+            Ecrire m_nbSCC
+            Ecrire le contenu de toute les CFC en precisant si le point est important ou pas
+
+            Ecrire les distances entre les points
         */
 
 

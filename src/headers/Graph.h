@@ -119,6 +119,7 @@ public:
     multimap< int, vector< int > > getListPath();
 
     void setStructGraph(char c);
+    char getStructGraph();
 
     bool isAnalysable();
     /* DETAIL : On considere que la condition minimale pour qu'un graphe soit analysable

@@ -58,6 +58,7 @@ int main(int argc, char* argv[]) {
 
     Graph G;
 		/* Variable pour analyser les fichiers d'entree */
+    char GStruct;
 
     /* ****************************************************** */
     /* ****************************************************** */
@@ -69,17 +70,19 @@ int main(int argc, char* argv[]) {
 
 	/* Mode de test activable avec l'option --log ou -l */
     if ( (opt == "--log") || (opt == "-l") ) {
-		if (argc == 5) {
+		if (argc == 6) {
         /* 1er argument : nom de l'executable
            2eme argument : option (--log ou -l)
            3eme argument : nombre de sommets
            4eme argument : nombre de relations
-           5eme argument : nombre de questions */
+           5eme argument : nombre de questions
+           6eme argument : structure pour l'analyse */
 
         gene.changeOptionAutomatic( TEST_GENE_IN, TEST_GENE_OUT, atoi(argv[2]),
             (int) atoi(argv[3]), (int) atoi(argv[4]) );
         gene.generateFile();
 
+        G.setStructGraph(argv[5][0]);
         repertory = TEST_GENE_OUT;
         G.initGraph(repertory);
 
@@ -100,7 +103,7 @@ int main(int argc, char* argv[]) {
         cout << ((double) t_dist - t_ini) / CLOCKS_PER_SEC << endl;
 
 		} else {
-        cout << " MODE TEST USAGE : --log <Nombre_de_sommets> <Nombre_de_relations> <Nombre_de_qestions>" << endl;
+        cout << " MODE TEST USAGE : --log <Nombre_de_sommets> <Nombre_de_relations> <Nombre_de_qestions> <structure (m/l)>" << endl;
 
 		}
 
@@ -116,7 +119,7 @@ int main(int argc, char* argv[]) {
 
         cout << "USAGE: " << argv[0] << " <OPTION>" << endl;
         cout << endl << "OPTION : " << endl;
-        cout << " --log <Nombre_de_sommets> <Nombre_de_relations> <Nombre_de_qestions>"
+        cout << " --log <Nombre_de_sommets> <Nombre_de_relations> <Nombre_de_qestions> <structure (m/l)>"
              << endl << "\t| Lance le programme le plus simplement possible"
              << endl << "\t| Les informations passees en parametre permettent de generer"
              << endl << "\t| un graphe aleatoirement, le graphe genere est ensuite analyse"
@@ -157,6 +160,7 @@ int main(int argc, char* argv[]) {
         cout << "- Appuyez sur 2 pour analyser un graphe" << endl;
         cout << "- Appuyez sur 3 pour recuperer les donnees de Facebook" << endl;
         cout << "- Appuyez sur 4 pour generer un graphe aleatoire" << endl;
+        cout << "- Appuyez sur 5 pour changer la structure" << endl;
         cout << "- Appuyez sur 0 pour fermer le programme" << endl << endl;
 
 
@@ -195,7 +199,20 @@ int main(int argc, char* argv[]) {
                 dir_in = REPERTOIRE + nom_in;
                 /* concaténation du repertoire test avec le nom du fichier d'entree */
 
-                cout << "Lecture du fichier... ";
+                cout << "Lecture du fichier ";
+
+                GStruct = G.getStructGraph();
+                switch (GStruct) {
+                    case 'm' :
+                        cout << "avec une structure matrice... ";
+                        break;
+                    case 'l' :
+                        cout << "avec une structure liste... ";
+                        break;
+                    default :
+                        cerr << "ERREUR - Structure inconnue. (main.cpp - case 1)";
+                        break;
+                }
 
                 t_ini = clock();
                 G.initGraph(dir_in);
@@ -314,6 +331,13 @@ int main(int argc, char* argv[]) {
                 break;
 			/* -------------------------------------------------------------- */
 
+			/* CASE 5 : Changement de structure */
+            case 5 :
+
+                G.chooseStruct();
+                cout << endl;
+                break;
+			/* -------------------------------------------------------------- */
 
 			/* DEFAULT : Autres cas */
             default :

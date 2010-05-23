@@ -109,6 +109,9 @@ void Graph::setStructGraph(char c) {
 	}
 }
 
+char Graph::getStructGraph() {
+    return m_structGraph;
+}
 
 bool Graph::isAnalysable() {
     return (m_sizeGraph != 0);
@@ -418,7 +421,38 @@ void Graph::searchDistances () {
 
 /* FONCTION : chooseStruct - Determine la structure a adopter pour analyser le graphe */
 char Graph::chooseStruct () {
-    return TEST_STRUCT;
+    string choice;
+
+    cout << "La structure actuelle est ";
+    switch (m_structGraph) {
+        case 'm' :
+            cout << "matrice." << endl;
+            break;
+        case 'l' :
+            cout << "liste." << endl;
+            break;
+        default :
+            cerr << "ERREUR - Structure inconnue. (Graph.cpp - chooseStruct)" << endl;
+            break;
+    }
+
+    cout << "Changer de structure ? (o/n) ";
+    cin >> choice;
+
+    if (choice == "o" || choice == "O"
+        || choice == "oui" || choice == "Oui") {
+        switch (m_structGraph) {
+        case 'm' :
+            m_structGraph = 'l';
+            break;
+        case 'l' :
+            m_structGraph = 'm';
+            break;
+        default :
+            cerr << "ERREUR - Structure inconnue. (Graph.cpp - chooseStruct)" << endl;
+            break;
+        }
+    }
 }
 /* -------------------------------------------------------------------------- */
 

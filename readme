@@ -9,8 +9,54 @@ Projet de langage C, nom de code LAGER
 ======================================
 Lager Ain't a Graph Explorer for Rookies !
 
+URL du projet sur google code
+Le projet est hebergé sur un serveur SubVersion (SVN)
 http://code.google.com/p/ig3projetc/
 
 Libs :
-- OpenSSL (for CURL) : http://www.shininglightpro.com/download/Win32OpenSSL_Light-1_0_0.exe
-- Visual C++ Red (error fix) : http://www.microsoft.com/downloads/details.aspx?familyid=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF
+- OpenSSL (for CURL) : 
+http://www.shininglightpro.com/download/Win32OpenSSL_Light-1_0_0.exe
+
+- Visual C++ Red (error fix) :
+http://www.microsoft.com/downloads/details.aspx?familyid=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF
+
+- Google test (Framework de Units Tests)
+http://code.google.com/p/googletest/
+
+--------------
+-INSTALLATION-
+--------------
+
+- Windows
+	Sur windows le plus simple est surement d'utiliser son IDE favori, d'ajouter
+des sources existantes a parti des dossiers src/headers et src/source. Ensuite
+il suffira d'utiliser le compilateur en prenant toutefois soin de modifier le 
+dossier d'execution ainsi que le dossier cible afin que les réferencement par
+adressage relative se réalise correctement.
+
+- Unix
+	Pour tous les systemes unix nous fournisson avec notre projet (dans le
+dossier src/) un makefile, il suffit donc d'executer la commande 'make' a
+l'interieur du dossier src/ pour compiler les sources. Un executable nommé
+'Lager' sera créé a coté du makefile.
+
+
+------
+-AIDE-
+------
+
+Il est possible d'obtenir de l'aide sur les differents arguments a passer en
+parametre de l'executable lors d'une execution en mode console en executant :
+Lager --help ( ou "./lager --help" sur UNIX).
+
+-------------
+-UNITS TESTS-
+-------------
+
+Pour utiliser les units tests fournis avec le projet (qui sont de la forme
+<nom_fichier>_unittest), il faut executer le makefile nommé makefile-ut.
+La commande makefile -f makefile-it permet donc de créer un executable qui
+permet de lancer l'ensemble des units tests, cet executable sera créé a coté du
+makefile, et sera nommé Lager-unittest. Il suffit ensuite de l'executer comme
+un fichier executable classique.
+

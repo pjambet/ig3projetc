@@ -63,7 +63,7 @@ public:
 	vector < s_summit > getTabSummit();
 	s_summit getTabSummit(int i);
 	int getSize();
-    int** getGraph();
+	int** getGraph();
 
     /* METHODES DE TRI DU TABLEAU DE SOMMETS */
 

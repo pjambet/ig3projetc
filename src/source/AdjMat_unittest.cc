@@ -28,7 +28,7 @@ TEST(AdjMat, DefaultConstructor) {
 }
 
 
-// Test inutile
+// Test inutile, réalisé dans graph_unittest
 //TEST(AdjMat, initSCC) {
 
 //	Graph Gr;
@@ -104,7 +104,7 @@ TEST(AdjMat, sortAscBeg) {
 	}
 }
 
-TEST(AdjMat, initDist) {
+TEST(AdjMat, isImportant) {
 
 	//TODO
 	

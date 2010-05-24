@@ -118,9 +118,4 @@ TEST(AdjList, sortAscBeg) {
 	}
 }
 
-TEST(AdjList, isImportant) {
-
-	//TODO
-		
-}
 

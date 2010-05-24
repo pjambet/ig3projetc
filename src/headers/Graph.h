@@ -122,6 +122,7 @@ public:
     char getStructGraph();
 
     bool isAnalysable();
+
     /* DETAIL : On considere que la condition minimale pour qu'un graphe soit analysable
                 est que m_sizeGraph != 0 */
 

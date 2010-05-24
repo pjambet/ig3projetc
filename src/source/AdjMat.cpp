@@ -13,7 +13,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 
 
 /* CONSTRUCTEURS ET DESCTRUCTEURS : */
-AdjMat::AdjMat () : m_size(0) {
+AdjMat::AdjMat () : m_size(0), m_graph(NULL) {
 }
 
 
@@ -50,6 +50,16 @@ s_summit AdjMat::getTabSummit(int i) {
 		return s;
 
 	}
+}
+
+
+int AdjMat::getSize() {
+	return m_size;
+}
+
+
+int** AdjMat::getGraph() {
+	return m_graph;
 }
 /* -------------------------------------------------------------------------- */
 

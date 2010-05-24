@@ -27,7 +27,7 @@ CXXFLAGS += -g -Wall -Wextra
 
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
-TESTS = Lager_unittest
+TESTS = Lager-unittest
 
 # All Google Test headers.  Usually you shouldn't change this
 # definition.
@@ -79,7 +79,7 @@ AdjList_unittest.o: $(USER_DIR)/source/AdjList_unittest.cc \
 AdjMat.o: $(USER_DIR)/source/AdjMat.cpp $(USER_DIR)/headers/Summit.h
 	$(CXX) $(CXXFLAGS) -o AdjMat.o -c $(USER_DIR)/source/AdjMat.cpp
 	
-AdjMat_unittest.o: $(USER_DIR)/source/AdjMat_unittest.cc \
+AdjMat_unittest.o: $(USER_DIR)/source/AdjMat_unittest.cc $(USER_DIR)/headers/Graph.h \
                      $(USER_DIR)/headers/AdjMat.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/source/AdjMat_unittest.cc
 	
@@ -87,7 +87,8 @@ Graph.o: $(USER_DIR)/source/Graph.cpp $(USER_DIR)/headers/AdjList.h $(USER_DIR)/
 	$(CXX) $(CXXFLAGS) -o Graph.o -c $(USER_DIR)/source/Graph.cpp
 
 Graph_unittest.o: $(USER_DIR)/source/Graph_unittest.cc \
-                     $(USER_DIR)/headers/Graph.h $(GTEST_HEADERS)
+                     $(USER_DIR)/headers/Graph.h $(USER_DIR)/headers/Generator.h \
+                      $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/source/Graph_unittest.cc
 	
 Summit.o: $(USER_DIR)/source/Summit.cpp $(GTEST_HEADERS)
@@ -107,7 +108,7 @@ Generator_unittest.o : $(USER_DIR)/source/Generator_unittest.cc \
                      $(USER_DIR)/headers/Generator.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/source/Generator_unittest.cc
 
-Lager_unittest : fbfriends.o AdjList.o AdjList_unittest.o AdjMat.o \
+Lager-unittest : fbfriends.o AdjList.o AdjList_unittest.o AdjMat.o \
 					 AdjMat_unittest.o Graph.o Graph_unittest.o Summit.o \
 					 Summit_unittest.o Generator.o Generator_unittest.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(USER_DIR)/source/os_dependent.c -lpthread $^ -o $@

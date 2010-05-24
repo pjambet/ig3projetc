@@ -84,6 +84,36 @@ vector< s_summit > AdjList::initSCC () {
 }
 /* -------------------------------------------------------------------------- */
 
+/* ACCESSEURS */
+
+vector < s_summit > AdjList::getTabSummit() {
+	return m_tabSummit;
+}
+
+s_summit AdjList::getTabSummit(int i) {
+	s_summit s;
+	if ((m_tabSummit.size() > 0 ) && (i >= 0) && (i < (int)m_tabSummit.size() ) ){
+		return m_tabSummit[i];
+	}
+	else {
+		cerr << "ERREUR sur l'ouverture de tabSummit !!" << endl;
+		return s;
+	}
+}
+
+int AdjList::getSize() {
+	return m_size;
+}
+
+vector < vector <int> > AdjList::getGraph() {
+	return m_graph;
+}
+
+vector < vector <int> > AdjList::getGraphDual() {
+	return m_graphDual;
+}
+/* ------------------------------------------------------------------------- */
+
 
 /* PROCEDURE : DFS - Parcours en profondeur du graphe (Depth First Search) */
 void AdjList::DFS () { // Parcours en profondeur du graphe (appel sur PProfG)
@@ -111,8 +141,8 @@ void AdjList::DFSHidden (int i, int& t) { // Parcours en profondeur du graphe (r
     m_tabSummit[i].beg = t; /* On le marque comme le t-ieme rencontre */
     sizeTemp = (int) m_graph[i].size();
 
-
     for (j = 0; j < sizeTemp; ++j) {
+    	//cout << "j : " << j << endl;
         if (m_tabSummit[ m_graph[i][j] ].status == -1) {
             /* Si le voisin avec l'id m_graph[i][j] n'a pas ete explore */
             DFSHidden(m_graph[i][j], t);

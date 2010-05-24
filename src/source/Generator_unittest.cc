@@ -31,7 +31,7 @@ TEST(Generator, GenerateFile) {
 	//On teste si la structure du fichier est conforme au sujet
 	EXPECT_TRUE(G.getDestination().c_str() != NULL);
 	
-	G.changeOptionAutomatic( "../test/noms.dat", "../test/gene_ut", 1000, 1000, 500);
+	G.changeOptionAutomatic( "../test/noms.dat", "../test/gene-ut", 1000, 1000, 500);
 	G.generateFile();
 	
 	FILE* fichier = NULL;

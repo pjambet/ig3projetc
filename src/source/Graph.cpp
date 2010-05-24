@@ -109,9 +109,11 @@ void Graph::setStructGraph(char c) {
 	}
 }
 
+
 char Graph::getStructGraph() {
     return m_structGraph;
 }
+
 
 bool Graph::isAnalysable() {
     return (m_sizeGraph != 0);
@@ -178,8 +180,8 @@ void Graph::initGraph (string& fileNameIn) {
 
 
         /* Etape intermediaire : Definition de la structure a adopter */
-        //On a dÈcidÈ de mettre ca de cotÈ pour une question de simplicitÈ
-        //Le choix de la representation est laissÈ a l'utilisateur
+        //On a d√©cid√© de mettre ca de cot√© pour une question de simplicit√©
+        //Le choix de la representation est laiss√© a l'utilisateur
         //m_structGraph = chooseStruct();
 
 
@@ -253,7 +255,8 @@ void Graph::clearGraph () {
 
     m_tabSummit.clear();
     m_idToRank.clear();
-    // m_structGraph = 'm';
+    //Plus necessaire vu que la structure est fix√©e dans le c'tor par d√©faut
+    //m_structGraph = 'm';
     m_analyzed = false;
 
     m_listFriends.clear();

@@ -11,46 +11,51 @@ DETAILS 		 : Ce fichier réalise les tests unitaires afin de verifier et
 				   du fichier AdjMat.h(cpp)
 ============================================================================= */
 
+#include <string>
 #include <gtest/gtest.h>
 #include "../headers/AdjMat.h"
 #include "../headers/Graph.h"
 #include "../headers/Generator.h"
 
 TEST(AdjMat, DefaultConstructor) {
-	AdjMat A;
+	
+	AdjMat Am;
+	
+	EXPECT_EQ(0, Am.getSize());
+	EXPECT_EQ(NULL, Am.getGraph() );
+	EXPECT_EQ(0, (int)Am.getTabSummit().size() );
 
 }
 
-TEST(AdjMat, initSCC) {
 
-	// Dans ce test on va verifier le fonctionnement de DFS et DFSD
-	
-	AdjMat A;
-	Graph Gr;
-	
-	vector< s_summit > tabSummit;
-		
-	Gr.initGraph(s);
-	
-	tabSummit = Gr.getTabSummit();
-	
-	A.initData(tabSummit, Gr.getMatFriends());
-	
-	A.initSCC();	
-	
-	
-}
+// Test inutile
+//TEST(AdjMat, initSCC) {
+
+//	Graph Gr;
+//	string s = "../test/gene-ut";
+//	AdjMat Am;
+//	
+//	vector< s_summit > tabSummit;
+//		
+//	Gr.initGraph(s);
+//	
+//	tabSummit = Gr.getTabSummit();
+//	
+//	Am.initData(tabSummit, Gr.getMatFriends());
+//	
+//	Am.initSCC();	
+//	
+//}
 
 TEST(AdjMat, sortDescEnd) {
 	
-	AdjMat A;
+	AdjMat Am;
 	Graph Gr;
+	string s = "../test/gene-ut";
 	Generator Ge;
 	
-	Ge.changeOptionAutomatic( "../test/noms.dat", "../test/gene_ut", 100, 100, 50);
+	Ge.changeOptionAutomatic( "../test/noms.dat", "../test/gene-ut", 100, 100, 50);
 	Ge.generateFile();
-	
-	string s = "../test/gene_ut";
 	
 	vector< s_summit > tabSummit;
 		
@@ -58,14 +63,13 @@ TEST(AdjMat, sortDescEnd) {
 	
 	tabSummit = Gr.getTabSummit();
 	
-	A.initData(tabSummit, Gr.getMatFriends());
+	Am.initData(tabSummit, Gr.getMatFriends());
 	
-	A.DFS();
-	A.sortDescEnd();
+	Am.DFS();
+	Am.sortDescEnd();
 	
 	for(int i = 0; i < (int)Gr.getSizeGraph() - 1; i++ ) {
-
-		EXPECT_GT(A.getTabSummit(i).end, A.getTabSummit(i + 1).end);
+		EXPECT_GT(Am.getTabSummit(i).end, Am.getTabSummit(i + 1).end);
 	}
 		
 	
@@ -73,14 +77,14 @@ TEST(AdjMat, sortDescEnd) {
 
 TEST(AdjMat, sortAscBeg) {
 	
-	AdjMat A;
+	AdjMat Am;
 	Graph Gr;
 	Generator Ge;
 	
-	Ge.changeOptionAutomatic( "../test/noms.dat", "../test/gene_ut", 100, 100, 50);
+	Ge.changeOptionAutomatic( "../test/noms.dat", "../test/gene-ut", 100, 100, 50);
 	Ge.generateFile();
 	
-	string s = "../test/gene_ut";
+	string s = "../test/gene-ut";
 	
 	vector< s_summit > tabSummit;
 		
@@ -88,18 +92,23 @@ TEST(AdjMat, sortAscBeg) {
 	
 	tabSummit = Gr.getTabSummit();
 	
-	A.initData(tabSummit, Gr.getMatFriends());
+	Am.initData(tabSummit, Gr.getMatFriends());
 	
-	A.DFS();
-	A.sortDescEnd();
-	A.DFSD();
-	A.sortAscBeg();
+	Am.DFS();
+	Am.sortDescEnd();
+	Am.DFSD();
+	Am.sortAscBeg();
 	
 	for(int i = 0; i < (int)Gr.getSizeGraph() - 1; i++ ) {
-
-		EXPECT_LT(A.getTabSummit(i).beg, A.getTabSummit(i + 1).beg);
+		EXPECT_LT(Am.getTabSummit(i).beg, Am.getTabSummit(i + 1).beg);
 	}
-
 }
+
+TEST(AdjMat, initDist) {
+
+	//TODO
+	
+}
+
 
 

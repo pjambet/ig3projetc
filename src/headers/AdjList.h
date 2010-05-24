@@ -96,6 +96,13 @@ public:
          Copie f dans m_graph
          Copie df dans m_graphDual */
 
+	/* ACCESSEURS */
+	
+	vector < s_summit > getTabSummit();
+	s_summit getTabSummit(int i);
+	int getSize();
+	vector < vector <int> > getGraph();
+	vector < vector <int> > getGraphDual();
 
     /* METHODES DE RECHERCHE DE COMPOSANTES FORTEMENT CONNEXES (STRONGLY CONNECTED COMPONENT) */
 

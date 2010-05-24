@@ -125,6 +125,7 @@ int main(int argc, char* argv[]) {
              << endl << "\t| un graphe aleatoirement, le graphe genere est ensuite analyse"
              << endl << "\t| par LAGER et les resultats seront affiches sur une seule ligne"
              << endl << "\t| avec le format suivant : "
+
              << endl << "\t| <Nombre_de_sommet> <Nombre_de_relation>"
              << " <Nombre_de_questions> <Temps_calcul_CFC> <Temps_calcul_questions>"
              << endl << endl;

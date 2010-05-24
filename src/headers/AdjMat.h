@@ -62,6 +62,8 @@ public:
 	/* ACCESSEURS */
 	vector < s_summit > getTabSummit();
 	s_summit getTabSummit(int i);
+	int getSize();
+    int** getGraph();
 
     /* METHODES DE TRI DU TABLEAU DE SOMMETS */
 

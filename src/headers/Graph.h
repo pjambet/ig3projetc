@@ -202,14 +202,6 @@ public:
 
     /* AUTRES ET OPTIONNELS */
 
-	/* FONCTION : chooseStruct - Determine la structure la mieux adaptee pour analyser le graphe */
-    char chooseStruct ();
-    /* COMPLEXITE : Constant
-       ENTREE : -
-       ALGORITHME :
-        */
-
-
     /* PROCEDURE : saveGraph - Sauvegarde des resultats dans un fichier */
     void saveGraph (string& fileNameOut);
     /* COMPLEXITE : Lineaire

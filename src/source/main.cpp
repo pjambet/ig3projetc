@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
     int choice;
     string choice2;
 		/* - choice : choix de l'utilisateur pour le menu
-		   - choice2 : choix de l'utilisateur pour l'affichage du rapport */
+		   - choice2 : choix de l'utilisateur pour les questions (o/n) */
 
     clock_t t_ini, t_open, t_cfc, t_dist, t_create;
 		/* Stockage des temps d'execution */
@@ -199,15 +199,15 @@ int main(int argc, char* argv[]) {
                 dir_in = REPERTOIRE + nom_in;
                 /* concaténation du repertoire test avec le nom du fichier d'entree */
 
-                cout << "Lecture du fichier ";
+                cout << "Lecture du fichier (structure ";
 
                 GStruct = G.getStructGraph();
                 switch (GStruct) {
                     case 'm' :
-                        cout << "avec une structure matrice... ";
+                        cout << "matrice)... ";
                         break;
                     case 'l' :
-                        cout << "avec une structure liste... ";
+                        cout << "liste)... ";
                         break;
                     default :
                         cerr << "ERREUR - Structure inconnue. (main.cpp - case 1)";
@@ -334,7 +334,38 @@ int main(int argc, char* argv[]) {
 			/* CASE 5 : Changement de structure */
             case 5 :
 
-                G.chooseStruct();
+                GStruct = G.getStructGraph();
+
+                cout << "La structure actuelle est ";
+                switch (GStruct) {
+                    case 'm' :
+                        cout << "matrice." << endl;
+                        break;
+                    case 'l' :
+                        cout << "liste." << endl;
+                        break;
+                    default :
+                        cerr << "ERREUR - Structure inconnue. (main.cpp - case 5)" << endl;
+                        break;
+                }
+
+                cout << "Changer de structure ? (o/n) ";
+                cin >> choice2;
+
+                if (choice2 == "o" || choice2 == "O"
+                    || choice2 == "oui" || choice2 == "Oui") {
+                    switch (GStruct) {
+                    case 'm' :
+                        G.setStructGraph('l');
+                        break;
+                    case 'l' :
+                        G.setStructGraph('m');
+                        break;
+                    default :
+                        cerr << "ERREUR - Structure inconnue. (main.cpp - case 5)" << endl;
+                        break;
+                    }
+                }
                 cout << endl;
                 break;
 			/* -------------------------------------------------------------- */

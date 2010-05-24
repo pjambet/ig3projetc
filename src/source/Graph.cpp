@@ -419,44 +419,6 @@ void Graph::searchDistances () {
 
 /* AUTRES ET OPTIONNELS */
 
-/* FONCTION : chooseStruct - Determine la structure a adopter pour analyser le graphe */
-char Graph::chooseStruct () {
-    string choice;
-
-    cout << "La structure actuelle est ";
-    switch (m_structGraph) {
-        case 'm' :
-            cout << "matrice." << endl;
-            break;
-        case 'l' :
-            cout << "liste." << endl;
-            break;
-        default :
-            cerr << "ERREUR - Structure inconnue. (Graph.cpp - chooseStruct)" << endl;
-            break;
-    }
-
-    cout << "Changer de structure ? (o/n) ";
-    cin >> choice;
-
-    if (choice == "o" || choice == "O"
-        || choice == "oui" || choice == "Oui") {
-        switch (m_structGraph) {
-        case 'm' :
-            m_structGraph = 'l';
-            break;
-        case 'l' :
-            m_structGraph = 'm';
-            break;
-        default :
-            cerr << "ERREUR - Structure inconnue. (Graph.cpp - chooseStruct)" << endl;
-            break;
-        }
-    }
-}
-/* -------------------------------------------------------------------------- */
-
-
 /* PROCEDURE : saveGraph - Sauvegarde des resultats dans un fichier */
 void Graph::saveGraph (string& fileNameOut) {
 	/* Variables */

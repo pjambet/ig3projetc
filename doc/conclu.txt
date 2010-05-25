@@ -1,0 +1,18 @@
+Nous sommes arrivés au terme de ce projet et même si il demeure toujours
+quelques points qui auraient pu etre approfondis, nous sommes satisfait du
+résultat obtenu.
+En effet notre programme s'avere etre performant, il offre un menu convivial a
+l'utilisateur et execute tout ce qu'il est demandé dans un temps optimisé et
+en prenant soin de la mémoire.
+Il faut tout de même reconnaitre que sur des problemes "importants", quand la
+densité de relation tend vers son maximum, Lager utilise une grande quantité de
+mémoire pour faire ses calculs. Cepdant cette faiblesse est relativisée par la
+grande vitesse de calcul et le fait qu'il n'y ait aucune fuite de mémoire.
+Au dela des questions techniques que nous avons traités au long de ce projet,
+tel que l'approndissement de nos connaissances en C/C++ ou en théorie des graphes,
+nous avons aussi beaucoup appris sur les enjeux du travail collaboratif.
+Nous avons tenté d'aborder le projet le mieux préparé avec un maximum d'outils
+facilitant ce travail, comme SubVersion par exemple. Mais nous avons tout de même 
+rencontrés des difficultés sur le plan relationnel que nous avons tenté de résoudre
+le plus efficacement possible.
+Ce projet aura donc été benefique autant sur le plan technique sur le plan personnel.

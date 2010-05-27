@@ -66,6 +66,21 @@ vector< s_summit > Graph::getTabSummit() {
 }
 
 
+s_summit Graph::getTabSummit(int i) {
+	s_summit s;
+
+
+	if ( (i >= 0) && (m_tabSummit.size() > 0 ) && (i < (int) m_tabSummit.size()) ) {
+		return m_tabSummit[i];
+
+	} else {
+		cerr << "ERREUR sur l'ouverture de tabSummit !" << endl;
+		return s;
+
+	}
+}
+
+
 map< string, int > Graph::getIdToRank() {
     return m_idToRank;
 }

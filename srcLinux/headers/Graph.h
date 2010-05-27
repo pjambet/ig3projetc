@@ -110,6 +110,7 @@ public:
     unsigned int getNbScc();
     int** getMatFriends();
     vector< s_summit > getTabSummit();
+    s_summit getTabSummit(int i);
     map< string, int > getIdToRank();
     vector< vector< int > > getListFriends();
     vector< vector< int > > getListDualFriends();

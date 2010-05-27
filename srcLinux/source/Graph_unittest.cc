@@ -184,6 +184,70 @@ TEST(Graph, searchSCCList) {
 }
 
 
+TEST(Graph, isImportantList) {
+
+	Graph Gr;
+	string s = "../test/test-etalon";
+	
+	Gr.setStructGraph('l');
+	Gr.initGraph(s);
+	Gr.searchSCC();
+	
+	EXPECT_EQ('l', Gr.getStructGraph());
+	
+	//On verifie que l'algo a trouvé les bons points importants
+	EXPECT_TRUE(Gr.getTabSummit(0).important);
+	EXPECT_TRUE(Gr.getTabSummit(1).important);
+	EXPECT_FALSE(Gr.getTabSummit(2).important);
+	EXPECT_FALSE(Gr.getTabSummit(3).important);
+	EXPECT_TRUE(Gr.getTabSummit(4).important);
+	EXPECT_TRUE(Gr.getTabSummit(5).important);
+	EXPECT_TRUE(Gr.getTabSummit(6).important);
+	EXPECT_TRUE(Gr.getTabSummit(7).important);
+	EXPECT_FALSE(Gr.getTabSummit(8).important);
+	EXPECT_FALSE(Gr.getTabSummit(9).important);
+	EXPECT_FALSE(Gr.getTabSummit(10).important);
+	EXPECT_FALSE(Gr.getTabSummit(11).important);
+	EXPECT_TRUE(Gr.getTabSummit(12).important);
+	EXPECT_TRUE(Gr.getTabSummit(13).important);
+	EXPECT_TRUE(Gr.getTabSummit(14).important);
+	
+
+}
+
+
+TEST(Graph, isImportantMat) {
+
+	Graph Gr;
+	string s = "../test/test-etalon";
+	
+	Gr.setStructGraph('m');
+	Gr.initGraph(s);
+	Gr.searchSCC();
+	
+	EXPECT_EQ('m', Gr.getStructGraph());
+	
+	//On verifie que l'algo a trouvé les bons points importants
+	EXPECT_TRUE(Gr.getTabSummit(0).important);
+	EXPECT_TRUE(Gr.getTabSummit(1).important);
+	EXPECT_FALSE(Gr.getTabSummit(2).important);
+	EXPECT_FALSE(Gr.getTabSummit(3).important);
+	EXPECT_TRUE(Gr.getTabSummit(4).important);
+	EXPECT_TRUE(Gr.getTabSummit(5).important);
+	EXPECT_TRUE(Gr.getTabSummit(6).important);
+	EXPECT_TRUE(Gr.getTabSummit(7).important);
+	EXPECT_FALSE(Gr.getTabSummit(8).important);
+	EXPECT_FALSE(Gr.getTabSummit(9).important);
+	EXPECT_FALSE(Gr.getTabSummit(10).important);
+	EXPECT_FALSE(Gr.getTabSummit(11).important);
+	EXPECT_TRUE(Gr.getTabSummit(12).important);
+	EXPECT_TRUE(Gr.getTabSummit(13).important);
+	EXPECT_TRUE(Gr.getTabSummit(14).important);
+	
+
+}
+
+
 TEST(Graph, saveGraph) {
 	//TODO
 
